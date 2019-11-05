@@ -1,1 +1,1 @@
-# react-native-synerise-sdk
+
