@@ -99,7 +99,7 @@ If you prefer linking manually, check [React Native - Linking Libraries](http://
 
 ## Initialization:
 
-```
+```javascript
 Synerise.Initializer()
 	.withClientApiKey('YOUR_CLIENT_API_KEY')
 	.withDebugModeEnabled(true)
