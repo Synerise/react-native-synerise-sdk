@@ -31,7 +31,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		6F17D04D23756B0B00D725AE /* libReactNativeSynerise.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libReactNativeSynerise.a; path = "/Users/krzysztofkurzawa/Desktop/synerise-react-native-sdk/react-native-synerise-sdk/ios/build/Debug-iphoneos/libReactNativeSynerise.a"; sourceTree = "<absolute>"; };
 		6F17D05F23756C4F00D725AE /* ReactNativeSynerise.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReactNativeSynerise.m; sourceTree = "<group>"; };
 		6F17D06023756C4F00D725AE /* ReactNativeSynerise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReactNativeSynerise.h; sourceTree = "<group>"; };
 		6F17D06223756C4F00D725AE /* RNSyneriseInitializer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNSyneriseInitializer.m; sourceTree = "<group>"; };
@@ -50,6 +49,7 @@
 		6F17D07023756C4F00D725AE /* RNTracker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNTracker.m; sourceTree = "<group>"; };
 		6F17D07223756C4F00D725AE /* RNReactCommunicationUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNReactCommunicationUtils.m; sourceTree = "<group>"; };
 		6F17D07323756C4F00D725AE /* RNReactCommunicationUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNReactCommunicationUtils.h; sourceTree = "<group>"; };
+		6FF3B32D23758DB5009EC43C /* libReactNativeSynerise.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libReactNativeSynerise.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +75,7 @@
 			children = (
 				6F17D05E23756C4F00D725AE /* ReactNativeSynerise */,
 				134814211AA4EA7D00B7C361 /* Products */,
+				6FF3B32D23758DB5009EC43C /* libReactNativeSynerise.a */,
 			);
 			sourceTree = "<group>";
 		};
@@ -144,7 +145,7 @@
 			);
 			name = ReactNativeSynerise;
 			productName = ReactNativeSynerise;
-			productReference = 6F17D04D23756B0B00D725AE /* libReactNativeSynerise.a */;
+			productReference = 6FF3B32D23758DB5009EC43C /* libReactNativeSynerise.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -249,7 +250,7 @@
 					"$(inherited)",
 					"$(SRCROOT)",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -297,7 +298,7 @@
 					"$(inherited)",
 					"$(SRCROOT)",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -336,7 +337,7 @@
 					"$(SRCROOT)/../../../React",
 					"$(SRCROOT)/../../react-native/React",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				OTHER_LDFLAGS = "-ObjC";
@@ -379,7 +380,7 @@
 					"$(SRCROOT)/../../../React",
 					"$(SRCROOT)/../../react-native/React",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_FAST_MATH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";

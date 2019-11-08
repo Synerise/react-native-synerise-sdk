@@ -1,6 +1,6 @@
 {
   "name": "react-native-synerise-sdk",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "React Native wrapper for Synerise SDK",
   "author": {
     "name": "Synerise",
@@ -20,8 +20,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
-    "prepare": "npm run build"
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\""
   },
   "repository": {
     "type": "git",
