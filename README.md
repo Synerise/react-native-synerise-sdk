@@ -1,7 +1,7 @@
 # Synerise React Native SDK (react-native-synerise-sdk)
 
 ![Platform](https://img.shields.io/badge/platform-ios%20%7C%20android-lightgrey)
-[![npm](https://img.shields.io/npm/v/react-native-synerise-sdk-sdk.svg?colorB=blue&)](https://www.npmjs.com/package/react-native-synerise-sdk)
+[![npm](https://img.shields.io/npm/v/react-native-synerise-sdk.svg?colorB=blue&)](https://www.npmjs.com/package/react-native-synerise-sdk)
 
 ## Documentation
 
