@@ -1,0 +1,51 @@
+import { BaseModel } from '../BaseModel';
+import { ClientSex } from './../Client/ClientSex';
+import { IClientAgreements, ClientAgreements } from './../Client/ClientAgreements';
+interface IClientAccountInformation {
+    clientId: number;
+    email: String;
+    phone: String;
+    customId: String;
+    uuid: String;
+    firstName: String;
+    lastName: String;
+    displayName: String;
+    sex: String;
+    birthDate: String;
+    avatarUrl: String;
+    company: String;
+    address: String;
+    city: String;
+    province: String;
+    zipCode: String;
+    countryCode: String;
+    anonymous: Boolean;
+    agreements: IClientAgreements;
+    attributes: object;
+    tags: Array<String>;
+}
+declare class ClientAccountInformation extends BaseModel {
+    clientId: number;
+    email: String;
+    phone: String;
+    customId: String;
+    uuid: String;
+    firstName: String;
+    lastName: String;
+    displayName: String;
+    sex: ClientSex;
+    birthDate: String;
+    avatarUrl: String;
+    company: String;
+    address: String;
+    city: String;
+    province: String;
+    zipCode: String;
+    countryCode: String;
+    anonymous: Boolean;
+    agreements: ClientAgreements;
+    attributes: object;
+    tags: Array<String>;
+    constructor(modelObject: IClientAccountInformation);
+}
+export { ClientAccountInformation };

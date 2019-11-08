@@ -1,0 +1,32 @@
+import { BaseModule as Module } from './BaseModule';
+import { ClientAccountRegisterContext } from './../../classes/models/Client/ClientAccountRegisterContext';
+import { ClientAccountUpdateContext } from './../../classes/models/Client/ClientAccountUpdateContext';
+import { ClientAccountInformation } from './../../classes/models/Client/ClientAccountInformation';
+import { Token } from './../../classes/models/Token/Token';
+import { Error } from './../../classes/types/Error';
+declare class ClientModule extends Module {
+    private static _instance;
+    static instance(): ClientModule;
+    private constructor();
+    registerAccount(context: ClientAccountRegisterContext, onSuccess: () => void, onError: (error: Error) => void): void;
+    confirmAccount(token: String, onSuccess: () => void, onError: (error: Error) => void): void;
+    activateAccount(email: String, onSuccess: () => void, onError: (error: Error) => void): void;
+    signIn(email: string, password: string, onSuccess: () => void, onError: (error: Error) => void): void;
+    isSignedIn(): boolean;
+    signOut(): void;
+    retrieveToken(onSuccess: (token: Token) => void, onError: (error: Error) => void): void;
+    getUUID(): String;
+    regenerateUUID(): void;
+    getAccount(onSuccess: (clientAccountInformation: ClientAccountInformation) => void, onError: (error: Error) => void): void;
+    updateAccount(context: ClientAccountUpdateContext, onSuccess: () => void, onError: (error: Error) => void): void;
+    requestPasswordReset(email: String, onSuccess: () => void, onError: (error: Error) => void): void;
+    confirmPasswordReset(password: String, token: String, onSuccess: () => void, onError: (error: Error) => void): void;
+    changePassword(oldPassword: String, newPassword: String, onSuccess: () => void, onError: (error: Error) => void): void;
+    requestEmailChange(email: String, password: String, onSuccess: () => void, onError: (error: Error) => void): void;
+    confirmEmailChange(token: String, newsletterAgreement: Boolean, onSuccess: () => void, onError: (error: Error) => void): void;
+    requestPhoneUpdate(phone: String, onSuccess: () => void, onError: (error: Error) => void): void;
+    confirmPhoneUpdate(phone: String, confirmationCode: String, smsAgreement: Boolean, onSuccess: () => void, onError: (error: Error) => void): void;
+    deleteAccount(password: String, onSuccess: () => void, onError: (error: Error) => void): void;
+    recognizeAnonymous(email: String | null, customIdentify: String | null, parameters: Record<string, any> | null): void;
+}
+export { ClientModule };

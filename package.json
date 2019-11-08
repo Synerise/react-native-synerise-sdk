@@ -1,0 +1,36 @@
+{
+  "name": "react-native-synerise-sdk",
+  "version": "0.9.0",
+  "description": "React Native wrapper for Synerise SDK",
+  "author": {
+    "name": "Synerise",
+    "email": "developer@synerise.com",
+    "url": "https://github.com/Synerise"
+  },
+  "keywords": [
+    "synerise",
+    "react-native",
+    "ios",
+    "android"
+  ],
+  "license": "MIT",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": ["lib/**/*"],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Synerise/react-native-synerise.git"
+  },
+  "devDependencies": {
+    "prettier": "^1.18.2",
+    "tslint": "^5.20.1",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.6.4"
+  }
+}
