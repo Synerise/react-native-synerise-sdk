@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.9.5] - 2019-11-08
+
+### Fixed
+- CocoaPods podspec file.
+
+
 ## [0.9.4] - 2019-11-08
 
 ### Fixed

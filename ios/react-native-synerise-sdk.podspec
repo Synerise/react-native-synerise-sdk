@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.license       = "MIT"
   s.author        = { "Synerise" => "developer@synerise.com" }
   s.platform      = :ios, "9.0"
-  s.source        = { :git => "https://github.com/Synerise/react-native-synerise-sdk", :tag => spec.version.to_s }
+  s.source        = { :git => "https://github.com/Synerise/react-native-synerise-sdk", :tag => s.version.to_s }
   s.source_files  = "ios/ReactNativeSynerise/**/*.{h,m}"
   s.requires_arc  = true
   
