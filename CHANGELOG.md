@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.9.2] - 2019-11-08
+
+### Added
+- ios/android native modules.
+
+
 ## [0.9.1] - 2019-11-08
 
 ### Added

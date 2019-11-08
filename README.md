@@ -48,7 +48,7 @@ Most up-to-date documentation is available at Synerise Help Center:
 4. Import Synerise SDK:
 
    ```javascript
-   import Synerise from 'react-native-synerise-sdk';
+   import { Synerise } from 'react-native-synerise-sdk';
    ```
    
 ### iOS
