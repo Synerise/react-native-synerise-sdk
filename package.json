@@ -1,6 +1,6 @@
 {
   "name": "react-native-synerise-sdk",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "React Native wrapper for Synerise SDK",
   "author": {
     "name": "Synerise",
@@ -16,7 +16,16 @@
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "files": ["lib/**/*", "ios/**/*", "android/**/*"],
+  "files": [
+    ".npmignore",
+    "react-native-synerise-sdk.podspec",
+    "lib/**/*", 
+    "ios/ReactNativeSynerise/**/*",
+    "ios/ReactNativeSynerise/ReactNativeSynerise.xcodeproj", 
+    "ios/ReactNativeSynerise/react-native-synerise-sdk.podspec",
+    "android/src/**/*",
+    "android/build.gradle"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
