@@ -8,12 +8,14 @@
 
 #import "RNBaseModule.h"
 
-static NSString * const RNDefaultErrorDomain = @"com.synerise.sdk.error";
+static NSString * const RNDefaultErrorDomain = @"com.synerise.sdk.react.error";
 static NSInteger const RNDefaultErrorCode = -1;
 static NSString * const RNDefaultErrorMessage = @"";
 
 static NSString * const RNErrorObjectCode = @"code";
 static NSString * const RNErrorObjectMessage = @"message";
+
+NS_ASSUME_NONNULL_BEGIN
 
 @implementation RNBaseModule
 
@@ -35,6 +37,13 @@ static NSString * const RNErrorObjectMessage = @"message";
 
 - (void)executeDefaultFailureCallbackResponse:(RCTResponseSenderBlock)response {
     response([self failureCallbackArrayWithError:[self defaultError]]);
+}
+
+- (NSDictionary *)dictionaryWithError:(NSError *)error {
+    return @{
+        RNErrorObjectCode: [NSNumber numberWithInteger:error.code],
+        RNErrorObjectMessage: error.localizedDescription
+    };
 }
 
 #pragma mark - Helpers
@@ -63,11 +72,10 @@ static NSString * const RNErrorObjectMessage = @"message";
     return @[
              @NO,
              [NSNull null],
-             @{
-                 RNErrorObjectCode: [NSNumber numberWithInteger:error.code],
-                 RNErrorObjectMessage: error.localizedDescription
-                 }
+             [self dictionaryWithError:error]
              ];
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

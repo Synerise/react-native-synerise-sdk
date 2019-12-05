@@ -120,4 +120,25 @@ public class MapUtil {
 
         return map;
     }
+
+    public static Map<String, String> toStringMap(ReadableMap readableMap) {
+        Map<String, String> map = new HashMap<>();
+        ReadableMapKeySetIterator iterator = readableMap.keySetIterator();
+
+        while (iterator.hasNextKey()) {
+            String key = iterator.nextKey();
+            ReadableType type = readableMap.getType(key);
+
+            switch (type) {
+                case Null:
+                    map.put(key, null);
+                    break;
+                case String:
+                    map.put(key, readableMap.getString(key));
+                    break;
+            }
+        }
+
+        return map;
+    }
 }

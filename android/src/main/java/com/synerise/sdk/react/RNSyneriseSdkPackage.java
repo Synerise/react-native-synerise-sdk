@@ -1,7 +1,5 @@
 package com.synerise.sdk.react;
 
-import android.app.Application;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
@@ -14,19 +12,16 @@ import com.facebook.react.bridge.JavaScriptModule;
 
 public class RNSyneriseSdkPackage implements ReactPackage {
 
-    private Application app;
-
-    public RNSyneriseSdkPackage(Application app) {
-        this.app = app;
-    }
-
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
       List<NativeModule> modules = new ArrayList<NativeModule>();
-      modules.add(new RNSynerise(reactContext, app));
+      modules.add(new RNSynerise(reactContext));
+      modules.add(new RNNotifications(reactContext));
+      modules.add(new RNInjector(reactContext));
       modules.add(new RNClient(reactContext));
       modules.add(new RNTracker(reactContext));
       modules.add(new RNSettings(reactContext));
+      modules.add(new RNPromotions(reactContext));
       return modules;
     }
 

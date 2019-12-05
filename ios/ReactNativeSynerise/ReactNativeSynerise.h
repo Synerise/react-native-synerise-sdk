@@ -7,10 +7,27 @@
 //
 
 #import <Foundation/Foundation.h>
+
 #import <React/RCTBridgeModule.h>
-#import <React/RCTEventDispatcher.h>
+#import <React/RCTEventEmitter.h>
+
 #import <SyneriseSDK/SyneriseSDK.h>
 
-@interface ReactNativeSynerise : NSObject
+#import "NSDictionary+ReactNative.h"
+#import "NSMutableDictionary+ReactNative.h"
 
-@end
+#import "RNSyneriseManager.h"
+
+static NSString * const kRNSyneriseJavaScriptDidLoadNotification = @"kRNSyneriseJavaScriptDidLoadNotification";
+
+static NSString * const kRNSyneriseInitializationSuccessEvent = @"kRNSyneriseInitializationSuccessEvent";
+static NSString * const kRNSyneriseInitializationFailureEvent = @"kRNSyneriseInitializationFailureEvent";
+
+static NSString * const kRNSyneriseRegistrationTokenEvent = @"kRNSyneriseRegistrationTokenEvent";
+static NSString * const kRNSyneriseRegistrationRequiredEvent = @"kRNSyneriseRegistrationRequiredEvent";
+static NSString * const kRNSyneriseNotificationEvent = @"kRNSyneriseNotificationEvent";
+
+static NSString * const kRNSyneriseUrlActionEvent = @"kRNSyneriseUrlActionEvent";
+static NSString * const kRNSyneriseDeepLinkActionEvent = @"kRNSyneriseDeepLinkActionEvent";
+static NSString * const kRNSyneriseBannerPresentedEvent = @"kRNSyneriseBannerPresentedEvent";
+static NSString * const kRNSyneriseBannerHiddenEvent = @"kRNSyneriseBannerHiddenEvent";

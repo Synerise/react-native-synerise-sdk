@@ -1,5 +1,5 @@
 //
-//  RNReactCommunicationUtils.h
+//  RNSyneriseDispatcher.h
 //  react-native-synerise-sdk
 //
 //  Created by Synerise
@@ -10,9 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RNReactCommunicationUtils : NSObject
-
-+ (NSDictionary *)normalizeDictionary:(NSDictionary *)dictionary;
+@interface RNSyneriseEventEmitter : RCTEventEmitter
 
 @end
 

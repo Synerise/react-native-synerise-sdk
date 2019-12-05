@@ -5,7 +5,6 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
-import com.synerise.sdk.react.RNBaseModule;
 import com.synerise.sdk.event.Tracker;
 import com.synerise.sdk.event.TrackerParams;
 import com.synerise.sdk.event.model.CustomEvent;
@@ -28,16 +27,19 @@ public class RNTracker extends RNBaseModule {
         return "RNTracker";
     }
 
+    //setCustomIdentifier(identifier: String)
     @ReactMethod
     public void setCustomIdentifier(String identifier) {
         Tracker.setCustomIdentifier(identifier);
     }
 
+    //setCustomEmail(email: String)
     @ReactMethod
     public void setCustomEmail(String email) {
         Tracker.setCustomEmail(email);
     }
 
+    //send(event: Event)
     @ReactMethod
     public void send(ReadableMap map) {
         String type = map.getString("type");
@@ -51,6 +53,7 @@ public class RNTracker extends RNBaseModule {
         Tracker.send(event);
     }
 
+    //flushEvents(onSuccess: () => void)
     @ReactMethod
     public void flushEvents(Callback callback) {
         Tracker.flush();

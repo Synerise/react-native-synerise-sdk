@@ -10,7 +10,6 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableMap;
-import com.synerise.sdk.react.RNBaseModule;
 import com.synerise.sdk.react.utils.ArrayUtil;
 import com.synerise.sdk.react.utils.MapUtil;
 import com.synerise.sdk.client.Client;
@@ -57,7 +56,6 @@ public class RNClient extends RNBaseModule {
     @ReactMethod
     public void signIn(String email, String password, Callback callback) {
         signInCall = Client.signIn(email, password);
-        // tak to trzeba zrobic
         signInCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
             @Override
             public void onDataAction(ApiError apiError) {
@@ -79,6 +77,7 @@ public class RNClient extends RNBaseModule {
         return true;
     }
 
+    //registerAccount(context: ClientAccountRegisterContext, onSuccess: () => void, onError: (error: Error) => void)
     @ReactMethod
     public void registerAccount(ReadableMap map, Callback callback) {
         RegisterClient registerClient = new RegisterClient();
@@ -124,6 +123,7 @@ public class RNClient extends RNBaseModule {
         });
     }
 
+    //confirmAccount(token: String, onSuccess: () => void, onError: (error: Error) => void)
     @ReactMethod
     public void confirmAccount(String token, Callback callback) {
         confirmCall = Client.confirmAccount(token);
@@ -135,6 +135,7 @@ public class RNClient extends RNBaseModule {
         });
     }
 
+    //activateAccount(email: String, onSuccess: () => void, onError: (error: Error) => void)
     @ReactMethod
     public void activateAccount(String email, Callback callback) {
         activateCall = Client.activateAccount(email);
@@ -146,6 +147,7 @@ public class RNClient extends RNBaseModule {
         });
     }
 
+    //retrieveToken(onSuccess: (token: Token) => void, onError: (error: Error) => void)
     @ReactMethod
     public void retrieveToken(Callback callback) {
         if (getTokenCall != null) getTokenCall.cancel();
@@ -159,6 +161,7 @@ public class RNClient extends RNBaseModule {
                 tokenMap.putDouble("expirationDate", token.getExpirationUnixTime());
                 //tokenMap.putString("rlm", token.getTokenRLM().getRlm());
                 tokenMap.putString("tokenOrigin", token.getOrigin().getOrigin());
+                tokenMap.putDouble("expirationDate", token.getExpirationUnixTime());
 
                 executeSuccessCallbackResponse(callback, tokenMap, null);
             }
@@ -170,16 +173,19 @@ public class RNClient extends RNBaseModule {
         });
     }
 
+    //getUUID()
     @ReactMethod(isBlockingSynchronousMethod = true)
     public String getUUID() {
         return Client.getUuid();
     }
 
+    //regenerateUUID()
     @ReactMethod
     public void regenerateUUID() {
         Client.regenerateUuid();
     }
 
+    //getAccount(onSuccess: (clientAccountInformation: ClientAccountInformation) => void, onError: (error: Error) => void)
     @ReactMethod
     public void getAccount(Callback callback) {
         if (getAccountCall != null) getAccountCall.cancel();
@@ -216,6 +222,9 @@ public class RNClient extends RNBaseModule {
                 accountMap.putMap("agreements", agreements);
                 accountMap.putMap("attributes", MapUtil.stringMapToWritableMap(getAccountInformation.getAttributes()));
                 accountMap.putArray("tags", ArrayUtil.toWritableArray(getAccountInformation.getTags()));
+                if (getAccountInformation.getLastActivityDate() != null) {
+                    accountMap.putDouble("lastActivityDate", getAccountInformation.getLastActivityDate().getTime());
+                }
 
                 executeSuccessCallbackResponse(callback, accountMap, null);
             }
@@ -227,6 +236,7 @@ public class RNClient extends RNBaseModule {
         });
     }
 
+    //updateAccount(context: ClientAccountUpdateContext, onSuccess: () => void, onError: (error: Error) => void)
     @ReactMethod
     public void updateAccount(ReadableMap map, Callback callback) {
         UpdateAccountInformation updateAccountInformation = new UpdateAccountInformation();
@@ -277,6 +287,7 @@ public class RNClient extends RNBaseModule {
         });
     }
 
+    //requestPasswordReset(email: String, onSuccess: () => void, onError: (error: Error) => void)
     @ReactMethod
     public void requestPasswordReset(String email, Callback callback) {
         PasswordResetRequest passwordResetRequest = new PasswordResetRequest(email);
@@ -289,6 +300,7 @@ public class RNClient extends RNBaseModule {
         });
     }
 
+    //confirmPasswordReset(password: String, token: String, onSuccess: () => void, onError: (error: Error) => void)
     @ReactMethod
     public void confirmPasswordReset(String password, String token, Callback callback) {
         PasswordResetConfirmation passwordResetConfirmation = new PasswordResetConfirmation(password, token);
@@ -301,6 +313,7 @@ public class RNClient extends RNBaseModule {
         });
     }
 
+    //changePassword(oldPassword: String, newPassword: String, onSuccess: () => void, onError: (error: Error) => void)
     @ReactMethod
     public void changePassword(String oldPassword, String password, Callback callback) {
         IApiCall changePasswordCall = Client.changePassword(oldPassword, password);
@@ -312,6 +325,7 @@ public class RNClient extends RNBaseModule {
         });
     }
 
+    //requestEmailChange(email: String, password: String, onSuccess: () => void, onError: (error: Error) => void)
     @ReactMethod
     public void requestEmailChange(String email, String password, Callback callback) {
         IApiCall emailChangeCall = Client.requestEmailChange(email, password, null);
@@ -323,6 +337,7 @@ public class RNClient extends RNBaseModule {
         });
     }
 
+    //confirmEmailChange(token: String, newsletterAgreement: Boolean, onSuccess: () => void, onError: (error: Error) => void)
     @ReactMethod
     public void confirmEmailChange(String token, boolean newsletterAgreement, Callback callback) {
         IApiCall confirmEmailChange = Client.confirmEmailChange(token, newsletterAgreement);
@@ -334,6 +349,7 @@ public class RNClient extends RNBaseModule {
         });
     }
 
+    //requestPhoneUpdate(phone: String, onSuccess: () => void, onError: (error: Error) => void)
     @ReactMethod
     public void requestPhoneUpdate(String phone, Callback callback) {
         IApiCall requestPhoneUpdateCall = Client.requestPhoneUpdate(phone);
@@ -345,6 +361,7 @@ public class RNClient extends RNBaseModule {
         });
     }
 
+    //confirmPhoneUpdate(phone: String, confirmationCode: String, smsAgreement: Boolean, onSuccess: () => void, onError: (error: Error) => void)
     @ReactMethod
     public void confirmPhoneUpdate(String phone, String confirmationCode, @Nullable Boolean smsAgreement, Callback callback) {
         IApiCall confirmPhoneUpdateCall = Client.confirmPhoneUpdate(phone, confirmationCode, smsAgreement);
@@ -356,6 +373,7 @@ public class RNClient extends RNBaseModule {
         });
     }
 
+    //deleteAccount(password: String, onSuccess: () => void, onError: (error: Error) => void)
     @ReactMethod
     public void deleteAccount(String password, Callback callback) {
         IApiCall deleteAccountCall = Client.deleteAccount(password);
@@ -367,6 +385,7 @@ public class RNClient extends RNBaseModule {
         });
     }
 
+    //recognizeAnonymous(email: String | null, customIdentify: String | null, parameters: Record<string, any> | null)
     @ReactMethod
     public void recognizeAnonymous(String email, String customIdentify, ReadableMap map) {
         HashMap<String, Object> parameters = new HashMap<>(MapUtil.toMap(map));

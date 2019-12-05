@@ -7,7 +7,6 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableMap;
-import com.synerise.sdk.react.RNBaseModule;
 import com.synerise.sdk.core.Synerise;
 import com.synerise.sdk.core.settings.Settings;
 
@@ -45,6 +44,7 @@ public class RNSettings extends RNBaseModule {
         return constants;
     }
 
+    //function getOne(key: string)
     @ReactMethod(isBlockingSynchronousMethod = true)
     public WritableMap getOne(String key) {
         Map<String, Object> settings = settingsDictionary();
@@ -58,11 +58,13 @@ public class RNSettings extends RNBaseModule {
         return setting;
     }
 
+    //function setOne(key: string, value: any)
     @ReactMethod
     public void setOne(String key, Object value) {
         matchSetting(key, value);
     }
 
+    //function setMany(settings: object)
     @ReactMethod
     public void setMany(ReadableMap newSettings) {
         ReadableMapKeySetIterator iterator = newSettings.keySetIterator();

@@ -9,6 +9,11 @@ interface ISettingsOptions {
         maxBatchSize?: number;
         autoFlushTimeout?: number;
     };
+    notifications?: {
+        enabled?: boolean;
+        disableInAppAlerts?: boolean;
+        appGroupIdentifier?: string;
+    };
 }
 declare class SettingsModule extends Module {
     private static _instance;
@@ -20,6 +25,11 @@ declare class SettingsModule extends Module {
         minBatchSize: any;
         maxBatchSize: any;
         autoFlushTimeout: any;
+    };
+    notifications: {
+        enabled: any;
+        disableInAppAlerts: any;
+        appGroupIdentifier: any;
     };
     static instance(): SettingsModule;
     private constructor();

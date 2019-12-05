@@ -10,8 +10,10 @@
 
 @implementation RNSyneriseInitializer
 
+#pragma mark - Public
+
 - (void)initialize {
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_sync(dispatch_get_main_queue(), ^{
         [self overwriteDefaultSettings];
         
         [SNRSynerise initializeWithClientApiKey:self.clientApiKey andBaseUrl:self.baseURL];
@@ -20,17 +22,24 @@
     });
 }
 
-- (void)overwriteDefaultSettings {
-    SNRSynerise.settings.notifications.enabled = NO;
-    SNRSynerise.settings.tracker.autoTracking.enabled = NO;
-    SNRSynerise.settings.tracker.tracking.enabled = YES;
+- (void)initialized {
+    [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseJavaScriptDidLoadNotification object:nil userInfo:@{}];
 }
 
-- (void)setApplicationOrigin {
-    //TODO: pomyśleć co zrobić ze stałymi
-//    NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"com.synerise.sdk"];
-//    [userDefaults setObject:@"REACT_NATIVE" forKey:@"app.origin"];
-//    [userDefaults synchronize];
+- (void)overwriteDefaultSettings {
+    SNRSynerise.settings.sdk.enabled = YES;
+    
+    SNRSynerise.settings.notifications.enabled = YES;
+    SNRSynerise.settings.notifications.disableInAppAlerts = NO;
+    SNRSynerise.settings.notifications.appGroupIdentifier = nil;
+    
+    SNRSynerise.settings.tracker.locationAutomatic = NO;
+    
+    SNRSynerise.settings.tracker.autoTracking.enabled = NO;
+    
+    SNRSynerise.settings.tracker.tracking.enabled = YES;
+    
+    SNRSynerise.settings.injector.automatic = NO;
 }
 
 @end

@@ -13,43 +13,39 @@ static NSString * const RNTrackerEventLabelKey = @"label";
 static NSString * const RNTrackerEventActionKey = @"action";
 static NSString * const RNTrackerEventParametersKey = @"parameters";
 
+NS_ASSUME_NONNULL_BEGIN
+
 @implementation RNTracker
+
+static RNTracker *moduleInstance;
 
 RCT_EXPORT_MODULE();
 
-RCT_EXPORT_METHOD(setCustomIdentifier:(NSString *)customIdentifier)
-{
-    [SNRTracker setCustomIdentifier:customIdentifier];
-}
+#pragma mark - Lifecycle
 
-RCT_EXPORT_METHOD(setCustomEmail:(NSString *)customEmail)
-{
-    [SNRTracker setCustomEmail:customEmail];
-}
-
-RCT_EXPORT_METHOD(send:(NSDictionary *)eventDictionary)
-{
-    NSDictionary *normalizedEventDictionary = [RNReactCommunicationUtils normalizeDictionary:eventDictionary];
-    SNREvent *event = [self eventWithEventDictionary:normalizedEventDictionary];
-    if (event != nil) {
-        [SNRTracker send:event];
+- (instancetype)init {
+    if (moduleInstance != nil) {
+        return moduleInstance;
     }
+    
+    self = [super init];
+    
+    if (self) {
+        
+    }
+    
+    moduleInstance = self;
+    
+    return self;
 }
 
-RCT_REMAP_METHOD(flushEvents, flushEventsWithResponse:(RCTResponseSenderBlock)response)
-{
-    [SNRTracker flushEventsWithCompletionHandler:^() {
-        [self executeSuccessCallbackResponse:response data:@{}];
-    }];
-}
+#pragma mark - SDK Mapping
 
-#pragma mark - Private
-
-- (SNRCustomEvent *)eventWithEventDictionary:(NSDictionary *)eventDictionary {
-    NSString *type = eventDictionary[RNTrackerEventTypeKey];
-    NSString *label = eventDictionary[RNTrackerEventLabelKey];
-    NSString *action = eventDictionary[RNTrackerEventActionKey];
-    NSDictionary *parameters = eventDictionary[RNTrackerEventParametersKey];
+- (SNRCustomEvent *)eventWithDictionary:(NSDictionary *)dictionary {
+    NSString *type = [dictionary getStringForKey:RNTrackerEventTypeKey];
+    NSString *label = [dictionary getStringForKey:RNTrackerEventLabelKey];
+    NSString *action = [dictionary getStringForKey:RNTrackerEventActionKey];
+    NSDictionary *parameters = [dictionary getDictionaryForKey:RNTrackerEventParametersKey];
     
     if (type != nil && label != nil) {
         SNRTrackerParams *params = [SNRTrackerParams makeWithBuilder:^(SNRTrackerParamsBuilder *builder) {
@@ -93,6 +89,7 @@ RCT_REMAP_METHOD(flushEvents, flushEventsWithResponse:(RCTResponseSenderBlock)re
     return nil;
 }
 
+//TODO: do helpersów
 - (BOOL)isDoubleNumber:(NSNumber *)number {
     CFNumberType numberType = CFNumberGetType((CFNumberRef)number);
     
@@ -105,4 +102,33 @@ RCT_REMAP_METHOD(flushEvents, flushEventsWithResponse:(RCTResponseSenderBlock)re
     return (numberType == kCFNumberCharType);
 }
 
+#pragma mark - JS Module
+
+RCT_EXPORT_METHOD(setCustomIdentifier:(NSString *)customIdentifier)
+{
+    [SNRTracker setCustomIdentifier:customIdentifier];
+}
+
+RCT_EXPORT_METHOD(setCustomEmail:(NSString *)customEmail)
+{
+    [SNRTracker setCustomEmail:customEmail];
+}
+
+RCT_EXPORT_METHOD(send:(NSDictionary *)dictionary)
+{
+    SNREvent *event = [self eventWithDictionary:dictionary];
+    if (event != nil) {
+        [SNRTracker send:event];
+    }
+}
+
+RCT_REMAP_METHOD(flushEvents, flushEventsWithResponse:(RCTResponseSenderBlock)response)
+{
+    [SNRTracker flushEventsWithCompletionHandler:^() {
+        [self executeSuccessCallbackResponse:response data:@{}];
+    }];
+}
+
 @end
+
+NS_ASSUME_NONNULL_END

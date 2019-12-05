@@ -3,5 +3,12 @@ export { IClientAccountRegisterContext, ClientAccountRegisterContext } from './.
 export { IClientAccountUpdateContext, ClientAccountUpdateContext } from './../classes/models/Client/ClientAccountUpdateContext';
 export { IClientAgreements, ClientAgreements } from './../classes/models/Client/ClientAgreements';
 export { ClientSex, ClientSexFromString, ClientSexToString } from './../classes/models/Client/ClientSex';
+export { PromotionStatus } from './../classes/models/Promotions/PromotionStatus';
+export { PromotionType } from './../classes/models/Promotions/PromotionType';
+export { PromotionDiscountType } from './../classes/models/Promotions/PromotionDiscountType';
+export { Promotion, PromotionSortingKey } from './../classes/models/Promotions/Promotion';
+export { PromotionResponse } from './../classes/models/Promotions/PromotionResponse';
+export { BaseApiQuery, IApiQuerySorting, ApiQuerySortingOrder } from './../classes/api_queries/BaseApiQuery';
+export { PromotionsApiQuery } from './../classes/api_queries/PromotionsApiQuery';
 export { Token } from './../classes/models/Token/Token';
 export { TokenOrigin, TokenOriginFromString, TokenOriginToString } from './../classes/models/Token/TokenOrigin';

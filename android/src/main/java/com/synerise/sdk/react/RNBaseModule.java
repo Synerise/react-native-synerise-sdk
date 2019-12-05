@@ -5,9 +5,11 @@ import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.synerise.sdk.error.ApiError;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class RNBaseModule extends ReactContextBaseJavaModule {
 
@@ -34,5 +36,11 @@ public class RNBaseModule extends ReactContextBaseJavaModule {
     @Override
     public String getName() {
         return "RNBaseModule";
+    }
+
+    protected static void sendEventToJs(String eventName, @Nullable WritableMap data, ReactApplicationContext context) {
+        context
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit(eventName, data);
     }
 }

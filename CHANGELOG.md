@@ -1,6 +1,18 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.9.6] - 2019-12-05
+
+### Added
+- `Synerise.Notifications` module.
+- `Synerise.Promotions` module.
+- Campaigns (Simple Push, Banner, Mandatory Update).
+- Settings for campaigns.
+- Handling URL and DeepLink actions from campaigns.
+
+### Changed
+- Synerise initialization (`Synerise.onReady` and `Synerise.onError` callbacks).
+
 ## [0.9.5] - 2019-11-08
 
 ### Fixed

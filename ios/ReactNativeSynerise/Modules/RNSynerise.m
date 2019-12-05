@@ -7,10 +7,16 @@
 //
 
 #import "RNSynerise.h"
-#import "RNConstants.h"
 #import "RNSyneriseInitializer.h"
+#import "RNInjector.h"
+#import "RNNotifications.h"
 
-@interface RNSynerise ()
+static NSString * const RNSyneriseInitializationSucessEventListenerKey = @"INITIALIZATION_SUCCESS_LISTENER_KEY";
+static NSString * const RNSyneriseInitializationFailureEventListenerKey = @"INITIALIZATION_FAILURE_LISTENER_KEY";
+
+NS_ASSUME_NONNULL_BEGIN
+
+@interface RNSynerise () <SNRSyneriseDelegate>
 
 @property (strong, nonatomic, nullable, readwrite) RNSyneriseInitializer *initializer;
 
@@ -18,14 +24,67 @@
 
 @implementation RNSynerise
 
+static RNSynerise *moduleInstance;
+
 RCT_EXPORT_MODULE();
 
-#pragma mark - Synerise Initializer
+#pragma mark - Lifecycle
+
+- (instancetype)init {
+    if (moduleInstance != nil) {
+        return moduleInstance;
+    }
+    
+    self = [super init];
+    
+    if (self) {
+        [SNRSynerise setDelegate:self];
+    }
+    
+    moduleInstance = self;
+    
+    return self;
+}
+
+#pragma mark - SNRSyneriseDelegate
+
+- (void)SNR_initialized {
+    [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseInitializationSuccessEvent object:nil userInfo:@{}];
+}
+
+- (void)SNR_initializationError:(NSError *)error {
+    NSDictionary *errorDictionary = [self dictionaryWithError:error];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseInitializationFailureEvent object:nil userInfo:errorDictionary];
+}
+
+- (void)SNR_registerForPushNotificationsIsNeeded {
+    [[RNSyneriseManager sharedInstance].notifications executeRegistrationRequired];
+}
+
+- (void)SNR_handledActionWithURL:(NSURL *)url activity:(SNRSyneriseActivity)activity completionHandler:(SNRSyneriseActivityCompletionHandler)completionHandler {
+    completionHandler(SNRSyneriseActivityActionHide, ^{
+        [[RNSyneriseManager sharedInstance].injector executeURLAction:url];
+    });
+}
+
+- (void)SNR_handledActionWithDeepLink:(NSString *)deepLink activity:(SNRSyneriseActivity)activity completionHandler:(SNRSyneriseActivityCompletionHandler)completionHandler {
+    completionHandler(SNRSyneriseActivityActionHide, ^{
+        [[RNSyneriseManager sharedInstance].injector executeDeepLinkAction:deepLink];
+    });
+}
+
+#pragma mark - JS Module
+
+- (NSDictionary *)constantsToExport
+{
+  return @{
+      RNSyneriseInitializationSucessEventListenerKey: kRNSyneriseInitializationSuccessEvent,
+      RNSyneriseInitializationFailureEventListenerKey: kRNSyneriseInitializationFailureEvent
+  };
+}
 
 RCT_EXPORT_METHOD(createInitializer) {
-    if (self.initializer == nil) {
-        self.initializer = [RNSyneriseInitializer new];
-    }
+   self.initializer = [RNSyneriseInitializer new];
 }
 
 RCT_EXPORT_METHOD(withClientApiKey:(NSString *)clientApiKey) {
@@ -53,9 +112,13 @@ RCT_EXPORT_METHOD(withCrashHandlingEnabled:(BOOL)crashHandlingEnabled) {
 }
 
 RCT_EXPORT_METHOD(initialize) {
-    if (self.initializer != nil) {
-        [self.initializer initialize];
-    }
+    [self.initializer initialize];
+}
+
+RCT_EXPORT_METHOD(initialized) {
+    [self.initializer initialized];
 }
 
 @end
+
+NS_ASSUME_NONNULL_END

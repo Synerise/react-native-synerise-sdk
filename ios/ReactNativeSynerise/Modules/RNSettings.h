@@ -6,7 +6,6 @@
 //  Copyright © 2018 Synerise. All rights reserved.
 //
 
-#import "ReactNativeSynerise.h"
 #import "RNBaseModule.h"
 
 NS_ASSUME_NONNULL_BEGIN

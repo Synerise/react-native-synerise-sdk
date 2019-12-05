@@ -8,11 +8,188 @@
 
 #import "RNClient.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @implementation RNClient
+
+static RNClient *moduleInstance;
 
 RCT_EXPORT_MODULE();
 
-#pragma mark - Module
+#pragma mark - Lifecycle
+
+- (instancetype)init {
+    if (moduleInstance != nil) {
+        return moduleInstance;
+    }
+    
+    self = [super init];
+    
+    if (self) {
+        
+    }
+    
+    moduleInstance = self;
+    
+    return self;
+}
+
+#pragma mark - SDK Mapping
+
+- (nullable SNRClientRegisterAccountContext *)modelClientRegisterAccountContextWithDictionary:(nullable NSDictionary *)dictionary {
+    if (dictionary != nil) {
+        NSString *email = [dictionary getStringForKey:@"email"];
+        NSString *password = [dictionary getStringForKey:@"password"];
+        
+        if (email != nil && password != nil) {
+            SNRClientRegisterAccountContext *model = [[SNRClientRegisterAccountContext alloc] initWithEmail:email andPassword:password];
+            model.phone = [dictionary getStringForKey:@"phone"];
+            model.customId = [dictionary getStringForKey:@"customId"];
+
+            model.firstName = [dictionary getStringForKey:@"firstName"];
+            model.lastName = [dictionary getStringForKey:@"lastName"];
+            model.sex = SNR_StringToClientSex([dictionary getStringForKey:@"sex"]);
+
+            model.company = [dictionary getStringForKey:@"company"];
+            model.address = [dictionary getStringForKey:@"address"];
+            model.city = [dictionary getStringForKey:@"city"];
+            model.province = [dictionary getStringForKey:@"province"];
+            model.zipCode = [dictionary getStringForKey:@"zipCode"];
+            model.countryCode = [dictionary getStringForKey:@"countryCode"];
+            
+            model.agreements = [self modelClientAgreementsWithDictionary:[dictionary getDictionaryForKey:@"agreements"]];
+
+            model.attributes = [dictionary getDictionaryForKey:@"attributes"];
+            model.tags = [dictionary getArrayForKey:@"tags"];
+            
+            return model;
+        }
+    }
+    
+    return nil;
+}
+
+- (nullable SNRClientUpdateAccountContext *)modelClientUpdateAccountContextWithDictionary:(nullable NSDictionary *)dictionary {
+    if (dictionary != nil) {
+        SNRClientUpdateAccountContext *model = [SNRClientUpdateAccountContext new];
+        model.email = [dictionary getStringForKey:@"email"];
+        model.phone = [dictionary getStringForKey:@"phone"];
+        model.customId = [dictionary getStringForKey:@"customId"];
+        model.uuid = [dictionary getStringForKey:@"uuid"];
+                                                
+        model.firstName = [dictionary getStringForKey:@"firstName"];
+        model.lastName = [dictionary getStringForKey:@"lastName"];
+        model.displayName = [dictionary getStringForKey:@"displayName"];
+        model.sex = SNR_StringToClientSex([dictionary getStringForKey:@"sex"]);
+        model.birthDate = [dictionary getStringForKey:@"birthDate"];
+        model.avatarUrl = [dictionary getStringForKey:@"avatarUrl"];
+                                                
+        model.company = [dictionary getStringForKey:@"company"];
+        model.address = [dictionary getStringForKey:@"address"];
+        model.city = [dictionary getStringForKey:@"city"];
+        model.province = [dictionary getStringForKey:@"province"];
+        model.zipCode = [dictionary getStringForKey:@"zipCode"];
+        model.countryCode = [dictionary getStringForKey:@"countryCode"];
+        
+        model.agreements = [self modelClientAgreementsWithDictionary:[dictionary getDictionaryForKey:@"agreements"]];
+
+        model.attributes = [dictionary getDictionaryForKey:@"attributes"];
+        model.tags = [dictionary getArrayForKey:@"tags"];
+        
+        return model;
+    }
+    
+    return nil;
+}
+
+- (nullable SNRClientAgreements *)modelClientAgreementsWithDictionary:(nullable NSDictionary *)dictionary {
+    if (dictionary != nil) {
+        SNRClientAgreements *model = [SNRClientAgreements new];
+        model.email = [dictionary getBoolForKey:@"email"];
+        model.sms = [dictionary getBoolForKey:@"sms"];
+        model.push = [dictionary getBoolForKey:@"push"];
+        model.bluetooth = [dictionary getBoolForKey:@"bluetooth"];
+        model.rfid = [dictionary getBoolForKey:@"rfid"];
+        model.wifi = [dictionary getBoolForKey:@"wifi"];
+        
+        return model;
+    }
+    
+    return nil;
+}
+
+#pragma mark - JS Mapping
+
+- (nullable NSDictionary *)dictionaryWithClientAccountInformation:(nullable SNRClientAccountInformation *)model {
+    if (model != nil) {
+        NSMutableDictionary *dictionary = [@{} mutableCopy];
+        
+        [dictionary setInteger:model.clientId forKey:@"clientId"];
+        [dictionary setString:model.email forKey:@"email"];
+        [dictionary setString:model.phone forKey:@"phone"];
+        [dictionary setString:model.customId forKey:@"customId"];
+        [dictionary setString:model.uuid forKey:@"uuid"];
+        
+        [dictionary setString:model.firstName forKey:@"firstName"];
+        [dictionary setString:model.lastName forKey:@"lastName"];
+        [dictionary setString:model.displayName forKey:@"displayName"];
+        [dictionary setString:SNR_ClientSexToString(model.sex) forKey:@"sex"];
+        [dictionary setString:model.birthDate forKey:@"birthDate"];
+        [dictionary setString:model.avatarUrl forKey:@"avatarUrl"];
+        
+        [dictionary setString:model.company forKey:@"company"];
+        [dictionary setString:model.address forKey:@"address"];
+        [dictionary setString:model.city forKey:@"city"];
+        [dictionary setString:model.province forKey:@"province"];
+        [dictionary setString:model.zipCode forKey:@"zipCode"];
+        [dictionary setString:model.countryCode forKey:@"countryCode"];
+
+        [dictionary setBool:model.anonymous forKey:@"anonymous"];
+        [dictionary setDate:model.lastActivityDate forKey:@"lastActivityDate"];
+        
+        [dictionary setDictionary:[self dictionaryWithClientAgreements:model.agreements] forKey:@"agreements"];
+        
+        [dictionary setDictionary:model.attributes forKey:@"attributes"];
+        [dictionary setArray:model.tags forKey:@"tags"];
+        
+        return dictionary;
+    }
+    
+    return nil;
+}
+
+- (nullable NSDictionary *)dictionaryWithClientAgreements:(nullable SNRClientAgreements *)model {
+    if (model != nil) {
+        NSMutableDictionary *dictionary = [@{} mutableCopy];
+        
+        [dictionary setBool:model.email forKey:@"email"];
+        [dictionary setBool:model.sms forKey:@"sms"];
+        [dictionary setBool:model.push forKey:@"push"];
+        [dictionary setBool:model.bluetooth forKey:@"bluetooth"];
+        [dictionary setBool:model.rfid forKey:@"rfid"];
+        [dictionary setBool:model.wifi forKey:@"wifi"];
+        
+        return dictionary;
+    }
+    
+    return nil;
+}
+
+- (nullable NSDictionary *)dictionaryWithToken:(nullable SNRToken *)model {
+    if (model != nil) {
+        NSMutableDictionary *dictionary = [@{} mutableCopy];
+        
+        [dictionary setString:model.tokenString forKey:@"tokenString"];
+        [dictionary setString:SNR_TokenOriginToString(model.tokenOrigin) forKey:@"tokenOrigin"];
+        [dictionary setDate:model.expirationDate forKey:@"expirationDate"];
+    
+        return dictionary;
+    }
+    
+    return nil;
+}
+
+#pragma mark - JS Module
 
 //registerAccount(context: ClientAccountRegisterContext, onSuccess: () => void, onError: (error: Error) => void)
 
@@ -191,7 +368,7 @@ RCT_EXPORT_METHOD(requestEmailChange:(NSString *)email password:(NSString *)pass
 
 //confirmEmailChange(token: String, newsletterAgreement: Boolean, onSuccess: () => void, onError: (error: Error) => void)
 
-RCT_EXPORT_METHOD(confirmEmailChange:(NSString *)token newsletterAgreement:(NSNumber *)newsletterAgreement response:(RCTResponseSenderBlock)response)
+RCT_EXPORT_METHOD(confirmEmailChange:(NSString *)token newsletterAgreement:(nonnull NSNumber *)newsletterAgreement response:(RCTResponseSenderBlock)response)
 {
     [SNRClient confirmEmailChange:token newsletterAgreement:[newsletterAgreement boolValue] success:^(BOOL isSuccess) {
         [self executeSuccessCallbackResponse:response data:@1];
@@ -213,7 +390,7 @@ RCT_EXPORT_METHOD(requestPhoneUpdate:(NSString *)phone response:(RCTResponseSend
 
 //confirmPhoneUpdate(phone: String, confirmationCode: String, smsAgreement: Boolean, onSuccess: () => void, onError: (error: Error) => void)
 
-RCT_EXPORT_METHOD(confirmPhoneUpdate:(NSString *)phone confirmationCode:(NSString *)confirmationCode smsAgreement:(NSNumber *)smsAgreement response:(RCTResponseSenderBlock)response)
+RCT_EXPORT_METHOD(confirmPhoneUpdate:(NSString *)phone confirmationCode:(NSString *)confirmationCode smsAgreement:(nonnull NSNumber *)smsAgreement response:(RCTResponseSenderBlock)response)
 {
     [SNRClient confirmPhoneUpdate:phone confirmationCode:confirmationCode smsAgreement:[smsAgreement boolValue] success:^(BOOL isSuccess) {
         [self executeSuccessCallbackResponse:response data:@1];
@@ -240,158 +417,6 @@ RCT_EXPORT_METHOD(recognizeAnonymous:(nullable NSString *)email customIdentify:(
     [SNRClient recognizeAnonymousWithEmail:email customIdentify:customIdentify parameters:parameters];
 }
 
-#pragma mark - SDK Mapping
-
-- (nullable SNRClientRegisterAccountContext *)modelClientRegisterAccountContextWithDictionary:(nullable NSDictionary *)dictionary {
-    if (dictionary != nil) {
-        NSString *email = dictionary[@"email"];
-        NSString *password = dictionary[@"password"];
-        
-        if (email != nil && password != nil) {
-            SNRClientRegisterAccountContext *model = [[SNRClientRegisterAccountContext alloc] initWithEmail:email andPassword:password];
-            model.phone = dictionary[@"phone"];
-            model.customId = dictionary[@"customId"];
-
-            model.firstName = dictionary[@"firstName"];
-            model.lastName = dictionary[@"lastName"];
-            model.sex = SNR_StringToClientSex(dictionary[@"sex"]);
-
-            model.company = dictionary[@"company"];
-            model.address = dictionary[@"address"];
-            model.city = dictionary[@"city"];
-            model.province = dictionary[@"province"];
-            model.zipCode = dictionary[@"zipCode"];
-            model.countryCode = dictionary[@"countryCode"];
-            
-            model.agreements = [self modelClientAgreementsWithDictionary:dictionary[@"agreements"]];
-
-            model.attributes = dictionary[@"attributes"];
-            model.tags = dictionary[@"tags"];
-            
-            return model;
-        }
-    }
-    
-    return nil;
-}
-
-- (nullable SNRClientUpdateAccountContext *)modelClientUpdateAccountContextWithDictionary:(nullable NSDictionary *)dictionary {
-    if (dictionary != nil) {
-        SNRClientUpdateAccountContext *model = [SNRClientUpdateAccountContext new];
-        model.email = dictionary[@"email"];
-        model.phone = dictionary[@"phone"];
-        model.customId = dictionary[@"customId"];
-        model.uuid = dictionary[@"uuid"];
-                                                
-        model.firstName = dictionary[@"firstName"];
-        model.lastName = dictionary[@"lastName"];
-        model.displayName = dictionary[@"displayName"];
-        model.sex = SNR_StringToClientSex(dictionary[@"sex"]);
-        model.birthDate = dictionary[@"birthDate"];
-        model.avatarUrl = dictionary[@"avatarUrl"];
-                                                
-        model.company = dictionary[@"company"];
-        model.address = dictionary[@"address"];
-        model.city = dictionary[@"city"];
-        model.province = dictionary[@"province"];
-        model.zipCode = dictionary[@"zipCode"];
-        model.countryCode = dictionary[@"countryCode"];
-        
-        model.agreements = [self modelClientAgreementsWithDictionary:dictionary[@"agreements"]];
-
-        model.attributes = dictionary[@"attributes"];
-        model.tags = dictionary[@"tags"];
-        
-        return model;
-    }
-    
-    return nil;
-}
-
-- (nullable SNRClientAgreements *)modelClientAgreementsWithDictionary:(nullable NSDictionary *)dictionary {
-    if (dictionary != nil) {
-        SNRClientAgreements *model = [SNRClientAgreements new];
-        model.email = [dictionary[@"email"] boolValue];
-        model.sms = [dictionary[@"sms"] boolValue];
-        model.push = [dictionary[@"push"] boolValue];
-        model.bluetooth = [dictionary[@"bluetooth"] boolValue];
-        model.rfid = [dictionary[@"rfid"] boolValue];
-        model.wifi = [dictionary[@"wifi"] boolValue];
-        
-        return model;
-    }
-    
-    return nil;
-}
-
-#pragma mark - JS Mapping
-
-- (nullable NSDictionary *)dictionaryWithClientAccountInformation:(nullable SNRClientAccountInformation *)clientAccountInformation {
-    if (clientAccountInformation != nil) {
-        NSMutableDictionary *dictionary = [@{} mutableCopy];
-        dictionary[@"clientId"] = [NSNumber numberWithInteger:clientAccountInformation.clientId];
-        dictionary[@"email"] = clientAccountInformation.email;
-        dictionary[@"phone"] = clientAccountInformation.phone;
-        dictionary[@"customId"] = clientAccountInformation.customId;
-        dictionary[@"uuid"] = clientAccountInformation.uuid;
-
-        dictionary[@"firstName"] = clientAccountInformation.firstName;
-        dictionary[@"lastName"] = clientAccountInformation.lastName;
-        dictionary[@"displayName"] = clientAccountInformation.displayName;
-        dictionary[@"sex"] = SNR_ClientSexToString(clientAccountInformation.sex);
-        dictionary[@"birthDate"] = clientAccountInformation.birthDate;
-        dictionary[@"avatarUrl"] = clientAccountInformation.avatarUrl;
-
-        dictionary[@"company"] = clientAccountInformation.company;
-        dictionary[@"address"] = clientAccountInformation.address;
-        dictionary[@"city"] = clientAccountInformation.city;
-        dictionary[@"province"] = clientAccountInformation.province;
-        dictionary[@"zipCode"] = clientAccountInformation.zipCode;
-        dictionary[@"countryCode"] = clientAccountInformation.countryCode;
-
-        //TODO:
-        //dictionary[@"lastActivityDate"] = clientAccountInformation.bu;
-        dictionary[@"anonymous"] = [NSNumber numberWithBool:clientAccountInformation.anonymous];
-        
-        dictionary[@"agreements"] = [self dictionaryWithClientAgreements:clientAccountInformation.agreements];
-        
-        dictionary[@"attributes"] = clientAccountInformation.attributes;
-        dictionary[@"tags"] = clientAccountInformation.tags;
-        
-        return dictionary;
-    }
-    
-    return nil;
-}
-
-- (nullable NSDictionary *)dictionaryWithClientAgreements:(nullable SNRClientAgreements *)clientAgreements {
-    if (clientAgreements != nil) {
-        NSMutableDictionary *dictionary = [@{} mutableCopy];
-        dictionary[@"email"] = [NSNumber numberWithBool:clientAgreements.email];
-        dictionary[@"sms"] = [NSNumber numberWithBool:clientAgreements.sms];
-        dictionary[@"push"] = [NSNumber numberWithBool:clientAgreements.push];
-        dictionary[@"bluetooth"] = [NSNumber numberWithBool:clientAgreements.bluetooth];
-        dictionary[@"rfid"] = [NSNumber numberWithBool:clientAgreements.rfid];
-        dictionary[@"wifi"] = [NSNumber numberWithBool:clientAgreements.wifi];
-    
-        return dictionary;
-    }
-    
-    return nil;
-}
-
-- (nullable NSDictionary *)dictionaryWithToken:(nullable SNRToken *)token {
-    if (token != nil) {
-        NSMutableDictionary *dictionary = [@{} mutableCopy];
-        dictionary[@"tokenString"] = token.tokenString;
-        dictionary[@"tokenOrigin"] = SNR_TokenOriginToString(token.tokenOrigin);
-        //TODO:
-        //dictionary[@"expirationDate"] = token.expirationDate;
-    
-        return dictionary;
-    }
-    
-    return nil;
-}
-
 @end
+
+NS_ASSUME_NONNULL_END
