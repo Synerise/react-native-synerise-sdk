@@ -1,6 +1,6 @@
 {
   "name": "react-native-synerise-sdk",
-  "version": "0.9.6",
+  "version": "0.9.7",
   "description": "React Native wrapper for Synerise SDK",
   "author": {
     "name": "Synerise",
@@ -19,9 +19,9 @@
   "files": [
     ".npmignore",
     "react-native-synerise-sdk.podspec",
-    "lib/**/*", 
+    "lib/**/*",
     "ios/ReactNativeSynerise/**/*",
-    "ios/ReactNativeSynerise/ReactNativeSynerise.xcodeproj", 
+    "ios/ReactNativeSynerise/ReactNativeSynerise.xcodeproj",
     "ios/ReactNativeSynerise/react-native-synerise-sdk.podspec",
     "android/src/**/*",
     "android/build.gradle"

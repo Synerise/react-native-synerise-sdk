@@ -14,23 +14,22 @@ public class RNSyneriseInitializer {
     public static volatile boolean isInitialized = false;
 
     public void initialize(Application app) {
-        prepareDefaultSettings();
+        if (isInitialized == false) {
+            prepareDefaultSettings();
 
-        Synerise.Builder.with(app, clientApiKey, getApplicationName(app))
-                .baseUrl(null)
-                .syneriseDebugMode(isDebugModeEnabled)
-                .crashHandlingEnabled(isCrashHandlingEnabled)
-                .pushRegistrationRequired(RNNotifications.getNativePushListener())
-                .build();
+            Synerise.Builder.with(app, clientApiKey, getApplicationName(app))
+                    .baseUrl(null)
+                    .syneriseDebugMode(isDebugModeEnabled)
+                    .crashHandlingEnabled(isCrashHandlingEnabled)
+                    .pushRegistrationRequired(RNNotifications.getNativePushListener())
+                    .build();
 
-        isInitialized = true;
+            isInitialized = true;
+        }
     }
 
     private void prepareDefaultSettings() {
-        Synerise.settings.injector.automatic = false;
-        Synerise.settings.notifications.enabled = true;
         Synerise.settings.tracker.autoTracking.enabled = false;
-        Synerise.settings.tracker.tracking.enabled = true;
     }
 
     private static String getApplicationName(Context context) {

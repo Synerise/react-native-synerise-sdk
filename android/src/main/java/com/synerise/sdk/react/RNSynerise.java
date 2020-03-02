@@ -1,7 +1,6 @@
 package com.synerise.sdk.react;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -11,6 +10,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.synerise.sdk.client.Client;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -86,6 +86,11 @@ public class RNSynerise extends ReactContextBaseJavaModule {
   @ReactMethod
   public void initialized() {
     initializer.notifyModules();
+  }
+
+  @ReactMethod
+  public void changeClientApiKey(String apiKey) {
+    Client.changeApiKey(apiKey);
   }
 
   private void sendEventToJs(String eventName, @Nullable WritableMap data, ReactApplicationContext context) {

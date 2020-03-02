@@ -133,6 +133,74 @@ RCT_EXPORT_MODULE();
     return nil;
 }
 
+- (nullable NSDictionary *)dictionaryWithAssignVoucherResponse:(SNRAssignVoucherResponse *)model {
+    if (model != nil) {
+        NSMutableDictionary *dictionary = [@{} mutableCopy];
+        
+        [dictionary setString:model.message forKey:@"message"];
+        [dictionary setDictionary:[self dictionaryWithAssignVoucherData:model.assignVoucherData] forKey:@"assignVoucherData"];
+        
+        return dictionary;
+    }
+    
+    return nil;
+}
+
+- (nullable NSDictionary *)dictionaryWithVoucherCodesResponse:(SNRVoucherCodesResponse *)model {
+    if (model != nil) {
+        NSMutableDictionary *dictionary = [@{} mutableCopy];
+        
+        NSMutableArray *voucherCodesArray = [@[] mutableCopy];
+        for (SNRVoucherCodesData *voucherCodesDataModel in model.items) {
+            [voucherCodesArray addObject:[self dictionaryWithVoucherCodesData:voucherCodesDataModel]];
+        }
+        
+        [dictionary setArray:voucherCodesArray forKey:@"items"];
+        
+        return dictionary;
+    }
+    
+    return nil;
+}
+
+- (nullable NSDictionary *)dictionaryWithAssignVoucherData:(SNRAssignVoucherData *)model {
+    if (model != nil) {
+        NSMutableDictionary *dictionary = [@{} mutableCopy];
+        
+        [dictionary setString:model.code forKey:@"code"];
+        [dictionary setDate:model.expireIn forKey:@"expireIn"];
+        [dictionary setDate:model.redeemAt forKey:@"redeemAt"];
+        [dictionary setDate:model.assignedAt forKey:@"assignedAt"];
+        [dictionary setDate:model.createdAt forKey:@"createdAt"];
+        [dictionary setDate:model.updatedAt forKey:@"updatedAt"];
+        
+        return dictionary;
+    }
+    
+    return nil;
+}
+
+- (nullable NSDictionary *)dictionaryWithVoucherCodesData:(SNRVoucherCodesData *)model {
+    if (model != nil) {
+        NSMutableDictionary *dictionary = [@{} mutableCopy];
+        
+        [dictionary setString:model.code forKey:@"code"];
+        [dictionary setString:SNR_VoucherStatusToString(model.status) forKey:@"status"];
+        [dictionary setString:model.clientId forKey:@"clientId"];
+        [dictionary setString:model.clientUuid forKey:@"clientUuid"];
+        [dictionary setString:model.poolUuid forKey:@"poolUuid"];
+        [dictionary setDate:model.expireIn forKey:@"expireIn"];
+        [dictionary setDate:model.redeemAt forKey:@"redeemAt"];
+        [dictionary setDate:model.assignedAt forKey:@"assignedAt"];
+        [dictionary setDate:model.createdAt forKey:@"createdAt"];
+        [dictionary setDate:model.updatedAt forKey:@"updatedAt"];
+        
+        return dictionary;
+    }
+    
+    return nil;
+}
+
 #pragma mark - JS Module
 
 //getAllPromotions(onSuccess: (promotionResponse: PromotionResponse) => void, onError: (error: Error) => void)
@@ -241,6 +309,55 @@ RCT_EXPORT_METHOD(deactivatePromotionByCode:(NSString *)code response:(RCTRespon
 {
     [SNRPromotions deactivatePromotionByCode:code success:^(BOOL isSuccess) {
         [self executeSuccessCallbackResponse:response data:@1];
+    } failure:^(NSError *error) {
+        [self executeFailureCallbackResponse:response error:error];
+    }];
+}
+
+//getOrAssignVoucher(poolUuid: string, onSuccess: (assignVoucherRespone: AssignVoucherResponse) => void, onError: (error: Error) => void)
+
+RCT_EXPORT_METHOD(getOrAssignVoucher:(NSString *)poolUUID response:(RCTResponseSenderBlock)response)
+{
+    [SNRPromotions getOrAssignVoucherWithPoolUUID:poolUUID success:^(SNRAssignVoucherResponse *assignVoucherResponse) {
+        NSDictionary *assignVoucherResponseDictionary = [self dictionaryWithAssignVoucherResponse:assignVoucherResponse];
+        if (assignVoucherResponseDictionary != nil) {
+            [self executeSuccessCallbackResponse:response data:assignVoucherResponseDictionary];
+        } else {
+            [self executeDefaultFailureCallbackResponse:response];
+        }
+    } failure:^(NSError *error) {
+        [self executeFailureCallbackResponse:response error:error];
+    }];
+}
+
+
+//assignVoucherCode(poolUuid: string, onSuccess: (assignVoucherRespone: AssignVoucherResponse) => void, onError: (error: Error) => void)
+
+RCT_EXPORT_METHOD(assignVoucherCode:(NSString *)poolUUID response:(RCTResponseSenderBlock)response)
+{
+    [SNRPromotions assignVoucherCodeWithPoolUUID:poolUUID success:^(SNRAssignVoucherResponse *assignVoucherResponse) {
+        NSDictionary *assignVoucherResponseDictionary = [self dictionaryWithAssignVoucherResponse:assignVoucherResponse];
+        if (assignVoucherResponseDictionary != nil) {
+            [self executeSuccessCallbackResponse:response data:assignVoucherResponseDictionary];
+        } else {
+            [self executeDefaultFailureCallbackResponse:response];
+        }
+    } failure:^(NSError *error) {
+        [self executeFailureCallbackResponse:response error:error];
+    }];
+}
+
+//getAssignedVoucherCodes(onSuccess: (voucherCodesResponse: VoucherCodesResponse) => void, onError: (error: Error) => void)
+
+RCT_REMAP_METHOD(getAssignedVoucherCodes, getAssignedVoucherCodesWithResponse:(RCTResponseSenderBlock)response)
+{
+    [SNRPromotions getAssignedVoucherCodesWithSuccess:^(SNRVoucherCodesResponse *voucherCodesResponse) {
+        NSDictionary *voucherCodesResponseDictionary = [self dictionaryWithVoucherCodesResponse:voucherCodesResponse];
+        if (voucherCodesResponseDictionary != nil) {
+            [self executeSuccessCallbackResponse:response data:voucherCodesResponseDictionary];
+        } else {
+            [self executeDefaultFailureCallbackResponse:response];
+        }
     } failure:^(NSError *error) {
         [self executeFailureCallbackResponse:response error:error];
     }];

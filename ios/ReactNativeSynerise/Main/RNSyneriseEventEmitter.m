@@ -22,7 +22,12 @@ RCT_EXPORT_MODULE();
         kRNSyneriseUrlActionEvent,
         kRNSyneriseDeepLinkActionEvent,
         kRNSyneriseBannerPresentedEvent,
-        kRNSyneriseBannerHiddenEvent
+        kRNSyneriseBannerHiddenEvent,
+        kRNSyneriseWalkthroughLoadedEvent,
+        kRNSyneriseWalkthroughLoadingErrorEvent,
+        kRNSyneriseWalkthroughPresentedEvent,
+        kRNSyneriseWalkthroughHiddenEvent
+
     ];
 }
 
@@ -38,6 +43,11 @@ RCT_EXPORT_MODULE();
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseDeepLinkActionEvent object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseBannerPresentedEvent object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseBannerHiddenEvent object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseWalkthroughLoadedEvent object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseWalkthroughLoadingErrorEvent object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseWalkthroughPresentedEvent object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseWalkthroughHiddenEvent object:nil];
 }
 
 - (void)stopObserving {

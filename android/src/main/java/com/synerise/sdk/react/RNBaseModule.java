@@ -25,9 +25,7 @@ public class RNBaseModule extends ReactContextBaseJavaModule {
     }
 
     public void executeFailureCallbackResponse(Callback callback, Object data, ApiError apiError) {
-        WritableMap errorMap = Arguments.createMap();
-        errorMap.putInt(CODE, apiError.getErrorBody().getStatus());
-        errorMap.putString(MESSAGE, apiError.getErrorBody().getMessage());
+        WritableMap errorMap = apiErrorToJsError(apiError);
 
         callback.invoke(false, data, errorMap);
     }
@@ -42,5 +40,14 @@ public class RNBaseModule extends ReactContextBaseJavaModule {
         context
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit(eventName, data);
+    }
+
+    protected static WritableMap apiErrorToJsError(ApiError apiError) {
+        WritableMap errorMap = Arguments.createMap();
+
+        errorMap.putInt(CODE, apiError.getErrorBody() != null ? apiError.getErrorBody().getStatus() : apiError.getHttpCode());
+        errorMap.putString(MESSAGE, apiError.getErrorBody() != null ? apiError.getErrorBody().getMessage() : apiError.getHttpErrorCategory().name());
+
+        return errorMap;
     }
 }

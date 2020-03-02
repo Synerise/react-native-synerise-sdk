@@ -15,6 +15,10 @@ import com.synerise.sdk.core.net.IDataApiCall;
 import com.synerise.sdk.core.types.enums.ApiQuerySortingOrder;
 import com.synerise.sdk.error.ApiError;
 import com.synerise.sdk.promotions.Promotions;
+import com.synerise.sdk.promotions.model.AssignVoucherData;
+import com.synerise.sdk.promotions.model.AssignVoucherResponse;
+import com.synerise.sdk.promotions.model.VoucherCodesData;
+import com.synerise.sdk.promotions.model.VoucherCodesResponse;
 import com.synerise.sdk.promotions.model.promotion.Promotion;
 import com.synerise.sdk.promotions.model.promotion.PromotionImage;
 import com.synerise.sdk.promotions.model.promotion.PromotionResponse;
@@ -36,6 +40,7 @@ public class RNPromotions extends RNBaseModule {
 
     IDataApiCall<PromotionResponse> getPromotionsCall;
     IDataApiCall<SinglePromotionResponse> getSinglePromotionCall;
+    IDataApiCall<AssignVoucherResponse> getOrAssignVoucherCall;
     IApiCall activatePromotionCall;
     IApiCall deactivatePromotionCall;
 
@@ -209,6 +214,82 @@ public class RNPromotions extends RNBaseModule {
         });
     }
 
+    @ReactMethod
+    public void getOrAssignVoucher(String poolUuid, Callback callback) {
+        if (getOrAssignVoucherCall != null) getOrAssignVoucherCall.cancel();
+        getOrAssignVoucherCall = Promotions.getOrAssignVoucher(poolUuid);
+        getOrAssignVoucherCall.execute(new DataActionListener<AssignVoucherResponse>() {
+            @Override
+            public void onDataAction(AssignVoucherResponse assignVoucherResponse) {
+                WritableMap voucherMap = Arguments.createMap();
+
+                if (assignVoucherResponse.getMessage() != null) {
+                    voucherMap.putString("message", assignVoucherResponse.getMessage());
+                }
+
+                if (assignVoucherResponse.getData() != null) {
+                    voucherMap.putMap("data", assignVoucherDataToMap(assignVoucherResponse.getData()));
+                }
+
+                executeSuccessCallbackResponse(callback, voucherMap, null);
+            }
+        }, new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
+        });
+    }
+
+    @ReactMethod
+    public void assignVoucherCode(String poolUuid, Callback callback) {
+        if (getOrAssignVoucherCall != null) getOrAssignVoucherCall.cancel();
+        getOrAssignVoucherCall = Promotions.assignVoucherCode(poolUuid);
+        getOrAssignVoucherCall.execute(new DataActionListener<AssignVoucherResponse>() {
+            @Override
+            public void onDataAction(AssignVoucherResponse assignVoucherResponse) {
+                WritableMap voucherMap = Arguments.createMap();
+
+                if (assignVoucherResponse.getMessage() != null) {
+                    voucherMap.putString("message", assignVoucherResponse.getMessage());
+                }
+
+                if (assignVoucherResponse.getData() != null) {
+                    voucherMap.putMap("data", assignVoucherDataToMap(assignVoucherResponse.getData()));
+                }
+
+                executeSuccessCallbackResponse(callback, voucherMap, null);
+            }
+        }, new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
+        });
+    }
+
+    @ReactMethod
+    public void getAssignedVoucherCodes(Callback callback) {
+        IDataApiCall<VoucherCodesResponse> getVoucherCodesCall = Promotions.getAssignedVoucherCodes();
+        getVoucherCodesCall.execute(new DataActionListener<VoucherCodesResponse>() {
+            @Override
+            public void onDataAction(VoucherCodesResponse voucherCodesResponse) {
+                WritableMap voucherCodesMap = Arguments.createMap();
+
+                if (voucherCodesResponse.getData() != null) {
+                    voucherCodesMap.putArray("data", voucherDataToWritableArray(voucherCodesResponse.getData()));
+                }
+
+                executeSuccessCallbackResponse(callback, voucherCodesMap, null);
+            }
+        }, new DataActionListener<ApiError>() {
+                @Override
+                public void onDataAction(ApiError apiError) {
+                    executeFailureCallbackResponse(callback, null, apiError);
+                }
+        });
+    }
+
     private WritableArray promotionsToWritableArray(List<Promotion> array) {
         WritableArray writableArray = Arguments.createArray();
 
@@ -363,5 +444,62 @@ public class RNPromotions extends RNBaseModule {
         promotionMap.putInt("code", promotionResponse.getPromotionMetadata().getCode());
 
         return promotionMap;
+    }
+
+    private WritableMap assignVoucherDataToMap(AssignVoucherData voucherData) {
+        WritableMap voucherDataMap = Arguments.createMap();
+
+        if (voucherData.getCode() != null) {
+            voucherDataMap.putString("code", voucherData.getCode());
+        }
+        if (voucherData.getExpireIn() != null) {
+            voucherDataMap.putDouble("expireIn", voucherData.getExpireIn().getTime());
+        }
+        if (voucherData.getRedeemAt() != null) {
+            voucherDataMap.putDouble("redeemAt", voucherData.getRedeemAt().getTime());
+        }
+        if (voucherData.getAssignedAt() != null) {
+            voucherDataMap.putDouble("assignedAt", voucherData.getAssignedAt().getTime());
+        }
+        if (voucherData.getCreatedAt() != null) {
+            voucherDataMap.putDouble("createdAt", voucherData.getCreatedAt().getTime());
+        }
+        if (voucherData.getUpdatedAt() != null) {
+            voucherDataMap.putDouble("updatedAt", voucherData.getUpdatedAt().getTime());
+        }
+
+        return voucherDataMap;
+    }
+
+    private WritableArray voucherDataToWritableArray(List<VoucherCodesData> array) {
+        WritableArray writableArray = Arguments.createArray();
+
+        for (int i = 0; i < array.size(); i++) {
+            VoucherCodesData voucherCodesData = array.get(i);
+            WritableMap voucherMap = Arguments.createMap();
+            voucherMap.putString("code", voucherCodesData.getCode());
+            voucherMap.putString("status", voucherCodesData.getStatus().getStatus());
+            voucherMap.putString("clientUuid", voucherCodesData.getClientUuid());
+            voucherMap.putString("poolUuid", voucherCodesData.getPoolUuid());
+            if (voucherCodesData.getExpireIn() != null) {
+                voucherMap.putDouble("expireIn", voucherCodesData.getExpireIn().getTime());
+            }
+            if (voucherCodesData.getRedeemAt() != null) {
+                voucherMap.putDouble("redeemAt", voucherCodesData.getRedeemAt().getTime());
+            }
+            if (voucherCodesData.getAssignedAt() != null) {
+                voucherMap.putDouble("assignedAt", voucherCodesData.getAssignedAt().getTime());
+            }
+            if (voucherCodesData.getCreatedAt() != null) {
+                voucherMap.putDouble("createdAt", voucherCodesData.getCreatedAt().getTime());
+            }
+            if (voucherCodesData.getUpdatedAt() != null) {
+                voucherMap.putDouble("updatedAt", voucherCodesData.getUpdatedAt().getTime());
+            }
+
+            writableArray.pushMap(voucherMap);
+        }
+
+        return writableArray;
     }
 }

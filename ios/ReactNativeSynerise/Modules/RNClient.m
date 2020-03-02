@@ -60,10 +60,33 @@ RCT_EXPORT_MODULE();
             model.agreements = [self modelClientAgreementsWithDictionary:[dictionary getDictionaryForKey:@"agreements"]];
 
             model.attributes = [dictionary getDictionaryForKey:@"attributes"];
-            model.tags = [dictionary getArrayForKey:@"tags"];
             
             return model;
         }
+    }
+    
+    return nil;
+}
+
+- (nullable SNRClientOAuthAuthenticationContext *)modelClientOAuthAuthenticationContextWithDictionary:(nullable NSDictionary *)dictionary {
+    if (dictionary != nil) {
+        SNRClientOAuthAuthenticationContext *model = [SNRClientOAuthAuthenticationContext new];
+        model.attributes = [dictionary getDictionaryForKey:@"attributes"];
+        model.agreements = [self modelClientAgreementsWithDictionary:[dictionary getDictionaryForKey:@"agreements"]];
+        
+        return model;
+    }
+    
+    return nil;
+}
+
+- (nullable SNRClientFacebookAuthenticationContext *)modelClientFacebookAuthenticationContextWithDictionary:(nullable NSDictionary *)dictionary {
+    if (dictionary != nil) {
+        SNRClientFacebookAuthenticationContext *model = [SNRClientFacebookAuthenticationContext new];
+        model.attributes = [dictionary getDictionaryForKey:@"attributes"];
+        model.agreements = [self modelClientAgreementsWithDictionary:[dictionary getDictionaryForKey:@"agreements"]];
+        
+        return model;
     }
     
     return nil;
@@ -94,7 +117,6 @@ RCT_EXPORT_MODULE();
         model.agreements = [self modelClientAgreementsWithDictionary:[dictionary getDictionaryForKey:@"agreements"]];
 
         model.attributes = [dictionary getDictionaryForKey:@"attributes"];
-        model.tags = [dictionary getArrayForKey:@"tags"];
         
         return model;
     }
@@ -234,6 +256,45 @@ RCT_EXPORT_METHOD(email:(NSString *)email response:(RCTResponseSenderBlock)respo
 RCT_EXPORT_METHOD(signIn:(NSString *)email password:(NSString *)password response:(RCTResponseSenderBlock)response)
 {
     [SNRClient signInWithEmail:email password:password success:^(BOOL isSuccess) {
+        [self executeSuccessCallbackResponse:response data:@1];
+    } failure:^(NSError *error) {
+        [self executeFailureCallbackResponse:response error:error];
+    }];
+}
+
+//authenticateByOAuth(accessToken: string, context: ClientOAuthAuthenticationContext, onSuccess: () => void, onError: (error: Error) => void)
+
+RCT_EXPORT_METHOD(authenticateByOAuth:(NSString *)accessToken context:(NSDictionary *)contextDictionary response:(RCTResponseSenderBlock)response)
+{
+    NSString *authID = contextDictionary[@"authId"];
+    SNRClientOAuthAuthenticationContext *context = [self modelClientOAuthAuthenticationContextWithDictionary:contextDictionary];
+    
+    [SNRClient authenticateByOAuthWithAccessToken:accessToken authID:authID context:context success:^(BOOL isSuccess) {
+        [self executeSuccessCallbackResponse:response data:@1];
+    } failure:^(NSError *error) {
+        [self executeFailureCallbackResponse:response error:error];
+    }];
+}
+
+//authenticateByFacebook(facebookToken: string, context: ClientFacebookAuthenticationContext, onSuccess: () => void, onError: (error: Error) => void)
+
+RCT_EXPORT_METHOD(authenticateByFacebook:(NSString *)facebookToken context:(NSDictionary *)contextDictionary response:(RCTResponseSenderBlock)response)
+{
+    NSString *authID = contextDictionary[@"authId"];
+    SNRClientFacebookAuthenticationContext *context = [self modelClientFacebookAuthenticationContextWithDictionary:contextDictionary];
+    
+    [SNRClient authenticateByFacebookWithFacebookToken:facebookToken authID:authID context:context success:^(BOOL isSuccess) {
+        [self executeSuccessCallbackResponse:response data:@1];
+    } failure:^(NSError *error) {
+        [self executeFailureCallbackResponse:response error:error];
+    }];
+}
+
+//authenticateByFacebookIfRegistered(facebookToken: string, authID: string, onSuccess: () => void, onError: (error: Error) => void)
+
+RCT_EXPORT_METHOD(authenticateByFacebookIfRegistered:(NSString *)facebookToken authID:(NSString *)authID response:(RCTResponseSenderBlock)response)
+{
+    [SNRClient authenticateByFacebookIfRegisteredWithFacebookToken:facebookToken authID:authID success:^(BOOL isSuccess) {
         [self executeSuccessCallbackResponse:response data:@1];
     } failure:^(NSError *error) {
         [self executeFailureCallbackResponse:response error:error];

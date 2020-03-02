@@ -19,6 +19,7 @@
         [SNRSynerise initializeWithClientApiKey:self.clientApiKey andBaseUrl:self.baseURL];
         [SNRSynerise setDebugModeEnabled:self.debugModeEnabled];
         [SNRSynerise setCrashHandlingEnabled:self.crashHandlingEnabled];
+        [SNRSynerise setHostApplicationType:SNRHostApplicationTypeReactNative];
     });
 }
 
@@ -27,19 +28,8 @@
 }
 
 - (void)overwriteDefaultSettings {
-    SNRSynerise.settings.sdk.enabled = YES;
-    
-    SNRSynerise.settings.notifications.enabled = YES;
-    SNRSynerise.settings.notifications.disableInAppAlerts = NO;
-    SNRSynerise.settings.notifications.appGroupIdentifier = nil;
-    
-    SNRSynerise.settings.tracker.locationAutomatic = NO;
-    
     SNRSynerise.settings.tracker.autoTracking.enabled = NO;
     
-    SNRSynerise.settings.tracker.tracking.enabled = YES;
-    
-    SNRSynerise.settings.injector.automatic = NO;
 }
 
 @end

@@ -14,6 +14,9 @@ interface ISettingsOptions {
         disableInAppAlerts?: boolean;
         appGroupIdentifier?: string;
     };
+    injector?: {
+        automatic?: boolean;
+    };
 }
 declare class SettingsModule extends Module {
     private static _instance;
@@ -31,8 +34,12 @@ declare class SettingsModule extends Module {
         disableInAppAlerts: any;
         appGroupIdentifier: any;
     };
+    injector: {
+        automatic: any;
+    };
     static instance(): SettingsModule;
     private constructor();
-    set(settings: ISettingsOptions): void;
+    isAlwaysActive(): boolean;
+    set(settingsOptions: ISettingsOptions): void;
 }
 export { ISettingsOptions, SettingsModule };

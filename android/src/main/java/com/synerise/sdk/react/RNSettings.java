@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class RNSettings extends RNBaseModule {
 
@@ -22,6 +23,8 @@ public class RNSettings extends RNBaseModule {
     public static final String RN_SETTINGS_TRACKER_MIN_BATCH_SIZE = "TRACKER_MIN_BATCH_SIZE";
     public static final String RN_SETTINGS_TRACKER_MAX_BATCH_SIZE = "TRACKER_MAX_BATCH_SIZE";
     public static final String RN_SETTINGS_TRACKER_AUTO_FLUSH_TIMEOUT = "TRACKER_AUTO_FLUSH_TIMEOUT";
+    public static final String RN_SETTINGS_NOTIFICATIONS_ENABLED = "NOTIFICATIONS_ENABLED";
+    public static final String RN_SETTINGS_INJECTOR_AUTOMATIC = "INJECTOR_AUTOMATIC";
 
     public RNSettings(ReactApplicationContext reactApplicationContext) {
         super(reactApplicationContext);
@@ -33,14 +36,17 @@ public class RNSettings extends RNBaseModule {
         return "RNSettings";
     }
 
-    @ReactMethod(isBlockingSynchronousMethod = true)
-    public WritableMap constantsToExport() {
-        WritableMap constants = Arguments.createMap();
-        constants.putString(RN_SETTINGS_SDK_ENABLED, RN_SETTINGS_SDK_ENABLED);
-        constants.putString(RN_SETTINGS_SDK_MIN_TOKEN_REFRESH_INTERVAL, RN_SETTINGS_SDK_MIN_TOKEN_REFRESH_INTERVAL);
-        constants.putString(RN_SETTINGS_TRACKER_MIN_BATCH_SIZE, RN_SETTINGS_TRACKER_MIN_BATCH_SIZE);
-        constants.putString(RN_SETTINGS_TRACKER_MAX_BATCH_SIZE, RN_SETTINGS_TRACKER_MAX_BATCH_SIZE);
-        constants.putString(RN_SETTINGS_TRACKER_AUTO_FLUSH_TIMEOUT, RN_SETTINGS_TRACKER_AUTO_FLUSH_TIMEOUT);
+    @Nullable
+    @Override
+    public Map<String, Object> getConstants() {
+        final Map<String, Object> constants = new HashMap<>();
+        constants.put(RN_SETTINGS_SDK_ENABLED, RN_SETTINGS_SDK_ENABLED);
+        constants.put(RN_SETTINGS_SDK_MIN_TOKEN_REFRESH_INTERVAL, RN_SETTINGS_SDK_MIN_TOKEN_REFRESH_INTERVAL);
+        constants.put(RN_SETTINGS_TRACKER_MIN_BATCH_SIZE, RN_SETTINGS_TRACKER_MIN_BATCH_SIZE);
+        constants.put(RN_SETTINGS_TRACKER_MAX_BATCH_SIZE, RN_SETTINGS_TRACKER_MAX_BATCH_SIZE);
+        constants.put(RN_SETTINGS_TRACKER_AUTO_FLUSH_TIMEOUT, RN_SETTINGS_TRACKER_AUTO_FLUSH_TIMEOUT);
+        constants.put(RN_SETTINGS_INJECTOR_AUTOMATIC, RN_SETTINGS_INJECTOR_AUTOMATIC);
+        constants.put(RN_SETTINGS_NOTIFICATIONS_ENABLED, RN_SETTINGS_NOTIFICATIONS_ENABLED);
         return constants;
     }
 
@@ -60,8 +66,17 @@ public class RNSettings extends RNBaseModule {
 
     //function setOne(key: string, value: any)
     @ReactMethod
-    public void setOne(String key, Object value) {
-        matchSetting(key, value);
+    public void setOne(ReadableMap settingMap) {
+        String key = settingMap.getString("key");
+        ReadableType type = settingMap.getType("value");
+        switch (type) {
+            case Boolean:
+                matchSetting(key, settingMap.getBoolean("value"));
+                break;
+            case Number:
+                matchSetting(key, settingMap.getInt("value"));
+                break;
+        }
     }
 
     //function setMany(settings: object)
@@ -75,10 +90,10 @@ public class RNSettings extends RNBaseModule {
 
             switch (type) {
                 case Boolean:
-                   setOne(key, newSettings.getBoolean(key));
+                   matchSetting(key, newSettings.getBoolean(key));
                     break;
                 case Number:
-                   setOne(key, newSettings.getInt(key));
+                   matchSetting(key, newSettings.getInt(key));
                     break;
             }
         }
@@ -111,6 +126,16 @@ public class RNSettings extends RNBaseModule {
                     Settings.tracker.setMinimumBatchSize((int) value);
                 }
                 break;
+            case RN_SETTINGS_INJECTOR_AUTOMATIC:
+                if (value instanceof Boolean) {
+                    Settings.injector.automatic = (Boolean) value;
+                }
+                break;
+            case RN_SETTINGS_NOTIFICATIONS_ENABLED:
+                if (value instanceof Boolean) {
+                    Settings.notifications.enabled = (Boolean) value;
+                }
+                break;
         }
     }
 
@@ -121,6 +146,8 @@ public class RNSettings extends RNBaseModule {
         settings.put(RN_SETTINGS_TRACKER_MIN_BATCH_SIZE, Synerise.settings.tracker.minBatchSize);
         settings.put(RN_SETTINGS_TRACKER_MAX_BATCH_SIZE, Synerise.settings.tracker.maxBatchSize);
         settings.put(RN_SETTINGS_TRACKER_AUTO_FLUSH_TIMEOUT, Synerise.settings.tracker.autoFlushTimeout);
+        settings.put(RN_SETTINGS_INJECTOR_AUTOMATIC, Synerise.settings.injector.automatic);
+        settings.put(RN_SETTINGS_NOTIFICATIONS_ENABLED, Synerise.settings.notifications.enabled);
         return settings;
     }
 }

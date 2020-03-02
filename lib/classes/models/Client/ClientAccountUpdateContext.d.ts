@@ -20,7 +20,6 @@ interface IClientAccountUpdateContext {
     countryCode?: String;
     agreements?: IClientAgreements;
     attributes?: object;
-    tags?: Array<String>;
 }
 declare class ClientAccountUpdateContext extends BaseModel {
     email?: String;
@@ -41,7 +40,6 @@ declare class ClientAccountUpdateContext extends BaseModel {
     countryCode?: String;
     agreements?: ClientAgreements;
     attributes?: object;
-    tags?: Array<String>;
     constructor(modelObject?: IClientAccountUpdateContext);
     toObject(): object;
 }

@@ -29,5 +29,11 @@ static NSString * const kRNSyneriseNotificationEvent = @"kRNSyneriseNotification
 
 static NSString * const kRNSyneriseUrlActionEvent = @"kRNSyneriseUrlActionEvent";
 static NSString * const kRNSyneriseDeepLinkActionEvent = @"kRNSyneriseDeepLinkActionEvent";
+
 static NSString * const kRNSyneriseBannerPresentedEvent = @"kRNSyneriseBannerPresentedEvent";
 static NSString * const kRNSyneriseBannerHiddenEvent = @"kRNSyneriseBannerHiddenEvent";
+
+static NSString * const kRNSyneriseWalkthroughLoadedEvent = @"kRNSyneriseWalkthroughLoadedEvent";
+static NSString * const kRNSyneriseWalkthroughLoadingErrorEvent = @"kRNSyneriseWalkthroughLoadingErrorEvent";
+static NSString * const kRNSyneriseWalkthroughPresentedEvent = @"kRNSyneriseWalkthroughPresentedEvent";
+static NSString * const kRNSyneriseWalkthroughHiddenEvent = @"kRNSyneriseWalkthroughHiddenEvent";

@@ -1,6 +1,23 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.9.7] - 2020-03-02
+
+### Added
+- OAuth/Facebook authentication.
+- Walkthrough campaign.
+- Walkthrough listener in `Synerise.Injector` module.
+- `Synerise.settings.injector.automatic` option in settings.
+- Vouchers methods in `Synerise.Promotions` module.
+- `Synerise.changeClientApiKey` method.
+
+### Changed
+- Prevention from SDK initializing multiple times (react native fast refresh).
+
+### Removed
+- Tags removed from some models (`ClientAccountUpdateContext`, `ClientAccountRegisterContext`).
+
+
 ## [0.9.6] - 2019-12-05
 
 ### Added
@@ -12,6 +29,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Synerise initialization (`Synerise.onReady` and `Synerise.onError` callbacks).
+
 
 ## [0.9.5] - 2019-11-08
 

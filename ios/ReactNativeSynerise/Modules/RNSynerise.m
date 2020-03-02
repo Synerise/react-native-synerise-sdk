@@ -46,15 +46,25 @@ RCT_EXPORT_MODULE();
     return self;
 }
 
-#pragma mark - SNRSyneriseDelegate
+#pragma mark - Private
 
-- (void)SNR_initialized {
+- (void)sendInitializationSuccessToJS {
     [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseInitializationSuccessEvent object:nil userInfo:@{}];
 }
 
-- (void)SNR_initializationError:(NSError *)error {
+- (void)sendInitializationFailureToJS:(NSError *)error {
     NSDictionary *errorDictionary = [self dictionaryWithError:error];
     [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseInitializationFailureEvent object:nil userInfo:errorDictionary];
+}
+
+#pragma mark - SNRSyneriseDelegate
+
+- (void)SNR_initialized {
+    [self sendInitializationSuccessToJS];
+}
+
+- (void)SNR_initializationError:(NSError *)error {
+    [self sendInitializationFailureToJS:error];
 }
 
 - (void)SNR_registerForPushNotificationsIsNeeded {
@@ -112,11 +122,27 @@ RCT_EXPORT_METHOD(withCrashHandlingEnabled:(BOOL)crashHandlingEnabled) {
 }
 
 RCT_EXPORT_METHOD(initialize) {
+    static BOOL isInitialized = NO;
+    
+    if (isInitialized == YES) {
+        [self sendInitializationSuccessToJS];
+        return;
+    }
+    
     [self.initializer initialize];
+    isInitialized = YES;
 }
 
 RCT_EXPORT_METHOD(initialized) {
     [self.initializer initialized];
+}
+
+RCT_EXPORT_METHOD(changeClientApiKey:(NSString *)clientApiKey) {
+    if (clientApiKey == nil) {
+        return;
+    }
+    
+    [SNRSynerise changeClientApiKey:clientApiKey];
 }
 
 @end

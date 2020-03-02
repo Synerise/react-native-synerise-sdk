@@ -11,15 +11,21 @@
 
 static NSString * const RNInjectorEventListenerUrlActionKey = @"URL_ACTION_LISTENER_KEY";
 static NSString * const RNInjectorEventListenerDeepLinkActionKey = @"DEEPLINK_ACTION_LISTENER_KEY";
+
 static NSString * const RNInjectorEventListenerBannerPresentedKey = @"BANNER_PRESENTED_LISTENER_KEY";
 static NSString * const RNInjectorEventListenerBannerHiddenKey = @"BANNER_HIDDEN_LISTENER_KEY";
+
+static NSString * const RNInjectorEventListenerWalkthroughLoadedKey = @"WALKTHROUGH_LOADED_LISTENER_KEY";
+static NSString * const RNInjectorEventListenerWalkthroughLoadingErrorKey = @"WALKTHROUGH_LOADING_ERROR_LISTENER_KEY";
+static NSString * const RNInjectorEventListenerWalkthroughPresentedKey = @"WALKTHROUGH_PRESENTED_LISTENER_KEY";
+static NSString * const RNInjectorEventListenerWalkthroughHiddenKey = @"WALKTHROUGH_HIDDEN_LISTENER_KEY";
 
 static NSString * const RNInjectorEventObjectUrlKey = @"url";
 static NSString * const RNInjectorEventObjectDeepLinkKey = @"deepLink";
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RNInjector () <RNSyneriseManagerDelegate, SNRInjectorBannerDelegate>
+@interface RNInjector () <RNSyneriseManagerDelegate, SNRInjectorBannerDelegate, SNRInjectorWalkthroughDelegate>
 
 @end
 
@@ -40,7 +46,9 @@ RCT_EXPORT_MODULE();
     
     if (self) {
         [[RNSyneriseManager sharedInstance] addDelegate:self];
+        
         [SNRInjector setBannerDelegate:self];
+        [SNRInjector setWalkthroughDelegate:self];
     }
     
     moduleInstance = self;
@@ -78,6 +86,23 @@ RCT_EXPORT_MODULE();
     [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseBannerHiddenEvent object:nil userInfo:nil];
 }
 
+- (void)sendWalkthroughLoadedToJS {
+    [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseWalkthroughLoadedEvent object:nil userInfo:nil];
+}
+
+- (void)sendWalkthroughLoadingErrorToJS:(NSError *)error {
+    NSDictionary *errorDictionary = [self dictionaryWithError:error];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseWalkthroughLoadingErrorEvent object:nil userInfo:errorDictionary];
+}
+
+- (void)sendWalkthroughPresentedToJS {
+    [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseWalkthroughPresentedEvent object:nil userInfo:nil];
+}
+
+- (void)sendWalkthroughHiddenToJS {
+    [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseWalkthroughHiddenEvent object:nil userInfo:nil];
+}
+
 #pragma mark - SNRInjectorBannerDelegate
 
 - (BOOL)SNR_shouldBannerAppear:(NSDictionary *)bannerDictionary {
@@ -90,6 +115,24 @@ RCT_EXPORT_MODULE();
 
 - (void)SNR_bannerDidDisappear {
     [self sendBannerHiddenToJS];
+}
+
+#pragma mark - SNRInjectorWalkthroughDelegate
+
+- (void)SNR_walkthroughDidLoad {
+    [self sendWalkthroughLoadedToJS];
+}
+
+- (void)SNR_walkthroughLoadingError:(NSError *)error {
+    [self sendWalkthroughLoadingErrorToJS:error];
+}
+
+- (void)SNR_walkthroughDidAppear {
+    [self sendBannerPresentedToJS];
+}
+
+- (void)SNR_walkthroughDidDisappear {
+    [self sendWalkthroughHiddenToJS];
 }
 
 #pragma mark - JS Mapping
@@ -113,9 +156,43 @@ RCT_EXPORT_MODULE();
   return @{
     RNInjectorEventListenerUrlActionKey: kRNSyneriseUrlActionEvent,
     RNInjectorEventListenerDeepLinkActionKey: kRNSyneriseDeepLinkActionEvent,
+    
     RNInjectorEventListenerBannerPresentedKey : kRNSyneriseBannerPresentedEvent,
-    RNInjectorEventListenerBannerHiddenKey: kRNSyneriseBannerHiddenEvent
+    RNInjectorEventListenerBannerHiddenKey: kRNSyneriseBannerHiddenEvent,
+    
+    RNInjectorEventListenerWalkthroughLoadedKey: kRNSyneriseWalkthroughLoadedEvent,
+    RNInjectorEventListenerWalkthroughLoadingErrorKey: kRNSyneriseWalkthroughLoadingErrorEvent,
+    RNInjectorEventListenerWalkthroughPresentedKey: kRNSyneriseWalkthroughPresentedEvent,
+    RNInjectorEventListenerWalkthroughHiddenKey: kRNSyneriseWalkthroughHiddenEvent
   };
+}
+
+//getWalkthrough()
+
+RCT_EXPORT_METHOD(getWalkthrough)
+{
+    [SNRInjector getWalkthrough];
+}
+
+//showWalkthrough()
+
+RCT_EXPORT_METHOD(showWalkthrough)
+{
+    [SNRInjector showWalkthrough];
+}
+
+//isWalkthroughLoaded() : boolean
+
+RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(isWalkthroughLoaded)
+{
+    return [NSNumber numberWithBool:[SNRInjector isWalkthroughLoaded]];
+}
+
+//isLoadedWalkthroughUnique() : boolean
+
+RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(isLoadedWalkthroughUnique)
+{
+    return [NSNumber numberWithBool:[SNRInjector isLoadedWalkthroughUnique]];
 }
 
 @end

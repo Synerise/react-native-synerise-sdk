@@ -8,8 +8,8 @@
 
 #import "RNSettings.h"
 
-static NSString * const RNSettingsSdkEnabled = @"SDK_ENABLED";
-static NSString * const RNSettingsSdkMinTokenRefreshInterval = @"SDK_MIN_TOKEN_REFRESH_INTERVAL";
+static NSString * const RNSettingsSDKEnabled = @"SDK_ENABLED";
+static NSString * const RNSettingsSDKMinTokenRefreshInterval = @"SDK_MIN_TOKEN_REFRESH_INTERVAL";
 
 static NSString * const RNSettingsTrackerMinBatchSize = @"TRACKER_MIN_BATCH_SIZE";
 static NSString * const RNSettingsTrackerMaxBatchSize = @"TRACKER_MAX_BATCH_SIZE";
@@ -18,6 +18,8 @@ static NSString * const RNSettingsTrackerAutoFlushTimeout = @"TRACKER_AUTO_FLUSH
 static NSString * const RNSettingsNotificationsEnabled = @"NOTIFICATIONS_ENABLED";
 static NSString * const RNSettingsNotificationsDisableInAppAlerts = @"NOTIFICATIONS_DISABLE_IN_APP_ALERTS";
 static NSString * const RNSettingsNotificationsAppGroupIdentifier = @"NOTIFICATIONS_APP_GROUP_IDENTIFIER";
+
+static NSString * const RNSettingsInjectorAutomatic = @"INJECTOR_AUTOMATIC";
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -48,8 +50,8 @@ RCT_EXPORT_MODULE();
 #pragma mark - Private
 
 - (void)updateSettingsWithDictionary:(NSDictionary *)dictionary {
-    [self updateSettingsKeyPath:@"sdk.enabled" expectedClass:[NSNumber class] object:dictionary[RNSettingsSdkEnabled]];
-    [self updateSettingsKeyPath:@"sdk.minTokenRefreshInterval" expectedClass:[NSNumber class] object:dictionary[RNSettingsSdkMinTokenRefreshInterval]];
+    [self updateSettingsKeyPath:@"sdk.enabled" expectedClass:[NSNumber class] object:dictionary[RNSettingsSDKEnabled]];
+    [self updateSettingsKeyPath:@"sdk.minTokenRefreshInterval" expectedClass:[NSNumber class] object:dictionary[RNSettingsSDKMinTokenRefreshInterval]];
     
     [self updateSettingsKeyPath:@"tracker.minBatchSize" expectedClass:[NSNumber class] object:dictionary[RNSettingsTrackerMinBatchSize]];
     [self updateSettingsKeyPath:@"tracker.maxBatchSize" expectedClass:[NSNumber class] object:dictionary[RNSettingsTrackerMaxBatchSize]];
@@ -58,6 +60,8 @@ RCT_EXPORT_MODULE();
     [self updateSettingsKeyPath:@"notifications.enabled" expectedClass:[NSNumber class] object:dictionary[RNSettingsNotificationsEnabled]];
     [self updateSettingsKeyPath:@"notifications.disableInAppAlerts" expectedClass:[NSNumber class] object:dictionary[RNSettingsNotificationsDisableInAppAlerts]];
     [self updateSettingsKeyPath:@"notifications.appGroupIdentifier" expectedClass:[NSString class] object:dictionary[RNSettingsNotificationsAppGroupIdentifier]];
+    
+    [self updateSettingsKeyPath:@"injector.automatic" expectedClass:[NSNumber class] object:dictionary[RNSettingsInjectorAutomatic]];
 }
 
 - (void)updateSettingsKeyPath:(NSString *)keyPath expectedClass:(Class)expectedClass object:(nullable id)object {
@@ -80,8 +84,8 @@ RCT_EXPORT_MODULE();
 
 - (NSDictionary *)settingsDictionary {
     NSMutableDictionary *dictionary = [@{} mutableCopy];
-    dictionary[RNSettingsSdkEnabled] = [NSNumber numberWithBool:SNRSynerise.settings.sdk.enabled];
-    dictionary[RNSettingsSdkMinTokenRefreshInterval] = [NSNumber numberWithDouble:SNRSynerise.settings.sdk.minTokenRefreshInterval];
+    dictionary[RNSettingsSDKEnabled] = [NSNumber numberWithBool:SNRSynerise.settings.sdk.enabled];
+    dictionary[RNSettingsSDKMinTokenRefreshInterval] = [NSNumber numberWithDouble:SNRSynerise.settings.sdk.minTokenRefreshInterval];
     
     dictionary[RNSettingsTrackerMinBatchSize] = [NSNumber numberWithInteger:SNRSynerise.settings.tracker.minBatchSize];
     dictionary[RNSettingsTrackerMaxBatchSize] = [NSNumber numberWithInteger:SNRSynerise.settings.tracker.maxBatchSize];
@@ -91,6 +95,8 @@ RCT_EXPORT_MODULE();
     dictionary[RNSettingsNotificationsDisableInAppAlerts] = [NSNumber numberWithBool:SNRSynerise.settings.notifications.disableInAppAlerts];
     dictionary[RNSettingsNotificationsAppGroupIdentifier] = SNRSynerise.settings.notifications.appGroupIdentifier ?: [NSNull null];
     
+    dictionary[RNSettingsInjectorAutomatic] = [NSNumber numberWithBool:SNRSynerise.settings.injector.automatic];
+    
     return dictionary;
 }
 
@@ -99,8 +105,8 @@ RCT_EXPORT_MODULE();
 - (NSDictionary *)constantsToExport
 {
   return @{
-      RNSettingsSdkEnabled: RNSettingsSdkEnabled,
-      RNSettingsSdkMinTokenRefreshInterval: RNSettingsSdkMinTokenRefreshInterval,
+      RNSettingsSDKEnabled: RNSettingsSDKEnabled,
+      RNSettingsSDKMinTokenRefreshInterval: RNSettingsSDKMinTokenRefreshInterval,
       
       RNSettingsTrackerMinBatchSize: RNSettingsTrackerMinBatchSize,
       RNSettingsTrackerMaxBatchSize: RNSettingsTrackerMaxBatchSize,
@@ -108,7 +114,9 @@ RCT_EXPORT_MODULE();
       
       RNSettingsNotificationsEnabled: RNSettingsNotificationsEnabled,
       RNSettingsNotificationsDisableInAppAlerts: RNSettingsNotificationsDisableInAppAlerts,
-      RNSettingsNotificationsAppGroupIdentifier: RNSettingsNotificationsAppGroupIdentifier
+      RNSettingsNotificationsAppGroupIdentifier: RNSettingsNotificationsAppGroupIdentifier,
+      
+      RNSettingsInjectorAutomatic: RNSettingsInjectorAutomatic
   };
 }
 
@@ -119,22 +127,34 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getOne:(NSString *)key)
     return [self settingsDictionary][key];
 }
 
-//function setOne(key: String, value: any)
+//function setOne(settingsOneOption: ISettingsOneOption)
 
-RCT_EXPORT_METHOD(setOne:(NSString *)key value:(id)value)
+RCT_EXPORT_METHOD(setOne:(NSDictionary *)settingsOneOption)
 {
-    NSMutableDictionary *settingsDictionary = [[self settingsDictionary] mutableCopy];
-    settingsDictionary[key] = value;
+    NSString *key = settingsOneOption[@"key"];
+    id value = settingsOneOption[@"value"];
     
-    [self updateSettingsWithDictionary:settingsDictionary];
+    if (key == nil || value == nil) {
+        return;
+    }
+    
+    NSMutableDictionary *settingsDictionary = [[self settingsDictionary] mutableCopy];
+    
+    if ([[settingsDictionary allKeys] containsObject:key]) {
+        [self updateSettingsWithDictionary:@{ key: value }];
+    }
 }
 
-//function setMany(settings: object)
+//function setMany(settingsManyOptions: ISettingsManyOptions)
 
-RCT_EXPORT_METHOD(setMany:(NSDictionary *)settings)
+RCT_EXPORT_METHOD(setMany:(NSDictionary *)settingsManyOptions)
 {
+    if (settingsManyOptions == nil || [settingsManyOptions count] == 0) {
+        return;
+    }
+    
     NSMutableDictionary *settingsDictionary = [[self settingsDictionary] mutableCopy];
-    [settingsDictionary addEntriesFromDictionary:settings];
+    [settingsDictionary addEntriesFromDictionary:settingsManyOptions];
     
     [self updateSettingsWithDictionary:settingsDictionary];
 }

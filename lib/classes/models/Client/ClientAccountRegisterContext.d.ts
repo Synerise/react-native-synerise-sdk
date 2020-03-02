@@ -15,7 +15,6 @@ interface IClientAccountRegisterContext {
     countryCode?: String;
     agreements?: IClientAgreements;
     attributes?: object;
-    tags?: Array<String>;
 }
 declare class ClientAccountRegisterContext extends BaseModel {
     email: String;
@@ -33,7 +32,6 @@ declare class ClientAccountRegisterContext extends BaseModel {
     countryCode?: String;
     agreements?: ClientAgreements;
     attributes?: object;
-    tags?: Array<String>;
     constructor(email: String, password: String, modelObject?: IClientAccountRegisterContext);
     toObject(): object;
 }

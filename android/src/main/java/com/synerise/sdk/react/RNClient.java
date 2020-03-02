@@ -6,9 +6,7 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableMap;
 import com.synerise.sdk.react.utils.ArrayUtil;
 import com.synerise.sdk.react.utils.MapUtil;
@@ -27,10 +25,8 @@ import com.synerise.sdk.core.types.model.Sex;
 import com.synerise.sdk.core.types.model.Token;
 import com.synerise.sdk.error.ApiError;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -77,6 +73,71 @@ public class RNClient extends RNBaseModule {
         return true;
     }
 
+    //authenticateByOAuth(accessToken: string, context: ClientOAuthAuthenticationContext, onSuccess: () => void, onError: (error: Error) => void)
+    @ReactMethod
+    public void authenticateByOAuth(String accessToken, ReadableMap authenticateByOAuthMap, Callback callback) {
+        Agreements agreements = null;
+        Attributes attributes = null;
+        String authID = null;
+        if (authenticateByOAuthMap.hasKey("agreements")) {
+            agreements = agreementsMapper(authenticateByOAuthMap.getMap("agreements"));
+        }
+
+        if (authenticateByOAuthMap.hasKey("attributes")) {
+            attributes = attributesMapper(authenticateByOAuthMap.getMap("attributes").toHashMap());
+        }
+
+        if (authenticateByOAuthMap.hasKey("authID")) {
+            authID = authenticateByOAuthMap.getString("authID");
+        }
+
+        IApiCall authenticateByOAuthCall = Client.authenticateByOAuth(accessToken, agreements, attributes, authID);
+        authenticateByOAuthCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
+        });
+    }
+
+    //authenticateByFacebook(facebookToken: string, context: ClientFacebookAuthenticationContext, onSuccess: () => void, onError: (error: Error) => void)
+    @ReactMethod
+    public void authenticateByFacebook(String facebookToken, ReadableMap authenticateByFacebookMap, Callback callback) {
+        Agreements agreements = null;
+        Attributes attributes = null;
+        String authID = null;
+        if (authenticateByFacebookMap.hasKey("agreements")) {
+            agreements = agreementsMapper(authenticateByFacebookMap.getMap("agreements"));
+        }
+
+        if (authenticateByFacebookMap.hasKey("attributes")) {
+            attributes = attributesMapper(authenticateByFacebookMap.getMap("attributes").toHashMap());
+        }
+
+        if (authenticateByFacebookMap.hasKey("authID")) {
+            authID = authenticateByFacebookMap.getString("authID");
+        }
+        IApiCall authenticateByFacebookCall = Client.authenticateByFacebook(facebookToken, agreements, attributes, authID);
+        authenticateByFacebookCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
+        });
+    }
+
+    //authenticateByFacebookIfRegistered(facebookToken: string, authID: string, onSuccess: () => void, onError: (error: Error) => void)
+    @ReactMethod
+    public void authenticateByFacebookIfRegistered(String facebookToken, String authID, Callback callback) {
+        IApiCall authenticateByFacebookIfRegisteredCall = Client.authenticateByFacebookRegistered(facebookToken, authID);
+        authenticateByFacebookIfRegisteredCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
+        });
+    }
+
     //registerAccount(context: ClientAccountRegisterContext, onSuccess: () => void, onError: (error: Error) => void)
     @ReactMethod
     public void registerAccount(ReadableMap map, Callback callback) {
@@ -102,16 +163,8 @@ public class RNClient extends RNBaseModule {
             registerClient.setAttributes(attributes);
         }
         if (map.hasKey("agreements")) {
-            Agreements agreements = new Agreements();
-            agreements.setBluetooth(map.getMap("agreements").getBoolean("bluetooth"));
-            agreements.setEmail(map.getMap("agreements").getBoolean("email"));
-            agreements.setPush(map.getMap("agreements").getBoolean("push"));
-            agreements.setRfid(map.getMap("agreements").getBoolean("rfid"));
-            agreements.setWifi(map.getMap("agreements").getBoolean("wifi"));
+            Agreements agreements = agreementsMapper(map.getMap("agreements"));
             registerClient.setAgreements(agreements);
-        }
-        if (map.hasKey("tags")) {
-            registerClient.setTags(tagsToList(map.getArray("tags")));
         }
 
         signUpCall = Client.registerAccount(registerClient);
@@ -265,17 +318,8 @@ public class RNClient extends RNBaseModule {
         }
 
         if (map.hasKey("agreements")) {
-            Agreements agreements = new Agreements();
-            agreements.setBluetooth(map.getMap("agreements").getBoolean("bluetooth"));
-            agreements.setEmail(map.getMap("agreements").getBoolean("email"));
-            agreements.setPush(map.getMap("agreements").getBoolean("push"));
-            agreements.setRfid(map.getMap("agreements").getBoolean("rfid"));
-            agreements.setWifi(map.getMap("agreements").getBoolean("wifi"));
+            Agreements agreements = agreementsMapper(map.getMap("agreements"));
             updateAccountInformation.setAgreements(agreements);
-        }
-
-        if (map.hasKey("tags")) {
-            updateAccountInformation.setTags(tagsToList(map.getArray("tags")));
         }
 
         updateAccountCall = Client.updateAccount(updateAccountInformation);
@@ -405,17 +449,19 @@ public class RNClient extends RNBaseModule {
             return attributes;
     }
 
-    public static List<String> tagsToList(ReadableArray readableArray) {
-        String[] array = new String[readableArray.size()];
+    private Agreements agreementsMapper(ReadableMap map) {
+        if (map != null) {
+            Agreements agreements = new Agreements();
+            agreements.setBluetooth(map.getBoolean("bluetooth"));
+            agreements.setEmail(map.getBoolean("email"));
+            agreements.setPush(map.getBoolean("push"));
+            agreements.setRfid(map.getBoolean("rfid"));
+            agreements.setWifi(map.getBoolean("wifi"));
+            agreements.setSms(map.getBoolean("sms"));
 
-        for (int i = 0; i < readableArray.size(); i++) {
-            ReadableType type = readableArray.getType(i);
-            if (type == ReadableType.String) {
-                array[i] = readableArray.getString(i);
-            }
+            return agreements;
+        } else {
+            return null;
         }
-
-        List<String> list = Arrays.asList(array);
-        return list;
     }
 }
