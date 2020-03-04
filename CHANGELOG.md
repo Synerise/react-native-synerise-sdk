@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.9.8] - 2020-03-04
+
+### Fixed
+- `Synerise.settings` module issues.
+
+
 ## [0.9.7] - 2020-03-02
 
 ### Added

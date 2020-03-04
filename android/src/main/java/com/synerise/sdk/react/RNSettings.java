@@ -103,37 +103,37 @@ public class RNSettings extends RNBaseModule {
         switch (key) {
             case RN_SETTINGS_SDK_ENABLED:
                 if (value instanceof Boolean) {
-                    Settings.sdk.enabled = (Boolean) value;
+                    Settings.getInstance().sdk.enabled = (Boolean) value;
                 }
                 break;
             case RN_SETTINGS_SDK_MIN_TOKEN_REFRESH_INTERVAL:
                 if (value instanceof Integer) {
-                    Settings.sdk.setMinTokenRefreshInterval((int) value);
+                    Settings.getInstance().sdk.setMinTokenRefreshInterval((int) value);
                 }
                 break;
             case RN_SETTINGS_TRACKER_AUTO_FLUSH_TIMEOUT:
                 if (value instanceof Integer) {
-                    Settings.tracker.setAutoFlushTimeout((int) value);
+                    Settings.getInstance().tracker.setAutoFlushTimeout((int) value);
                 }
                 break;
             case RN_SETTINGS_TRACKER_MAX_BATCH_SIZE:
                 if (value instanceof Integer) {
-                    Settings.tracker.setMaximumBatchSize((int) value);
+                    Settings.getInstance().tracker.setMaximumBatchSize((int) value);
                 }
                 break;
             case RN_SETTINGS_TRACKER_MIN_BATCH_SIZE:
                 if (value instanceof Integer) {
-                    Settings.tracker.setMinimumBatchSize((int) value);
+                    Settings.getInstance().tracker.setMinimumBatchSize((int) value);
                 }
                 break;
             case RN_SETTINGS_INJECTOR_AUTOMATIC:
                 if (value instanceof Boolean) {
-                    Settings.injector.automatic = (Boolean) value;
+                    Settings.getInstance().injector.automatic = (Boolean) value;
                 }
                 break;
             case RN_SETTINGS_NOTIFICATIONS_ENABLED:
                 if (value instanceof Boolean) {
-                    Settings.notifications.enabled = (Boolean) value;
+                    Settings.getInstance().notifications.enabled = (Boolean) value;
                 }
                 break;
         }
