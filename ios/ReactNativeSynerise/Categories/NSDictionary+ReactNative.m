@@ -26,8 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
     return [self getObjectForKey:key properClass:NSArray.class];
 }
 
-- (nullable NSDictionary *)getDictionaryForKey:(NSDictionary *)key {
-    return [self getObjectForKey:key properClass:NSNumber.class];
+- (nullable NSDictionary *)getDictionaryForKey:(NSString *)key {
+    return [self getObjectForKey:key properClass:NSDictionary.class];
 }
 
 - (NSInteger)getIntegerForKey:(NSString *)key {

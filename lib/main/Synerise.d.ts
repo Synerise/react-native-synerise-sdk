@@ -15,7 +15,6 @@ declare class SyneriseInitializer {
     withSettings(settings: ISettingsOptions): this;
     init(): void;
     private setupModules;
-    private enableModules;
 }
 declare class Synerise {
     constructor();

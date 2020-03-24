@@ -12,5 +12,6 @@ declare class ErrorMapper {
 }
 declare class ErrorProvider {
     static getUnknownError(): Error;
+    static getModuleConnectorBadParametersError(): Error;
 }
 export { IError, Error, ErrorMapper, ErrorProvider };

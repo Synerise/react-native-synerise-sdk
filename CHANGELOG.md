@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.9.9] - 2020-03-24
+
+### Fixed
+- parsing custom parameters by event constructor on iOS.
+
+
 ## [0.9.8] - 2020-03-04
 
 ### Fixed
