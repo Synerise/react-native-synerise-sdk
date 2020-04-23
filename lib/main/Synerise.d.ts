@@ -4,6 +4,7 @@ import { TrackerModule as Tracker } from './modules/TrackerModule';
 import { NotificationsModule as Notifications } from './modules/NotificationsModule';
 import { InjectorModule as Injector } from './modules/InjectorModule';
 import { PromotionsModule as Promotions } from './modules/PromotionsModule';
+import { ContentModule as Content } from './modules/ContentModule';
 import { Error } from './../classes/types/Error';
 declare class SyneriseInitializer {
     private settings?;
@@ -29,5 +30,6 @@ declare class Synerise {
     static get Notifications(): Notifications;
     static get Injector(): Injector;
     static get Promotions(): Promotions;
+    static get Content(): Content;
 }
 export { Synerise };

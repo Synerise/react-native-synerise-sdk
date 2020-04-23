@@ -317,6 +317,13 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(signOut)
     return @YES;
 }
 
+//destroySession()
+
+RCT_EXPORT_METHOD(destroySession)
+{
+    [SNRClient destroySession];
+}
+
 //retrieveToken(onSuccess: (token: Token) => void, onError: (error: Error) => void)
 
 RCT_REMAP_METHOD(retrieveToken, retrieveTokenWithResponse:(RCTResponseSenderBlock)response)
@@ -345,6 +352,13 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getUUID)
 RCT_EXPORT_METHOD(regenerateUUID)
 {
     [SNRClient regenerateUUID];
+}
+
+//regenerateUUIDWithClientIdentifier(clientIdentifier: String)
+
+RCT_EXPORT_METHOD(regenerateUUIDWithClientIdentifier:(NSString *)clientIdentifier)
+{
+    [SNRClient regenerateUUIDWithClientIdentifier:clientIdentifier];
 }
 
 //getAccount(onSuccess: (clientAccountInformation: ClientAccountInformation) => void, onError: (error: Error) => void)

@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.9.10] - 2020-04-23
+
+### Added
+- `Synerise.Content` module (documents and recommendations).
+- `Synerise.Client.destroySession` method.
+- `Synerise.Client.regenerateUUIDWithClientIdentifier` method.
+
 ## [0.9.9] - 2020-03-24
 
 ### Fixed

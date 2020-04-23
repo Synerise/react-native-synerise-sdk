@@ -19,6 +19,7 @@
 		6FCFFCF1238434A400EBD863 /* NSMutableDictionary+ReactNative.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FCFFCF0238434A400EBD863 /* NSMutableDictionary+ReactNative.m */; };
 		FF0827AB2388190E00B88D52 /* RNNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = FF0827AA2388190E00B88D52 /* RNNotifications.m */; };
 		FF0827AE2388191900B88D52 /* RNInjector.m in Sources */ = {isa = PBXBuildFile; fileRef = FF0827AD2388191900B88D52 /* RNInjector.m */; };
+		FF5BBC032449BA230074FA2E /* RNContent.m in Sources */ = {isa = PBXBuildFile; fileRef = FF5BBC022449BA230074FA2E /* RNContent.m */; };
 		FFB64BC7238893A6001856B7 /* RNSyneriseEventEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = FFB64BC6238893A6001856B7 /* RNSyneriseEventEmitter.m */; };
 /* End PBXBuildFile section */
 
@@ -61,6 +62,8 @@
 		FF0827AA2388190E00B88D52 /* RNNotifications.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNNotifications.m; sourceTree = "<group>"; };
 		FF0827AC2388191900B88D52 /* RNInjector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNInjector.h; sourceTree = "<group>"; };
 		FF0827AD2388191900B88D52 /* RNInjector.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNInjector.m; sourceTree = "<group>"; };
+		FF5BBC012449BA230074FA2E /* RNContent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNContent.h; sourceTree = "<group>"; };
+		FF5BBC022449BA230074FA2E /* RNContent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNContent.m; sourceTree = "<group>"; };
 		FFB64BC5238893A6001856B7 /* RNSyneriseEventEmitter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RNSyneriseEventEmitter.h; path = ReactNativeSynerise/Main/RNSyneriseEventEmitter.h; sourceTree = SOURCE_ROOT; };
 		FFB64BC6238893A6001856B7 /* RNSyneriseEventEmitter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RNSyneriseEventEmitter.m; path = ReactNativeSynerise/Main/RNSyneriseEventEmitter.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -136,6 +139,8 @@
 				FF0827AD2388191900B88D52 /* RNInjector.m */,
 				6F8FDD40237D8CCB00EF1CC7 /* RNPromotions.h */,
 				6F8FDD41237D8CCB00EF1CC7 /* RNPromotions.m */,
+				FF5BBC012449BA230074FA2E /* RNContent.h */,
+				FF5BBC022449BA230074FA2E /* RNContent.m */,
 			);
 			path = Modules;
 			sourceTree = "<group>";
@@ -218,6 +223,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FFB64BC7238893A6001856B7 /* RNSyneriseEventEmitter.m in Sources */,
+				FF5BBC032449BA230074FA2E /* RNContent.m in Sources */,
 				6F17D07623756D6F00D725AE /* RNSyneriseInitializer.m in Sources */,
 				6F30542D238BEBEC00D0BD7D /* RNSyneriseManager.m in Sources */,
 				6F17D07723756D6F00D725AE /* RNBaseModule.m in Sources */,

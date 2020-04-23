@@ -14,6 +14,7 @@
 #import "RNTracker.h"
 #import "RNInjector.h"
 #import "RNPromotions.h"
+#import "RNContent.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -37,7 +38,8 @@ NS_ASSUME_NONNULL_BEGIN
         RNClient.class,
         RNTracker.class,
         RNInjector.class,
-        RNPromotions.class
+        RNPromotions.class,
+        RNContent.class
     ];
     
     for (Class aClass in nativeModulesToCreate) {

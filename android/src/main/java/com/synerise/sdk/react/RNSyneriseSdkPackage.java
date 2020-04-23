@@ -22,6 +22,7 @@ public class RNSyneriseSdkPackage implements ReactPackage {
       modules.add(new RNTracker(reactContext));
       modules.add(new RNSettings(reactContext));
       modules.add(new RNPromotions(reactContext));
+      modules.add(new RNContent(reactContext));
       return modules;
     }
 

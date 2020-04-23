@@ -46,9 +46,6 @@ RCT_EXPORT_MODULE();
     
     if (self) {
         [[RNSyneriseManager sharedInstance] addDelegate:self];
-        
-        [SNRInjector setBannerDelegate:self];
-        [SNRInjector setWalkthroughDelegate:self];
     }
     
     moduleInstance = self;
@@ -147,6 +144,17 @@ RCT_EXPORT_MODULE();
     return @{
         RNInjectorEventObjectDeepLinkKey: deepLink
     };
+}
+
+#pragma mark - RNSyneriseManagerDelegate
+
+- (void)applicationJavaScriptDidLoad {
+    // nothing for yet
+}
+
+- (void)syneriseJavaScriptDidLoad {
+    [SNRInjector setBannerDelegate:self];
+    [SNRInjector setWalkthroughDelegate:self];
 }
 
 #pragma mark - JS Module

@@ -19,9 +19,11 @@ declare class ClientModule extends Module {
     authenticateByFacebookIfRegistered(facebookToken: string, authID: string, onSuccess: () => void, onError: (error: Error) => void): void;
     isSignedIn(): boolean;
     signOut(): void;
+    destroySession(): void;
     retrieveToken(onSuccess: (token: Token) => void, onError: (error: Error) => void): void;
     getUUID(): string;
     regenerateUUID(): void;
+    regenerateUUIDWithClientIdentifier(clientIdentifier: String): void;
     getAccount(onSuccess: (clientAccountInformation: ClientAccountInformation) => void, onError: (error: Error) => void): void;
     updateAccount(context: ClientAccountUpdateContext, onSuccess: () => void, onError: (error: Error) => void): void;
     requestPasswordReset(email: string, onSuccess: () => void, onError: (error: Error) => void): void;

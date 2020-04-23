@@ -73,6 +73,12 @@ public class RNClient extends RNBaseModule {
         return true;
     }
 
+    //destroySession()
+    @ReactMethod
+    public void destroySession() {
+        Client.destroySession();
+    }
+
     //authenticateByOAuth(accessToken: string, context: ClientOAuthAuthenticationContext, onSuccess: () => void, onError: (error: Error) => void)
     @ReactMethod
     public void authenticateByOAuth(String accessToken, ReadableMap authenticateByOAuthMap, Callback callback) {
@@ -236,6 +242,11 @@ public class RNClient extends RNBaseModule {
     @ReactMethod
     public void regenerateUUID() {
         Client.regenerateUuid();
+    }
+
+    @ReactMethod
+    public void regenerateUUID(String clientIdentifier) {
+        Client.regenerateUuid(clientIdentifier);
     }
 
     //getAccount(onSuccess: (clientAccountInformation: ClientAccountInformation) => void, onError: (error: Error) => void)
