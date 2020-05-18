@@ -1,3 +1,6 @@
+export { IClientOAuthAuthenticationContext, ClientOAuthAuthenticationContext } from './../classes/models/Client/ClientOAuthAuthenticationContext';
+export { IClientFacebookAuthenticationContext, ClientFacebookAuthenticationContext } from './../classes/models/Client/ClientFacebookAuthenticationContext';
+export { IClientAppleSignInAuthenticationContext, ClientAppleSignInAuthenticationContext } from './../classes/models/Client/ClientAppleSignInAuthenticationContext';
 export { ClientAccountInformation } from './../classes/models/Client/ClientAccountInformation';
 export { IClientAccountRegisterContext, ClientAccountRegisterContext } from './../classes/models/Client/ClientAccountRegisterContext';
 export { IClientAccountUpdateContext, ClientAccountUpdateContext } from './../classes/models/Client/ClientAccountUpdateContext';

@@ -1,4 +1,4 @@
-import { DocumentsApiQueryType } from "./DocumentsApiQueryType";
+import { DocumentsApiQueryType } from './DocumentsApiQueryType';
 declare class DocumentsApiQuery {
     type: DocumentsApiQueryType;
     typeValue: String;

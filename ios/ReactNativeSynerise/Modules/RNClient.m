@@ -92,6 +92,21 @@ RCT_EXPORT_MODULE();
     return nil;
 }
 
+- (nullable SNRClientAppleSignInAuthenticationContext *)modelClientAppleSignInAuthenticationContextWithIdentityToken:(NSString *)identityToken andDictionary:(nullable NSDictionary *)dictionary {
+    if (dictionary != nil) {
+        if (identityToken != nil) {
+            NSData *identityTokenData = [identityToken dataUsingEncoding:NSUTF8StringEncoding];
+            SNRClientAppleSignInAuthenticationContext *model = [[SNRClientAppleSignInAuthenticationContext alloc] initWithIdentityToken:identityTokenData];
+            model.attributes = [dictionary getDictionaryForKey:@"attributes"];
+            model.agreements = [self modelClientAgreementsWithDictionary:[dictionary getDictionaryForKey:@"agreements"]];
+            
+            return model;
+        }
+    }
+    
+    return nil;
+}
+
 - (nullable SNRClientUpdateAccountContext *)modelClientUpdateAccountContextWithDictionary:(nullable NSDictionary *)dictionary {
     if (dictionary != nil) {
         SNRClientUpdateAccountContext *model = [SNRClientUpdateAccountContext new];
@@ -295,6 +310,20 @@ RCT_EXPORT_METHOD(authenticateByFacebook:(NSString *)facebookToken context:(NSDi
 RCT_EXPORT_METHOD(authenticateByFacebookIfRegistered:(NSString *)facebookToken authID:(NSString *)authID response:(RCTResponseSenderBlock)response)
 {
     [SNRClient authenticateByFacebookIfRegisteredWithFacebookToken:facebookToken authID:authID success:^(BOOL isSuccess) {
+        [self executeSuccessCallbackResponse:response data:@1];
+    } failure:^(NSError *error) {
+        [self executeFailureCallbackResponse:response error:error];
+    }];
+}
+
+//authenticateByAppleSignIn(identityToken: string, context: AppleSignInAuthenticationContext, onSuccess: () => void, onError: (error: Error) => void)
+
+RCT_EXPORT_METHOD(authenticateByAppleSignIn:(NSString *)identityToken context:(NSDictionary *)contextDictionary response:(RCTResponseSenderBlock)response)
+{
+    NSString *authID = contextDictionary[@"authId"];
+    SNRClientAppleSignInAuthenticationContext *context = [self modelClientAppleSignInAuthenticationContextWithIdentityToken:identityToken andDictionary:contextDictionary];
+    
+    [SNRClient authenticateByAppleSignInWithContext:context authID:authID success:^(BOOL isSuccess) {
         [self executeSuccessCallbackResponse:response data:@1];
     } failure:^(NSError *error) {
         [self executeFailureCallbackResponse:response error:error];

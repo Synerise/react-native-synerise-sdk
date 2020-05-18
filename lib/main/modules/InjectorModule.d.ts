@@ -43,6 +43,10 @@ declare class InjectorModule extends Module {
     private onHideWalkthrough;
     setListener(listener: IInjectorListener): void;
     setBannerListener(listener: IInjectorBannerListener): void;
+    setShouldBannerPresentFlag(shouldPresentBanner: boolean): void;
+    fetchBanners(onSuccess: (banners: Array<Object>) => void, onError: (error: Error) => void): void;
+    getBanners(): Array<Object>;
+    showBanner(banner: Object, markPresented: boolean): void;
     setWalkthroughListener(listener: IInjectorWalkthroughListener): void;
     getWalkthrough(): void;
     showWalkthrough(): void;

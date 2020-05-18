@@ -4,6 +4,7 @@ import { ClientAccountUpdateContext } from './../../classes/models/Client/Client
 import { ClientAccountInformation } from './../../classes/models/Client/ClientAccountInformation';
 import { ClientOAuthAuthenticationContext } from '../../classes/models/Client/ClientOAuthAuthenticationContext';
 import { ClientFacebookAuthenticationContext } from '../../classes/models/Client/ClientFacebookAuthenticationContext';
+import { ClientAppleSignInAuthenticationContext } from '../../classes/models/Client/ClientAppleSignInAuthenticationContext';
 import { Token } from './../../classes/models/Token/Token';
 import { Error } from './../../classes/types/Error';
 declare class ClientModule extends Module {
@@ -17,6 +18,7 @@ declare class ClientModule extends Module {
     authenticateByOAuth(accessToken: string, context: ClientOAuthAuthenticationContext, onSuccess: () => void, onError: (error: Error) => void): void;
     authenticateByFacebook(facebookToken: string, context: ClientFacebookAuthenticationContext, onSuccess: () => void, onError: (error: Error) => void): void;
     authenticateByFacebookIfRegistered(facebookToken: string, authID: string, onSuccess: () => void, onError: (error: Error) => void): void;
+    authenticateByAppleSignIn(identityToken: string, context: ClientAppleSignInAuthenticationContext, onSuccess: () => void, onError: (error: Error) => void): void;
     isSignedIn(): boolean;
     signOut(): void;
     destroySession(): void;

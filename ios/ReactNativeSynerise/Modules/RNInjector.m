@@ -29,7 +29,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@implementation RNInjector
+@implementation RNInjector {
+    BOOL _shouldBannerPresentFlag;
+}
 
 static RNInjector *moduleInstance;
 
@@ -46,6 +48,8 @@ RCT_EXPORT_MODULE();
     
     if (self) {
         [[RNSyneriseManager sharedInstance] addDelegate:self];
+        
+        _shouldBannerPresentFlag = YES;
     }
     
     moduleInstance = self;
@@ -103,7 +107,7 @@ RCT_EXPORT_MODULE();
 #pragma mark - SNRInjectorBannerDelegate
 
 - (BOOL)SNR_shouldBannerAppear:(NSDictionary *)bannerDictionary {
-    return YES;
+    return _shouldBannerPresentFlag;
 }
 
 - (void)SNR_bannerDidAppear {
@@ -173,6 +177,38 @@ RCT_EXPORT_MODULE();
     RNInjectorEventListenerWalkthroughPresentedKey: kRNSyneriseWalkthroughPresentedEvent,
     RNInjectorEventListenerWalkthroughHiddenKey: kRNSyneriseWalkthroughHiddenEvent
   };
+}
+
+//setShouldBannerPresentFlag(shouldPresentBanner: boolean)
+
+RCT_EXPORT_METHOD(setShouldBannerPresentFlag:(nonnull NSNumber *)flag)
+{
+    _shouldBannerPresentFlag = [flag boolValue];
+}
+
+//fetchBanners(onSuccess: (banners: Array<Object>) => void, onError: (error: Error) => void)
+
+RCT_REMAP_METHOD(fetchBanners, fetchBannersWithResponse:(RCTResponseSenderBlock)response)
+{
+    [SNRInjector fetchBannersWithSuccess:^(NSArray<NSDictionary *> *banners) {
+        [self executeSuccessCallbackResponse:response data:banners];
+    } failure:^(NSError *error) {
+        [self executeFailureCallbackResponse:response error:error];
+    }];
+}
+
+//getBanners(): Array<Object>
+
+RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getBanners)
+{
+    return [SNRInjector getBanners];
+}
+
+//showBanner(banner: Object, markPresented: boolean)
+
+RCT_EXPORT_METHOD(showBanner:(NSDictionary *)bannerDictionary markPresented:(BOOL)markPresented)
+{
+    [SNRInjector showBanner:bannerDictionary markPresented:markPresented];
 }
 
 //getWalkthrough()

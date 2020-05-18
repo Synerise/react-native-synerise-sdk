@@ -1,18 +1,28 @@
 package com.synerise.sdk.react;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.google.gson.Gson;
+import com.synerise.sdk.core.listeners.DataActionListener;
 import com.synerise.sdk.error.ApiError;
 import com.synerise.sdk.injector.Injector;
 import com.synerise.sdk.injector.callback.InjectorSource;
 import com.synerise.sdk.injector.callback.OnBannerListener;
 import com.synerise.sdk.injector.callback.OnInjectorListener;
 import com.synerise.sdk.injector.callback.OnWalkthroughListener;
+import com.synerise.sdk.injector.net.model.push.banner.TemplateBanner;
 import com.synerise.sdk.injector.ui.handler.InjectorActionHandler;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -39,6 +49,8 @@ public class RNInjector extends RNBaseModule {
     private static String WALKTHROUGH_PRESENTED_VALUE = "walkthroughPresented";
     private static String WALKTHROUGH_HIDDEN_KEY = "WALKTHROUGH_HIDDEN_LISTENER_KEY";
     private static String WALKTHROUGH_HIDDEN_VALUE = "walkthroughHidden";
+    private static Boolean shouldBannerPresentFlag = false;
+    private Gson gson = new Gson();
 
     public RNInjector(ReactApplicationContext reactApplicationContext) {
         super(reactApplicationContext);
@@ -63,6 +75,59 @@ public class RNInjector extends RNBaseModule {
     @ReactMethod(isBlockingSynchronousMethod = true)
     public boolean isLoadedWalkthroughUnique() {
         return Injector.isLoadedWalkthroughUnique();
+    }
+
+    @ReactMethod
+    public void setShouldBannerPresentFlag(Boolean shouldBannerPresentFlag) {
+        this.shouldBannerPresentFlag = shouldBannerPresentFlag;
+    }
+
+    @ReactMethod
+    public void fetchBanners(Callback callback) {
+        Injector.fetchBanners(new DataActionListener<List<TemplateBanner>>() {
+            @Override
+            public void onDataAction(List<TemplateBanner> templateBanners) {
+                WritableArray array = Arguments.createArray();
+                for (TemplateBanner banner : templateBanners) {
+                    try {
+                        String jsonObject = gson.toJson(banner);
+                        WritableMap objectMap = convertJsonToMap(new JSONObject(jsonObject));
+                        array.pushMap(objectMap);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                executeSuccessCallbackResponse(callback, array, null);
+            }
+        }, new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
+        });
+    }
+
+    @ReactMethod(isBlockingSynchronousMethod = true)
+    public WritableArray getBanners() {
+        List<TemplateBanner> bannerList = Injector.getBanners();
+        WritableArray array = Arguments.createArray();
+        for (TemplateBanner banner : bannerList) {
+            try {
+                String jsonObject = gson.toJson(banner);
+                WritableMap objectMap = convertJsonToMap(new JSONObject(jsonObject));
+                array.pushMap(objectMap);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return array;
+    }
+
+    @ReactMethod
+    public void showBanner(ReadableMap bannerObject, Boolean markPresented) {
+        String bannerJson = readableMapToJson(bannerObject);
+        TemplateBanner banner = TemplateBanner.fromJson(bannerJson, new Gson());
+        Injector.showBanner(banner, markPresented);
     }
 
     @Nullable
@@ -130,6 +195,11 @@ public class RNInjector extends RNBaseModule {
             }
 
             @Override
+            public boolean shouldPresent(TemplateBanner banner) {
+                return shouldBannerPresentFlag;
+            }
+
+            @Override
             public void onClosed() {
                 super.onClosed();
                 onBannerClosed();
@@ -188,5 +258,17 @@ public class RNInjector extends RNBaseModule {
 
     private static void onWalkthroughClosed() {
         sendEventToJs(WALKTHROUGH_HIDDEN_VALUE, null, reactApplicationContext);
+    }
+
+    private String readableMapToJson(ReadableMap map) {
+        String json;
+        try {
+            JSONObject jsonObject = new JSONObject(map.toString());
+            json = jsonObject.get("NativeMap").toString();
+        } catch (JSONException e) {
+            json = null;
+        }
+
+        return json;
     }
 }
