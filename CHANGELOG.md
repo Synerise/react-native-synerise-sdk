@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.9.13] - 2020-07-09
+
+### Fixed
+
+- CocoaPods config files.
+
+
 ## [0.9.12] - 2020-07-09
 
 ### Added
