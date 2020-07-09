@@ -33,8 +33,8 @@ import javax.annotation.Nonnull;
 
 public class RNClient extends RNBaseModule {
 
-    private IApiCall signInCall, signUpCall, confirmCall, activateCall, updateAccountCall;
-    private IApiCall passwordResetCall;
+    private IApiCall signInCall, signUpCall, confirmCall, activateCall, updateAccountCall, refreshTokenCall;
+    private IApiCall passwordResetCall, deleteAccountByFacebookCall, deleteAccountByOAuthCall;
     private IDataApiCall<Token> getTokenCall;
     private IDataApiCall<GetAccountInformation> getAccountCall;
 
@@ -51,6 +51,7 @@ public class RNClient extends RNBaseModule {
     //signIn(email: string, password: string, onSuccess: () => void, onError: (error: Error) => void)
     @ReactMethod
     public void signIn(String email, String password, Callback callback) {
+        if (signInCall != null) signInCall.cancel();
         signInCall = Client.signIn(email, password);
         signInCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
             @Override
@@ -79,6 +80,19 @@ public class RNClient extends RNBaseModule {
         Client.destroySession();
     }
 
+    //refreshToken(onSuccess: () => void, onError: (error: Error) => void)
+    @ReactMethod
+    public void refreshToken(Callback callback) {
+        if (refreshTokenCall != null) refreshTokenCall.cancel();
+        refreshTokenCall = Client.refreshToken();
+        refreshTokenCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
+        });
+    }
+
     //authenticateByOAuth(accessToken: string, context: ClientOAuthAuthenticationContext, onSuccess: () => void, onError: (error: Error) => void)
     @ReactMethod
     public void authenticateByOAuth(String accessToken, ReadableMap authenticateByOAuthMap, Callback callback) {
@@ -99,6 +113,17 @@ public class RNClient extends RNBaseModule {
 
         IApiCall authenticateByOAuthCall = Client.authenticateByOAuth(accessToken, agreements, attributes, authID);
         authenticateByOAuthCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
+        });
+    }
+
+    @ReactMethod
+    public void authenticateByOAuthIfRegistered(String accessToken, String authID, Callback callback) {
+        IApiCall authenticateByOAuthIfRegisteredCall = Client.authenticateByOAuthIfRegistered(accessToken, authID);
+        authenticateByOAuthIfRegisteredCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
             @Override
             public void onDataAction(ApiError apiError) {
                 executeFailureCallbackResponse(callback, null, apiError);
@@ -135,7 +160,7 @@ public class RNClient extends RNBaseModule {
     //authenticateByFacebookIfRegistered(facebookToken: string, authID: string, onSuccess: () => void, onError: (error: Error) => void)
     @ReactMethod
     public void authenticateByFacebookIfRegistered(String facebookToken, String authID, Callback callback) {
-        IApiCall authenticateByFacebookIfRegisteredCall = Client.authenticateByFacebookRegistered(facebookToken, authID);
+        IApiCall authenticateByFacebookIfRegisteredCall = Client.authenticateByFacebookIfRegistered(facebookToken, authID);
         authenticateByFacebookIfRegisteredCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
             @Override
             public void onDataAction(ApiError apiError) {
@@ -173,6 +198,7 @@ public class RNClient extends RNBaseModule {
             registerClient.setAgreements(agreements);
         }
 
+        if (signUpCall != null) signUpCall.cancel();
         signUpCall = Client.registerAccount(registerClient);
         signUpCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
             @Override
@@ -185,6 +211,7 @@ public class RNClient extends RNBaseModule {
     //confirmAccount(token: String, onSuccess: () => void, onError: (error: Error) => void)
     @ReactMethod
     public void confirmAccount(String token, Callback callback) {
+        if (confirmCall != null) confirmCall.cancel();
         confirmCall = Client.confirmAccount(token);
         confirmCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
             @Override
@@ -197,6 +224,7 @@ public class RNClient extends RNBaseModule {
     //activateAccount(email: String, onSuccess: () => void, onError: (error: Error) => void)
     @ReactMethod
     public void activateAccount(String email, Callback callback) {
+        if (activateCall != null) activateCall.cancel();
         activateCall = Client.activateAccount(email);
         activateCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
             @Override
@@ -282,7 +310,7 @@ public class RNClient extends RNBaseModule {
                 accountMap.putString("birthDate", getAccountInformation.getBirthDate());
                 accountMap.putString("sex", getAccountInformation.getSex().getSex());
                 accountMap.putString("avatarUrl", getAccountInformation.getAvatarUrl());
-                accountMap.putBoolean("anonymus", getAccountInformation.getAnonymous());
+                accountMap.putBoolean("anonymous", getAccountInformation.getAnonymous());
                 accountMap.putMap("agreements", agreements);
                 accountMap.putMap("attributes", MapUtil.stringMapToWritableMap(getAccountInformation.getAttributes()));
                 accountMap.putArray("tags", ArrayUtil.toWritableArray(getAccountInformation.getTags()));
@@ -333,6 +361,7 @@ public class RNClient extends RNBaseModule {
             updateAccountInformation.setAgreements(agreements);
         }
 
+        if (updateAccountCall != null) updateAccountCall.cancel();
         updateAccountCall = Client.updateAccount(updateAccountInformation);
         updateAccountCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
             @Override
@@ -345,6 +374,7 @@ public class RNClient extends RNBaseModule {
     //requestPasswordReset(email: String, onSuccess: () => void, onError: (error: Error) => void)
     @ReactMethod
     public void requestPasswordReset(String email, Callback callback) {
+        if (passwordResetCall != null) passwordResetCall.cancel();
         PasswordResetRequest passwordResetRequest = new PasswordResetRequest(email);
         passwordResetCall = Client.requestPasswordReset(passwordResetRequest);
         passwordResetCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
@@ -439,6 +469,32 @@ public class RNClient extends RNBaseModule {
             }
         });
     }
+
+    @ReactMethod
+    public void deleteAccountByFacebook(String facebookToken, Callback callback) {
+        if (deleteAccountByFacebookCall != null) deleteAccountByFacebookCall.cancel();
+        deleteAccountByFacebookCall = Client.deleteAccountByFacebook(facebookToken, null);
+        deleteAccountByFacebookCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
+        });
+    }
+
+    @ReactMethod
+    public void deleteAccountByOAuth(String accessToken, Callback callback) {
+        if (deleteAccountByOAuthCall != null) deleteAccountByOAuthCall.cancel();
+        deleteAccountByOAuthCall = Client.deleteAccountByOAuth(accessToken, null);
+        deleteAccountByOAuthCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
+        });
+    }
+
+
 
     //recognizeAnonymous(email: String | null, customIdentify: String | null, parameters: Record<string, any> | null)
     @ReactMethod

@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.9.12] - 2020-07-09
+
+### Added
+
+- `Synerise.Client.authenticateByAppleSignIn` method.
+- `Synerise.Client.authenticateByAppleSignInIfRegistered` method.
+- `Synerise.Injector.authenticateByOAuthIfRegistered` method.
+- `Synerise.Injector.deleteAccountByOAuth` method.
+- `Synerise.Injector.deleteAccountByAppleSignIn` method.
+- `Synerise.settings.sdk.sdk.shouldDestroySessionOnApiKeyChange` option in settings.
+
 ## [0.9.11] - 2020-05-18
 
 ### Added

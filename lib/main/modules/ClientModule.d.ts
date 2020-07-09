@@ -16,12 +16,15 @@ declare class ClientModule extends Module {
     activateAccount(email: string, onSuccess: () => void, onError: (error: Error) => void): void;
     signIn(email: string, password: string, onSuccess: () => void, onError: (error: Error) => void): void;
     authenticateByOAuth(accessToken: string, context: ClientOAuthAuthenticationContext, onSuccess: () => void, onError: (error: Error) => void): void;
+    authenticateByOAuthIfRegistered(accessToken: string, authID: string | null, onSuccess: () => void, onError: (error: Error) => void): void;
     authenticateByFacebook(facebookToken: string, context: ClientFacebookAuthenticationContext, onSuccess: () => void, onError: (error: Error) => void): void;
-    authenticateByFacebookIfRegistered(facebookToken: string, authID: string, onSuccess: () => void, onError: (error: Error) => void): void;
+    authenticateByFacebookIfRegistered(facebookToken: string, authID: string | null, onSuccess: () => void, onError: (error: Error) => void): void;
     authenticateByAppleSignIn(identityToken: string, context: ClientAppleSignInAuthenticationContext, onSuccess: () => void, onError: (error: Error) => void): void;
+    authenticateByAppleSignInIfRegistered(identityToken: string, authID: string, onSuccess: () => void, onError: (error: Error) => void): void;
     isSignedIn(): boolean;
     signOut(): void;
     destroySession(): void;
+    refreshToken(onSuccess: () => void, onError: (error: Error) => void): void;
     retrieveToken(onSuccess: (token: Token) => void, onError: (error: Error) => void): void;
     getUUID(): string;
     regenerateUUID(): void;
@@ -36,6 +39,8 @@ declare class ClientModule extends Module {
     requestPhoneUpdate(phone: string, onSuccess: () => void, onError: (error: Error) => void): void;
     confirmPhoneUpdate(phone: string, confirmationCode: string, smsAgreement: Boolean, onSuccess: () => void, onError: (error: Error) => void): void;
     deleteAccount(password: string, onSuccess: () => void, onError: (error: Error) => void): void;
+    deleteAccountByOAuth(accessToken: string, onSuccess: () => void, onError: (error: Error) => void): void;
+    deleteAccountByFacebook(facebookToken: string, onSuccess: () => void, onError: (error: Error) => void): void;
     recognizeAnonymous(email: string | null, customIdentify: string | null, parameters: Record<string, any> | null): void;
 }
 export { ClientModule };

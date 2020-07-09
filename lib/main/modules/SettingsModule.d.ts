@@ -3,6 +3,7 @@ interface ISettingsOptions {
     sdk?: {
         enabled?: boolean;
         minTokenRefreshInterval?: number;
+        shouldDestroySessionOnApiKeyChange?: boolean;
     };
     tracker?: {
         minBatchSize?: number;
@@ -23,6 +24,7 @@ declare class SettingsModule extends Module {
     sdk: {
         enabled: any;
         minTokenRefreshInterval: any;
+        shouldDestroySessionOnApiKeyChange: any;
     };
     tracker: {
         minBatchSize: any;
