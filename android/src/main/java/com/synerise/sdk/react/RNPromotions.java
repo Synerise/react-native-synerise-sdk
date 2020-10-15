@@ -328,7 +328,7 @@ public class RNPromotions extends RNBaseModule {
                 promotionMap.putArray("catalogIndexItems", ArrayUtil.toWritableArray(promotion.getCatalogIndexItems()));
             }
             if (promotion.getParams() != null) {
-                promotionMap.putMap("params", MapUtil.hashMaptoWritableMap(promotion.getParams()));
+                promotionMap.putMap("params", MapUtil.toWritableMap(promotion.getParams()));
             }
 
             writableArray.pushMap(promotionMap);
@@ -360,7 +360,7 @@ public class RNPromotions extends RNBaseModule {
             promotionMap.putArray("images", promotionImageToWritableArray(promotion.getImages()));
         }
         if (promotion.getParams() != null) {
-            promotionMap.putMap("params", MapUtil.hashMaptoWritableMap(promotion.getParams()));
+            promotionMap.putMap("params", MapUtil.toWritableMap(promotion.getParams()));
         }
         if (promotion.getCatalogIndexItems() != null) {
             promotionMap.putArray("catalogIndexItems", ArrayUtil.toWritableArray(promotion.getCatalogIndexItems()));

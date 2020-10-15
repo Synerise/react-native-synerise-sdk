@@ -238,6 +238,31 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(isSilentSDKCommand:(NSDictionary *)userIn
     return [NSNumber numberWithBool:[SNRSynerise isSyneriseSilentSDKCommand:userInfo]];
 }
 
+//isNotificationEncrypted(payload: object)
+
+RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(isNotificationEncrypted:(NSDictionary *)userInfo)
+{
+    return [NSNumber numberWithBool:[SNRSynerise isNotificationEncrypted:userInfo]];
+}
+
+//decryptNotification(payload: object)
+
+RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(decryptNotification:(NSDictionary *)userInfo)
+{
+    NSDictionary *decryptedUserInfo = [SNRSynerise decryptNotification:userInfo];
+    if (decryptedUserInfo != nil) {
+        return @[
+            @YES,
+            decryptedUserInfo
+        ];
+    } else {
+        return @[
+            @NO,
+            [NSNull null]
+        ];
+    }
+}
+
 //handleNotification(payload: object)
 
 RCT_EXPORT_METHOD(handleNotification:(NSDictionary *)userInfo)

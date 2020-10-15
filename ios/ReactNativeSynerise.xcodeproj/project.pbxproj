@@ -100,7 +100,6 @@
 			children = (
 				6F17D06023756C4F00D725AE /* ReactNativeSynerise.h */,
 				6FCFFCEE2384347500EBD863 /* Categories */,
-				6F17D07123756C4F00D725AE /* Helpers */,
 				6F17D06123756C4F00D725AE /* Main */,
 				6F17D06423756C4F00D725AE /* Modules */,
 			);
@@ -143,13 +142,6 @@
 				FF5BBC022449BA230074FA2E /* RNContent.m */,
 			);
 			path = Modules;
-			sourceTree = "<group>";
-		};
-		6F17D07123756C4F00D725AE /* Helpers */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Helpers;
 			sourceTree = "<group>";
 		};
 		6FCFFCEE2384347500EBD863 /* Categories */ = {

@@ -9,6 +9,8 @@
 #import "RNSettings.h"
 
 static NSString * const RNSettingsSDKEnabled = @"SDK_ENABLED";
+static NSString * const RNSettingsSDKAppGroupIdentifier = @"SDK_APP_GROUP_IDENTIFIER";
+static NSString * const RNSettingsSDKKeychainGroupIdentifier = @"SDK_KEYCHAIN_GROUP_IDENTIFIER";
 static NSString * const RNSettingsSDKMinTokenRefreshInterval = @"SDK_MIN_TOKEN_REFRESH_INTERVAL";
 static NSString * const RNSettingsSDKShouldDestroySessionOnApiKeyChange = @"SDK_SHOULD_DESTROY_SESSION_ON_API_KEY_CHANGE";
 
@@ -17,8 +19,8 @@ static NSString * const RNSettingsTrackerMaxBatchSize = @"TRACKER_MAX_BATCH_SIZE
 static NSString * const RNSettingsTrackerAutoFlushTimeout = @"TRACKER_AUTO_FLUSH_TIMEOUT";
 
 static NSString * const RNSettingsNotificationsEnabled = @"NOTIFICATIONS_ENABLED";
+static NSString * const RNSettingsNotificationsEncryption = @"NOTIFICATIONS_ENCRYPTION";
 static NSString * const RNSettingsNotificationsDisableInAppAlerts = @"NOTIFICATIONS_DISABLE_IN_APP_ALERTS";
-static NSString * const RNSettingsNotificationsAppGroupIdentifier = @"NOTIFICATIONS_APP_GROUP_IDENTIFIER";
 
 static NSString * const RNSettingsInjectorAutomatic = @"INJECTOR_AUTOMATIC";
 
@@ -52,6 +54,8 @@ RCT_EXPORT_MODULE();
 
 - (void)updateSettingsWithDictionary:(NSDictionary *)dictionary {
     [self updateSettingsKeyPath:@"sdk.enabled" expectedClass:[NSNumber class] object:dictionary[RNSettingsSDKEnabled]];
+    [self updateSettingsKeyPath:@"sdk.appGroupIdentifier" expectedClass:[NSString class] object:dictionary[RNSettingsSDKAppGroupIdentifier]];
+    [self updateSettingsKeyPath:@"sdk.keychainGroupIdentifier" expectedClass:[NSString class] object:dictionary[RNSettingsSDKKeychainGroupIdentifier]];
     [self updateSettingsKeyPath:@"sdk.minTokenRefreshInterval" expectedClass:[NSNumber class] object:dictionary[RNSettingsSDKMinTokenRefreshInterval]];
     [self updateSettingsKeyPath:@"sdk.shouldDestroySessionOnApiKeyChange" expectedClass:[NSNumber class] object:dictionary[RNSettingsSDKShouldDestroySessionOnApiKeyChange]];
     
@@ -60,8 +64,8 @@ RCT_EXPORT_MODULE();
     [self updateSettingsKeyPath:@"tracker.autoFlushTimeout" expectedClass:[NSNumber class] object:dictionary[RNSettingsTrackerAutoFlushTimeout]];
     
     [self updateSettingsKeyPath:@"notifications.enabled" expectedClass:[NSNumber class] object:dictionary[RNSettingsNotificationsEnabled]];
+    [self updateSettingsKeyPath:@"notifications.encryption" expectedClass:[NSNumber class] object:dictionary[RNSettingsNotificationsEncryption]];
     [self updateSettingsKeyPath:@"notifications.disableInAppAlerts" expectedClass:[NSNumber class] object:dictionary[RNSettingsNotificationsDisableInAppAlerts]];
-    [self updateSettingsKeyPath:@"notifications.appGroupIdentifier" expectedClass:[NSString class] object:dictionary[RNSettingsNotificationsAppGroupIdentifier]];
     
     [self updateSettingsKeyPath:@"injector.automatic" expectedClass:[NSNumber class] object:dictionary[RNSettingsInjectorAutomatic]];
 }
@@ -86,7 +90,10 @@ RCT_EXPORT_MODULE();
 
 - (NSDictionary *)settingsDictionary {
     NSMutableDictionary *dictionary = [@{} mutableCopy];
+    
     dictionary[RNSettingsSDKEnabled] = [NSNumber numberWithBool:SNRSynerise.settings.sdk.enabled];
+    dictionary[RNSettingsSDKAppGroupIdentifier] = SNRSynerise.settings.sdk.appGroupIdentifier ?: [NSNull null];
+    dictionary[RNSettingsSDKKeychainGroupIdentifier] = SNRSynerise.settings.sdk.keychainGroupIdentifier ?: [NSNull null];
     dictionary[RNSettingsSDKMinTokenRefreshInterval] = [NSNumber numberWithDouble:SNRSynerise.settings.sdk.minTokenRefreshInterval];
     dictionary[RNSettingsSDKShouldDestroySessionOnApiKeyChange] = [NSNumber numberWithDouble:SNRSynerise.settings.sdk.shouldDestroySessionOnApiKeyChange];
     
@@ -95,8 +102,8 @@ RCT_EXPORT_MODULE();
     dictionary[RNSettingsTrackerAutoFlushTimeout] = [NSNumber numberWithDouble:SNRSynerise.settings.tracker.autoFlushTimeout];
     
     dictionary[RNSettingsNotificationsEnabled] = [NSNumber numberWithBool:SNRSynerise.settings.notifications.enabled];
+    dictionary[RNSettingsNotificationsEncryption] = [NSNumber numberWithBool:SNRSynerise.settings.notifications.encryption];
     dictionary[RNSettingsNotificationsDisableInAppAlerts] = [NSNumber numberWithBool:SNRSynerise.settings.notifications.disableInAppAlerts];
-    dictionary[RNSettingsNotificationsAppGroupIdentifier] = SNRSynerise.settings.notifications.appGroupIdentifier ?: [NSNull null];
     
     dictionary[RNSettingsInjectorAutomatic] = [NSNumber numberWithBool:SNRSynerise.settings.injector.automatic];
     
@@ -109,6 +116,8 @@ RCT_EXPORT_MODULE();
 {
   return @{
       RNSettingsSDKEnabled: RNSettingsSDKEnabled,
+      RNSettingsSDKAppGroupIdentifier: RNSettingsSDKAppGroupIdentifier,
+      RNSettingsSDKKeychainGroupIdentifier: RNSettingsSDKKeychainGroupIdentifier,
       RNSettingsSDKMinTokenRefreshInterval: RNSettingsSDKMinTokenRefreshInterval,
       RNSettingsSDKShouldDestroySessionOnApiKeyChange: RNSettingsSDKShouldDestroySessionOnApiKeyChange,
           
@@ -117,8 +126,8 @@ RCT_EXPORT_MODULE();
       RNSettingsTrackerAutoFlushTimeout: RNSettingsTrackerAutoFlushTimeout,
       
       RNSettingsNotificationsEnabled: RNSettingsNotificationsEnabled,
+      RNSettingsNotificationsEncryption: RNSettingsNotificationsEncryption,
       RNSettingsNotificationsDisableInAppAlerts: RNSettingsNotificationsDisableInAppAlerts,
-      RNSettingsNotificationsAppGroupIdentifier: RNSettingsNotificationsAppGroupIdentifier,
       
       RNSettingsInjectorAutomatic: RNSettingsInjectorAutomatic
   };

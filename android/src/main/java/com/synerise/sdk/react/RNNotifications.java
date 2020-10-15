@@ -7,11 +7,13 @@ import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.synerise.sdk.client.Client;
 import com.synerise.sdk.core.listeners.DataActionListener;
 import com.synerise.sdk.core.listeners.OnRegisterForPushListener;
 import com.synerise.sdk.core.net.IApiCall;
+import com.synerise.sdk.core.types.exceptions.DecryptionException;
 import com.synerise.sdk.error.ApiError;
 import com.synerise.sdk.injector.Injector;
 import com.synerise.sdk.react.listeners.OnRegisterPushListener;
@@ -110,6 +112,27 @@ public class RNNotifications extends RNBaseModule {
     public boolean isSyneriseBanner(ReadableMap map) {
         return Injector.isSyneriseBanner(MapUtil.toStringMap(map));
     }
+    //isNotificationEncrypted(payload: object)
+    @ReactMethod(isBlockingSynchronousMethod = true)
+    public boolean isNotificationEncrypted(ReadableMap map) {
+        return Injector.isPushEncrypted(MapUtil.toStringMap(map));
+    }
+
+    //decryptNotification(payload: object): object
+    @ReactMethod(isBlockingSynchronousMethod = true)
+    public WritableArray decryptNotification(ReadableMap map) {
+        WritableArray notificationArrayForJs = Arguments.createArray();
+        try {
+            WritableMap payload = MapUtil.stringMapToWritableMap(Injector.decryptPushPayload(MapUtil.toStringMap(map)));
+            notificationArrayForJs.pushBoolean(true);
+            notificationArrayForJs.pushMap(payload);
+        } catch (DecryptionException e) {
+            notificationArrayForJs.pushBoolean(false);
+            notificationArrayForJs.pushNull();
+        }
+
+        return notificationArrayForJs;
+    }
 
     //registerForNotifications(token: String, onSuccess: () => void, onError: (error: Error) => void)
     @ReactMethod
@@ -131,17 +154,17 @@ public class RNNotifications extends RNBaseModule {
     public static void onNotificationReceive(Bundle bundle) {
         Map<String, String> data = new HashMap<>();
         if (bundle != null) {
-            if (bundle.get(ISSUER.getApiKey()) != null) {
-                data.put(ISSUER.getApiKey(), (String) bundle.get(ISSUER.getApiKey()));
+            if (bundle.get(ISSUER.getKey()) != null) {
+                data.put(ISSUER.getKey(), (String) bundle.get(ISSUER.getKey()));
             }
-            if (bundle.get(CONTENT_TYPE.getApiKey()) != null) {
-                data.put(CONTENT_TYPE.getApiKey(), (String) bundle.get(CONTENT_TYPE.getApiKey()));
+            if (bundle.get(CONTENT_TYPE.getKey()) != null) {
+                data.put(CONTENT_TYPE.getKey(), (String) bundle.get(CONTENT_TYPE.getKey()));
             }
-            if (bundle.get(MESSAGE_TYPE.getApiKey()) != null) {
-                data.put(MESSAGE_TYPE.getApiKey(), (String) bundle.get(MESSAGE_TYPE.getApiKey()));
+            if (bundle.get(MESSAGE_TYPE.getKey()) != null) {
+                data.put(MESSAGE_TYPE.getKey(), (String) bundle.get(MESSAGE_TYPE.getKey()));
             }
-            if (bundle.get(CONTENT.getApiKey()) != null) {
-                data.put(CONTENT.getApiKey(), (String) bundle.get(CONTENT.getApiKey()));
+            if (bundle.get(CONTENT.getKey()) != null) {
+                data.put(CONTENT.getKey(), (String) bundle.get(CONTENT.getKey()));
             }
         }
 

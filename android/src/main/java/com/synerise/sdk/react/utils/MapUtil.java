@@ -42,7 +42,7 @@ public class MapUtil {
         return writableMap;
     }
 
-    public static WritableMap hashMaptoWritableMap(HashMap<String, Object> map) {
+    public static WritableMap stringMapToWritableMap(Map<String, String> map) {
         WritableMap writableMap = Arguments.createMap();
         Iterator iterator = map.entrySet().iterator();
 
@@ -50,37 +50,7 @@ public class MapUtil {
             Map.Entry pair = (Map.Entry)iterator.next();
             Object value = pair.getValue();
 
-            if (value == null) {
-                writableMap.putNull((String) pair.getKey());
-            } else if (value instanceof Boolean) {
-                writableMap.putBoolean((String) pair.getKey(), (Boolean) value);
-            } else if (value instanceof Double) {
-                writableMap.putDouble((String) pair.getKey(), (Double) value);
-            } else if (value instanceof Integer) {
-                writableMap.putInt((String) pair.getKey(), (Integer) value);
-            } else if (value instanceof String) {
-                writableMap.putString((String) pair.getKey(), (String) value);
-            } else if (value instanceof Map) {
-                writableMap.putMap((String) pair.getKey(), MapUtil.toWritableMap((Map<String, Object>) value));
-            } else if (value.getClass() != null && value.getClass().isArray()) {
-                writableMap.putArray((String) pair.getKey(), ArrayUtil.toWritableArray((Object[]) value));
-            }
-
-            iterator.remove();
-        }
-
-        return writableMap;
-    }
-
-    public static WritableMap stringMapToWritableMap(HashMap<String, String> map) {
-        WritableMap writableMap = Arguments.createMap();
-        Iterator iterator = map.entrySet().iterator();
-
-        while (iterator.hasNext()) {
-            Map.Entry pair = (Map.Entry)iterator.next();
-            Object value = pair.getValue();
-
-                writableMap.putString((String) pair.getKey(), (String) value);
+            writableMap.putString((String) pair.getKey(), (String) value);
 
             iterator.remove();
         }

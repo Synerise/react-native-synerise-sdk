@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.9.14] - 2020-10-15
+
+### Added
+
+- Support for encrypted notifications (enabled by `Synerise.settings.notifications.encryption`). [1]
+
+[1] Please read full documentation:
+iOS: https://help.synerise.com/developers/ios-sdk/configure-notifications/#configuring-notification-encryption
+Android: https://help.synerise.com/developers/android-sdk/configure-notifications/#configuring-notification-encryption
+
+
 ## [0.9.13] - 2020-07-09
 
 ### Fixed

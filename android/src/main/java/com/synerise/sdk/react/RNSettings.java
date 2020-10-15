@@ -25,6 +25,7 @@ public class RNSettings extends RNBaseModule {
     public static final String RN_SETTINGS_TRACKER_MAX_BATCH_SIZE = "TRACKER_MAX_BATCH_SIZE";
     public static final String RN_SETTINGS_TRACKER_AUTO_FLUSH_TIMEOUT = "TRACKER_AUTO_FLUSH_TIMEOUT";
     public static final String RN_SETTINGS_NOTIFICATIONS_ENABLED = "NOTIFICATIONS_ENABLED";
+    public static final String RN_SETTINGS_NOTIFICATIONS_ENCRYPTION = "NOTIFICATIONS_ENCRYPTION";
     public static final String RN_SETTINGS_INJECTOR_AUTOMATIC = "INJECTOR_AUTOMATIC";
 
     public RNSettings(ReactApplicationContext reactApplicationContext) {
@@ -48,6 +49,7 @@ public class RNSettings extends RNBaseModule {
         constants.put(RN_SETTINGS_TRACKER_AUTO_FLUSH_TIMEOUT, RN_SETTINGS_TRACKER_AUTO_FLUSH_TIMEOUT);
         constants.put(RN_SETTINGS_INJECTOR_AUTOMATIC, RN_SETTINGS_INJECTOR_AUTOMATIC);
         constants.put(RN_SETTINGS_NOTIFICATIONS_ENABLED, RN_SETTINGS_NOTIFICATIONS_ENABLED);
+        constants.put(RN_SETTINGS_NOTIFICATIONS_ENCRYPTION, RN_SETTINGS_NOTIFICATIONS_ENCRYPTION);
         constants.put(RN_SETTINGS_SHOULD_DESTROY_SESSION_ON_API_KEY_CHANGE, RN_SETTINGS_SHOULD_DESTROY_SESSION_ON_API_KEY_CHANGE);
         return constants;
     }
@@ -138,6 +140,11 @@ public class RNSettings extends RNBaseModule {
                     Settings.getInstance().notifications.enabled = (Boolean) value;
                 }
                 break;
+            case RN_SETTINGS_NOTIFICATIONS_ENCRYPTION:
+                if (value instanceof Boolean) {
+                    Settings.getInstance().notifications.setEncryption((Boolean) value);
+                }
+                break;
             case RN_SETTINGS_SHOULD_DESTROY_SESSION_ON_API_KEY_CHANGE:
                 if (value instanceof Boolean) {
                     Settings.getInstance().sdk.shouldDestroySessionOnApiKeyChange = (Boolean) value;
@@ -155,6 +162,7 @@ public class RNSettings extends RNBaseModule {
         settings.put(RN_SETTINGS_TRACKER_AUTO_FLUSH_TIMEOUT, Synerise.settings.tracker.autoFlushTimeout);
         settings.put(RN_SETTINGS_INJECTOR_AUTOMATIC, Synerise.settings.injector.automatic);
         settings.put(RN_SETTINGS_NOTIFICATIONS_ENABLED, Synerise.settings.notifications.enabled);
+        settings.put(RN_SETTINGS_NOTIFICATIONS_ENCRYPTION, Synerise.settings.notifications.getEncryption());
         settings.put(RN_SETTINGS_SHOULD_DESTROY_SESSION_ON_API_KEY_CHANGE, Synerise.settings.sdk.shouldDestroySessionOnApiKeyChange);
         return settings;
     }

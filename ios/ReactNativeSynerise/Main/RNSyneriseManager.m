@@ -123,7 +123,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (nullable id)getModuleForClass:(Class)aClass {
-    id module = self.modules[NSStringFromClass(RNInjector.class)];
+    id module = self.modules[NSStringFromClass(aClass)];
     if (module != nil && [module isKindOfClass:aClass] == YES) {
         return module;
     }

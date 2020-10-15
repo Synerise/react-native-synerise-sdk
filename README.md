@@ -82,7 +82,7 @@ If you prefer linking manually, check [React Native - Linking Libraries](http://
 
 ### Android
 
-1. Add `implementation 'com.synerise.sdk.react:react-native-synerise-sdk:0.9.6'` as a dependency in your app's build.gradle file.
+1. Add `implementation 'com.synerise.sdk.react:react-native-synerise-sdk:0.9.13'` as a dependency in your app's build.gradle file.
 
 2. Add `RNSyneriseSdkPackage` to your list your packages in application's main class as shown below:
 
