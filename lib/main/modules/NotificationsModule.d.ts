@@ -24,6 +24,8 @@ declare class NotificationsModule extends Module {
     isSyneriseBanner(payload: object): boolean;
     isSilentCommand(payload: object): boolean;
     isSilentSDKCommand(payload: object): boolean;
+    isNotificationEncrypted(payload: object): boolean;
+    decryptNotification(payload: object): object | null;
     handleNotification(payload: object): void;
 }
 export { NotificationsModule, INotificationsListener };

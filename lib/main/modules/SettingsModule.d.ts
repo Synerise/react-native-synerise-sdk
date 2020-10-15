@@ -2,6 +2,8 @@ import { BaseModule as Module } from './BaseModule';
 interface ISettingsOptions {
     sdk?: {
         enabled?: boolean;
+        appGroupIdentifier?: string;
+        keychainGroupIdentifier?: string;
         minTokenRefreshInterval?: number;
         shouldDestroySessionOnApiKeyChange?: boolean;
     };
@@ -12,8 +14,8 @@ interface ISettingsOptions {
     };
     notifications?: {
         enabled?: boolean;
+        encryption?: boolean;
         disableInAppAlerts?: boolean;
-        appGroupIdentifier?: string;
     };
     injector?: {
         automatic?: boolean;
@@ -23,6 +25,8 @@ declare class SettingsModule extends Module {
     private static _instance;
     sdk: {
         enabled: any;
+        appGroupIdentifier: any;
+        keychainGroupIdentifier: any;
         minTokenRefreshInterval: any;
         shouldDestroySessionOnApiKeyChange: any;
     };
@@ -33,8 +37,8 @@ declare class SettingsModule extends Module {
     };
     notifications: {
         enabled: any;
+        encryption: any;
         disableInAppAlerts: any;
-        appGroupIdentifier: any;
     };
     injector: {
         automatic: any;
