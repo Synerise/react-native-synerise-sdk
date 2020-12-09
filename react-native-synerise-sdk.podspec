@@ -2,7 +2,7 @@ require 'json'
 
 package = JSON.parse(File.read('./package.json'))
 
-SYNERISE_SDK_FRAMEWORK_VERSION = '3.6.17'
+SYNERISE_SDK_FRAMEWORK_VERSION = '3.6.22'
 
 Pod::Spec.new do |s|
   s.name          = package['name']
@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   s.requires_arc  = true
   
   s.dependency "React"
-  s.dependency 'SyneriseSDK', "~> #{SYNERISE_SDK_FRAMEWORK_VERSION}"
+  s.dependency 'SyneriseSDK', "#{SYNERISE_SDK_FRAMEWORK_VERSION}"
 
 end
 

@@ -8,6 +8,7 @@ interface ISettingsOptions {
         shouldDestroySessionOnApiKeyChange?: boolean;
     };
     tracker?: {
+        isBackendTimeSyncRequired?: boolean;
         minBatchSize?: number;
         maxBatchSize?: number;
         autoFlushTimeout?: number;
@@ -31,6 +32,7 @@ declare class SettingsModule extends Module {
         shouldDestroySessionOnApiKeyChange: any;
     };
     tracker: {
+        isBackendTimeSyncRequired: any;
         minBatchSize: any;
         maxBatchSize: any;
         autoFlushTimeout: any;

@@ -6,6 +6,7 @@ export { IClientAccountRegisterContext, ClientAccountRegisterContext } from './.
 export { IClientAccountUpdateContext, ClientAccountUpdateContext } from './../classes/models/Client/ClientAccountUpdateContext';
 export { IClientAgreements, ClientAgreements } from './../classes/models/Client/ClientAgreements';
 export { ClientSex, ClientSexFromString, ClientSexToString } from './../classes/models/Client/ClientSex';
+export { ClientIdentityProvider } from './../classes/models/Client/ClientIdentityProvider';
 export { PromotionStatus } from './../classes/models/Promotions/PromotionStatus';
 export { PromotionType } from './../classes/models/Promotions/PromotionType';
 export { PromotionDiscountType } from './../classes/models/Promotions/PromotionDiscountType';

@@ -13,7 +13,7 @@ Most up-to-date documentation is available at Synerise Help Center:
 
 ### iOS
 
-* Xcode 11 and iOS SDK 13
+* Xcode 12 and iOS SDK 14
 * iOS 9.0+ target deployment
 * Valid architectures: armv7, armv7s, arm64 devices and i386, x86_64 simulators
 

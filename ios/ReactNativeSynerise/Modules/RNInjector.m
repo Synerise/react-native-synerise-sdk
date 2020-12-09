@@ -124,6 +124,10 @@ RCT_EXPORT_MODULE();
     [self sendWalkthroughLoadedToJS];
 }
 
+- (void)SNR_walkthroughDidLoad:(NSDictionary *)walkthroughDictionary {
+    [self sendWalkthroughLoadedToJS];
+}
+
 - (void)SNR_walkthroughLoadingError:(NSError *)error {
     [self sendWalkthroughLoadingErrorToJS:error];
 }

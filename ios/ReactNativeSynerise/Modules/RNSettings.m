@@ -14,6 +14,7 @@ static NSString * const RNSettingsSDKKeychainGroupIdentifier = @"SDK_KEYCHAIN_GR
 static NSString * const RNSettingsSDKMinTokenRefreshInterval = @"SDK_MIN_TOKEN_REFRESH_INTERVAL";
 static NSString * const RNSettingsSDKShouldDestroySessionOnApiKeyChange = @"SDK_SHOULD_DESTROY_SESSION_ON_API_KEY_CHANGE";
 
+static NSString * const RNSettingsTrackerIsBackendTimeSyncRequired = @"TRACKER_IS_BACKEND_TIME_SYNC_REQUIRED";
 static NSString * const RNSettingsTrackerMinBatchSize = @"TRACKER_MIN_BATCH_SIZE";
 static NSString * const RNSettingsTrackerMaxBatchSize = @"TRACKER_MAX_BATCH_SIZE";
 static NSString * const RNSettingsTrackerAutoFlushTimeout = @"TRACKER_AUTO_FLUSH_TIMEOUT";
@@ -59,6 +60,7 @@ RCT_EXPORT_MODULE();
     [self updateSettingsKeyPath:@"sdk.minTokenRefreshInterval" expectedClass:[NSNumber class] object:dictionary[RNSettingsSDKMinTokenRefreshInterval]];
     [self updateSettingsKeyPath:@"sdk.shouldDestroySessionOnApiKeyChange" expectedClass:[NSNumber class] object:dictionary[RNSettingsSDKShouldDestroySessionOnApiKeyChange]];
     
+    [self updateSettingsKeyPath:@"tracker.isBackendTimeSyncRequired" expectedClass:[NSNumber class] object:dictionary[RNSettingsTrackerIsBackendTimeSyncRequired]];
     [self updateSettingsKeyPath:@"tracker.minBatchSize" expectedClass:[NSNumber class] object:dictionary[RNSettingsTrackerMinBatchSize]];
     [self updateSettingsKeyPath:@"tracker.maxBatchSize" expectedClass:[NSNumber class] object:dictionary[RNSettingsTrackerMaxBatchSize]];
     [self updateSettingsKeyPath:@"tracker.autoFlushTimeout" expectedClass:[NSNumber class] object:dictionary[RNSettingsTrackerAutoFlushTimeout]];
@@ -97,10 +99,11 @@ RCT_EXPORT_MODULE();
     dictionary[RNSettingsSDKMinTokenRefreshInterval] = [NSNumber numberWithDouble:SNRSynerise.settings.sdk.minTokenRefreshInterval];
     dictionary[RNSettingsSDKShouldDestroySessionOnApiKeyChange] = [NSNumber numberWithDouble:SNRSynerise.settings.sdk.shouldDestroySessionOnApiKeyChange];
     
+    dictionary[RNSettingsTrackerIsBackendTimeSyncRequired] = [NSNumber numberWithBool:SNRSynerise.settings.tracker.isBackendTimeSyncRequired];
     dictionary[RNSettingsTrackerMinBatchSize] = [NSNumber numberWithInteger:SNRSynerise.settings.tracker.minBatchSize];
     dictionary[RNSettingsTrackerMaxBatchSize] = [NSNumber numberWithInteger:SNRSynerise.settings.tracker.maxBatchSize];
     dictionary[RNSettingsTrackerAutoFlushTimeout] = [NSNumber numberWithDouble:SNRSynerise.settings.tracker.autoFlushTimeout];
-    
+
     dictionary[RNSettingsNotificationsEnabled] = [NSNumber numberWithBool:SNRSynerise.settings.notifications.enabled];
     dictionary[RNSettingsNotificationsEncryption] = [NSNumber numberWithBool:SNRSynerise.settings.notifications.encryption];
     dictionary[RNSettingsNotificationsDisableInAppAlerts] = [NSNumber numberWithBool:SNRSynerise.settings.notifications.disableInAppAlerts];
@@ -121,10 +124,11 @@ RCT_EXPORT_MODULE();
       RNSettingsSDKMinTokenRefreshInterval: RNSettingsSDKMinTokenRefreshInterval,
       RNSettingsSDKShouldDestroySessionOnApiKeyChange: RNSettingsSDKShouldDestroySessionOnApiKeyChange,
           
+      RNSettingsTrackerIsBackendTimeSyncRequired: RNSettingsTrackerIsBackendTimeSyncRequired,
       RNSettingsTrackerMinBatchSize: RNSettingsTrackerMinBatchSize,
       RNSettingsTrackerMaxBatchSize: RNSettingsTrackerMaxBatchSize,
       RNSettingsTrackerAutoFlushTimeout: RNSettingsTrackerAutoFlushTimeout,
-      
+
       RNSettingsNotificationsEnabled: RNSettingsNotificationsEnabled,
       RNSettingsNotificationsEncryption: RNSettingsNotificationsEncryption,
       RNSettingsNotificationsDisableInAppAlerts: RNSettingsNotificationsDisableInAppAlerts,

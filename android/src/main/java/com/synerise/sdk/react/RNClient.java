@@ -8,6 +8,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
+import com.synerise.sdk.client.model.ClientIdentityProvider;
 import com.synerise.sdk.react.utils.ArrayUtil;
 import com.synerise.sdk.react.utils.MapUtil;
 import com.synerise.sdk.client.Client;
@@ -458,6 +459,17 @@ public class RNClient extends RNBaseModule {
         });
     }
 
+    @ReactMethod
+    public void deleteAccountByIdentityProvider(String clientAuthFactor, String clientIdentityProvider, String authId, Callback callback) {
+        IApiCall deleteAccountCall = Client.deleteAccount(clientAuthFactor, ClientIdentityProvider.getByProvider(clientIdentityProvider), authId);
+        deleteAccountCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
+        });
+    }
+
     //deleteAccount(password: String, onSuccess: () => void, onError: (error: Error) => void)
     @ReactMethod
     public void deleteAccount(String password, Callback callback) {
@@ -493,8 +505,6 @@ public class RNClient extends RNBaseModule {
             }
         });
     }
-
-
 
     //recognizeAnonymous(email: String | null, customIdentify: String | null, parameters: Record<string, any> | null)
     @ReactMethod

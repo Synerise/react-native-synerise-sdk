@@ -15,6 +15,7 @@ import com.synerise.sdk.injector.callback.InjectorSource;
 import com.synerise.sdk.injector.callback.OnBannerListener;
 import com.synerise.sdk.injector.callback.OnInjectorListener;
 import com.synerise.sdk.injector.callback.OnWalkthroughListener;
+import com.synerise.sdk.injector.net.model.inject.walkthrough.WalkthroughResponse;
 import com.synerise.sdk.injector.net.model.push.banner.TemplateBanner;
 import com.synerise.sdk.injector.ui.handler.InjectorActionHandler;
 
@@ -224,8 +225,8 @@ public class RNInjector extends RNBaseModule {
             }
 
             @Override
-            public void onLoaded() {
-                super.onLoaded();
+            public void onLoaded(WalkthroughResponse response) {
+                super.onLoaded(response);
                 onWalkthroughLoaded();
             }
 

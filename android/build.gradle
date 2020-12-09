@@ -4,8 +4,8 @@ ext.versions = [
         'minSdk'     : 21,
         'compileSdk' : 29,
         'targetSdk'  : 29,
-        'versionCode': 10,
-        'versionName': "0.9.14"
+        'versionCode': 11,
+        'versionName': "0.9.15"
 ]
 
 buildscript {
@@ -58,5 +58,5 @@ repositories {
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
-    api 'com.synerise.sdk:synerise-mobile-sdk:3.6.18'
+    api 'com.synerise.sdk:synerise-mobile-sdk:3.6.20'
 }

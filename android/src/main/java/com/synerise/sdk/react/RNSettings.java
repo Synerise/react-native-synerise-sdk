@@ -21,6 +21,7 @@ public class RNSettings extends RNBaseModule {
     public static final String RN_SETTINGS_SDK_ENABLED = "SDK_ENABLED";
     public static final String RN_SETTINGS_SDK_MIN_TOKEN_REFRESH_INTERVAL = "SDK_MIN_TOKEN_REFRESH_INTERVAL";
     public static final String RN_SETTINGS_SHOULD_DESTROY_SESSION_ON_API_KEY_CHANGE = "SDK_SHOULD_DESTROY_SESSION_ON_API_KEY_CHANGE";
+    public static final String RN_SETTINGS_TRACKER_IS_BACKEND_TIME_SYNC_REQUIRED = "TRACKER_IS_BACKEND_TIME_SYNC_REQUIRED";
     public static final String RN_SETTINGS_TRACKER_MIN_BATCH_SIZE = "TRACKER_MIN_BATCH_SIZE";
     public static final String RN_SETTINGS_TRACKER_MAX_BATCH_SIZE = "TRACKER_MAX_BATCH_SIZE";
     public static final String RN_SETTINGS_TRACKER_AUTO_FLUSH_TIMEOUT = "TRACKER_AUTO_FLUSH_TIMEOUT";
@@ -44,6 +45,7 @@ public class RNSettings extends RNBaseModule {
         final Map<String, Object> constants = new HashMap<>();
         constants.put(RN_SETTINGS_SDK_ENABLED, RN_SETTINGS_SDK_ENABLED);
         constants.put(RN_SETTINGS_SDK_MIN_TOKEN_REFRESH_INTERVAL, RN_SETTINGS_SDK_MIN_TOKEN_REFRESH_INTERVAL);
+        constants.put(RN_SETTINGS_TRACKER_IS_BACKEND_TIME_SYNC_REQUIRED, RN_SETTINGS_TRACKER_IS_BACKEND_TIME_SYNC_REQUIRED);
         constants.put(RN_SETTINGS_TRACKER_MIN_BATCH_SIZE, RN_SETTINGS_TRACKER_MIN_BATCH_SIZE);
         constants.put(RN_SETTINGS_TRACKER_MAX_BATCH_SIZE, RN_SETTINGS_TRACKER_MAX_BATCH_SIZE);
         constants.put(RN_SETTINGS_TRACKER_AUTO_FLUSH_TIMEOUT, RN_SETTINGS_TRACKER_AUTO_FLUSH_TIMEOUT);
@@ -115,6 +117,10 @@ public class RNSettings extends RNBaseModule {
                     Settings.getInstance().sdk.setMinTokenRefreshInterval((int) value);
                 }
                 break;
+            case RN_SETTINGS_TRACKER_IS_BACKEND_TIME_SYNC_REQUIRED:
+                if (value instanceof Boolean) {
+                    Settings.getInstance().tracker.isBackendTimeSyncRequired = (Boolean) value;
+                }
             case RN_SETTINGS_TRACKER_AUTO_FLUSH_TIMEOUT:
                 if (value instanceof Integer) {
                     Settings.getInstance().tracker.setAutoFlushTimeout((int) value);
@@ -157,6 +163,7 @@ public class RNSettings extends RNBaseModule {
         Map<String, Object> settings = new HashMap<>();
         settings.put(RN_SETTINGS_SDK_ENABLED, Synerise.settings.sdk.enabled);
         settings.put(RN_SETTINGS_SDK_MIN_TOKEN_REFRESH_INTERVAL, Synerise.settings.sdk.getMinTokenRefreshInterval());
+        settings.put(RN_SETTINGS_TRACKER_IS_BACKEND_TIME_SYNC_REQUIRED, Synerise.settings.tracker.isBackendTimeSyncRequired);
         settings.put(RN_SETTINGS_TRACKER_MIN_BATCH_SIZE, Synerise.settings.tracker.minBatchSize);
         settings.put(RN_SETTINGS_TRACKER_MAX_BATCH_SIZE, Synerise.settings.tracker.maxBatchSize);
         settings.put(RN_SETTINGS_TRACKER_AUTO_FLUSH_TIMEOUT, Synerise.settings.tracker.autoFlushTimeout);

@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.9.15] - 2020-12-10
+
+### Added
+
+- Information about device root is moved to AppStarted event.
+- New option to set whether events should be sent when server time synchronization has failed - `Synerise.settings.tracker.isBackendTimeSyncRequired`.
+- `Client.deleteAccountByIdentityProvider` method.
+
 ## [0.9.14] - 2020-10-15
 
 ### Added

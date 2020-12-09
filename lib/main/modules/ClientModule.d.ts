@@ -5,6 +5,7 @@ import { ClientAccountInformation } from './../../classes/models/Client/ClientAc
 import { ClientOAuthAuthenticationContext } from '../../classes/models/Client/ClientOAuthAuthenticationContext';
 import { ClientFacebookAuthenticationContext } from '../../classes/models/Client/ClientFacebookAuthenticationContext';
 import { ClientAppleSignInAuthenticationContext } from '../../classes/models/Client/ClientAppleSignInAuthenticationContext';
+import { ClientIdentityProvider } from '../../classes/models/Client/ClientIdentityProvider';
 import { Token } from './../../classes/models/Token/Token';
 import { Error } from './../../classes/types/Error';
 declare class ClientModule extends Module {
@@ -38,6 +39,7 @@ declare class ClientModule extends Module {
     confirmEmailChange(token: string, newsletterAgreement: Boolean, onSuccess: () => void, onError: (error: Error) => void): void;
     requestPhoneUpdate(phone: string, onSuccess: () => void, onError: (error: Error) => void): void;
     confirmPhoneUpdate(phone: string, confirmationCode: string, smsAgreement: Boolean, onSuccess: () => void, onError: (error: Error) => void): void;
+    deleteAccountByIdentityProvider(clientAuthFactor: string, clientIdentityProvider: ClientIdentityProvider, authID: string | null, onSuccess: () => void, onError: (error: Error) => void): void;
     deleteAccount(password: string, onSuccess: () => void, onError: (error: Error) => void): void;
     deleteAccountByOAuth(accessToken: string, onSuccess: () => void, onError: (error: Error) => void): void;
     deleteAccountByFacebook(facebookToken: string, onSuccess: () => void, onError: (error: Error) => void): void;

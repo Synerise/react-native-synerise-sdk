@@ -548,6 +548,19 @@ RCT_EXPORT_METHOD(deleteAccount:(NSString *)password response:(RCTResponseSender
     }];
 }
 
+//deleteAccountByIdentityProvider(clientAuthFactor: string, clientIdentityProvider: ClientIdentityProvider, authID: string | null, onSuccess: () => void, onError: (error: Error) => void)
+
+RCT_EXPORT_METHOD(deleteAccountByIdentityProvider:(id)clientAuthFactor clientIdentityProvider:(NSString *)clientIdentityProviderString authID:(nullable NSString *)authID response:(RCTResponseSenderBlock)response)
+{
+    SNRClientIdentityProvider clientIdentityProvider = SNR_StringToClientIdentityProvider(clientIdentityProviderString);
+    
+    [SNRClient deleteAccount:clientAuthFactor clientIdentityProvider:clientIdentityProvider authID:authID success:^(BOOL isSuccess) {
+        [self executeSuccessCallbackResponse:response data:@1];
+    } failure:^(NSError *error) {
+        [self executeFailureCallbackResponse:response error:error];
+    }];
+}
+
 //deleteAccountByOAuth(password: String, onSuccess: () => void, onError: (error: Error) => void)
 
 RCT_EXPORT_METHOD(deleteAccountByOAuth:(NSString *)accessToken response:(RCTResponseSenderBlock)response)
