@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.9.16] - 2020-12-11
+
+### Changed
+- Improvements to stability.
+
+
 ## [0.9.15] - 2020-12-10
 
 ### Added

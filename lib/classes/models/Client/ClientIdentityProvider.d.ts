@@ -1,9 +1,8 @@
 declare enum ClientIdentityProvider {
-    Synerise = "SYNERISE",
-    OAuth = "OAUTH",
     Facebook = "FACEBOOK",
-    Apple = "APPLE",
     Google = "GOOGLE",
+    Oauth = "OAUTH",
+    Synerise = "SYNERISE",
     Unknown = "UNKNOWN"
 }
 declare function ClientIdentityProviderFromString(string: string): ClientIdentityProvider;
