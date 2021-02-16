@@ -29,7 +29,7 @@ declare class ClientModule extends Module {
     retrieveToken(onSuccess: (token: Token) => void, onError: (error: Error) => void): void;
     getUUID(): string;
     regenerateUUID(): void;
-    regenerateUUIDWithClientIdentifier(clientIdentifier: String): void;
+    regenerateUUIDWithClientIdentifier(clientIdentifier: string): void;
     getAccount(onSuccess: (clientAccountInformation: ClientAccountInformation) => void, onError: (error: Error) => void): void;
     updateAccount(context: ClientAccountUpdateContext, onSuccess: () => void, onError: (error: Error) => void): void;
     requestPasswordReset(email: string, onSuccess: () => void, onError: (error: Error) => void): void;

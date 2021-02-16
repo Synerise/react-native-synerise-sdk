@@ -1,5 +1,5 @@
 import { Event } from './../Event';
 declare class LoggedOutEvent extends Event {
-    constructor(label: String, parameters?: Object);
+    constructor(label: string, parameters?: Object);
 }
 export { LoggedOutEvent };

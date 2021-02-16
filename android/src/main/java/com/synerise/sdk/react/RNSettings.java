@@ -109,7 +109,7 @@ public class RNSettings extends RNBaseModule {
         switch (key) {
             case RN_SETTINGS_SDK_ENABLED:
                 if (value instanceof Boolean) {
-                    Settings.getInstance().sdk.enabled = (Boolean) value;
+                    Settings.getInstance().sdk.setSDKEnabled((Boolean) value);
                 }
                 break;
             case RN_SETTINGS_SDK_MIN_TOKEN_REFRESH_INTERVAL:
@@ -161,7 +161,7 @@ public class RNSettings extends RNBaseModule {
 
     private Map<String, Object> settingsDictionary() {
         Map<String, Object> settings = new HashMap<>();
-        settings.put(RN_SETTINGS_SDK_ENABLED, Synerise.settings.sdk.enabled);
+        settings.put(RN_SETTINGS_SDK_ENABLED, Synerise.settings.sdk.isSDKEnabled());
         settings.put(RN_SETTINGS_SDK_MIN_TOKEN_REFRESH_INTERVAL, Synerise.settings.sdk.getMinTokenRefreshInterval());
         settings.put(RN_SETTINGS_TRACKER_IS_BACKEND_TIME_SYNC_REQUIRED, Synerise.settings.tracker.isBackendTimeSyncRequired);
         settings.put(RN_SETTINGS_TRACKER_MIN_BATCH_SIZE, Synerise.settings.tracker.minBatchSize);

@@ -1,19 +1,19 @@
-import { BaseModel } from "../BaseModel";
-import { IRecommendation } from "./Recommendation";
+import { BaseModel } from '../BaseModel';
+import { IRecommendation } from './Recommendation';
 interface IRecommendationResponse {
-    campaignHash: String;
-    campaignId: String;
-    schema: String;
-    slug: String;
-    uuid: String;
+    campaignHash: string;
+    campaignId: string;
+    schema: string;
+    slug: string;
+    uuid: string;
     items: Array<IRecommendation>;
 }
 declare class RecommendationResponse extends BaseModel {
-    campaignHash: String;
-    campaignId: String;
-    schema: String;
-    slug: String;
-    uuid: String;
+    campaignHash: string;
+    campaignId: string;
+    schema: string;
+    slug: string;
+    uuid: string;
     items: Array<IRecommendation>;
     constructor(modelObject: IRecommendationResponse);
 }

@@ -1,5 +1,5 @@
 import { Event } from './../Event';
 declare class AppearedInLocationEvent extends Event {
-    constructor(label: String, lat: Number, lon: Number, parameters?: Object);
+    constructor(label: string, lat: number, lon: number, parameters?: Object);
 }
 export { AppearedInLocationEvent };

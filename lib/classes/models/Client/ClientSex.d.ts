@@ -4,6 +4,6 @@ declare enum ClientSex {
     Female = "FEMALE",
     Other = "OTHER"
 }
-declare function ClientSexFromString(string: String): ClientSex;
-declare function ClientSexToString(clientSex: ClientSex): String;
+declare function ClientSexFromString(string: string): ClientSex;
+declare function ClientSexToString(clientSex: ClientSex): string;
 export { ClientSex, ClientSexFromString, ClientSexToString };

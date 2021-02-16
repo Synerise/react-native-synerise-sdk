@@ -1,7 +1,7 @@
 import { Event } from '../Event';
 declare class RecommendationEvent extends Event {
-    constructor(type: String, label: String, productId: String, name: String, campaignId: String, campaignHash: String, parameters?: Object);
-    setCategory(category: String): void;
-    setUrl(url: String): void;
+    constructor(type: string, label: string, productId: string, name: string, campaignId: string, campaignHash: string, parameters?: Object);
+    setCategory(category: string): void;
+    setUrl(url: string): void;
 }
 export { RecommendationEvent };

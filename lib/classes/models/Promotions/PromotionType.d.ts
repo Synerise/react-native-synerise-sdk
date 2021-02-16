@@ -4,6 +4,6 @@ declare enum PromotionType {
     Custom = "CUSTOM",
     General = "GENERAL"
 }
-declare function PromotionTypeFromString(string: String): PromotionType;
-declare function PromotionTypeToString(promotionType: PromotionType): String;
+declare function PromotionTypeFromString(string: string): PromotionType;
+declare function PromotionTypeToString(promotionType: PromotionType): string;
 export { PromotionType, PromotionTypeFromString, PromotionTypeToString };

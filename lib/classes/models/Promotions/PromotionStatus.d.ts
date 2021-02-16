@@ -4,6 +4,6 @@ declare enum PromotionStatus {
     Assigned = "ASSIGNED",
     Redeemed = "REDEEMED"
 }
-declare function PromotionStatusFromString(string: String): PromotionStatus;
-declare function PromotionStatusToString(promotionStatus: PromotionStatus): String;
+declare function PromotionStatusFromString(string: string): PromotionStatus;
+declare function PromotionStatusToString(promotionStatus: PromotionStatus): string;
 export { PromotionStatus, PromotionStatusFromString, PromotionStatusToString };

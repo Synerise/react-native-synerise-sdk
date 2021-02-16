@@ -1,5 +1,5 @@
 import { ProductEvent } from './ProductEvent';
 declare class ProductViewEvent extends ProductEvent {
-    constructor(label: String, productId: String, name: String, parameters?: Object);
+    constructor(label: string, productId: string, name: string, parameters?: Object);
 }
 export { ProductViewEvent };

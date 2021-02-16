@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import com.synerise.sdk.core.Synerise;
+import com.synerise.sdk.core.types.enums.HostApplicationType;
 
 public class RNSyneriseInitializer {
 
@@ -22,6 +23,7 @@ public class RNSyneriseInitializer {
                     .syneriseDebugMode(isDebugModeEnabled)
                     .crashHandlingEnabled(isCrashHandlingEnabled)
                     .pushRegistrationRequired(RNNotifications.getNativePushListener())
+                    .hostApplicationType(HostApplicationType.REACT_NATIVE)
                     .build();
 
             isInitialized = true;

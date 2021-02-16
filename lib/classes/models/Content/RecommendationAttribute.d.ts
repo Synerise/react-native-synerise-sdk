@@ -1,13 +1,13 @@
-import { BaseModel } from "../BaseModel";
+import { BaseModel } from '../BaseModel';
 interface IRecommendationAttribute {
-    name: String;
-    type: String;
-    value: String;
+    name: string;
+    type: string;
+    value: string;
 }
 declare class RecommendationAttribute extends BaseModel {
-    name: String;
-    type: String;
-    value: String;
+    name: string;
+    type: string;
+    value: string;
     constructor(modelObject: IRecommendationAttribute);
 }
 export { IRecommendationAttribute, RecommendationAttribute };

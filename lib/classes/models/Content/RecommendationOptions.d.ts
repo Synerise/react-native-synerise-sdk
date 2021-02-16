@@ -1,6 +1,6 @@
 declare class RecommendationOptions {
-    slug: String | undefined;
-    productID: String | undefined;
+    slug: string | undefined;
+    productID: string | undefined;
     toObject(): object;
 }
 export { RecommendationOptions };

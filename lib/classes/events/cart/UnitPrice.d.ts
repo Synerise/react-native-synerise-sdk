@@ -1,9 +1,9 @@
 declare class UnitPrice {
     private amount;
     private currency;
-    constructor(amount: Number, currency: String);
+    constructor(amount: number, currency: String);
     toObject(): {
-        amount: Number;
+        amount: number;
         currency: String;
     };
 }

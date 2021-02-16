@@ -6,6 +6,6 @@ declare enum PromotionDiscountType {
     Points = "POINTS",
     Multibuy = "MULTIBUY"
 }
-declare function PromotionDiscountTypeFromString(string: String): PromotionDiscountType;
-declare function PromotionDiscountTypeToString(promotionDiscountType: PromotionDiscountType): String;
+declare function PromotionDiscountTypeFromString(string: string): PromotionDiscountType;
+declare function PromotionDiscountTypeToString(promotionDiscountType: PromotionDiscountType): string;
 export { PromotionDiscountType, PromotionDiscountTypeFromString, PromotionDiscountTypeToString };

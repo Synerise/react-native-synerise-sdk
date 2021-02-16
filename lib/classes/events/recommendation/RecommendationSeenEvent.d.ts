@@ -1,5 +1,5 @@
 import { RecommendationEvent } from './RecommendationEvent';
 declare class RecommendationSeenEvent extends RecommendationEvent {
-    constructor(label: String, productId: String, name: String, campaignId: String, campaignHash: String, parameters?: Object);
+    constructor(label: string, productId: string, name: string, campaignId: string, campaignHash: string, parameters?: Object);
 }
 export { RecommendationSeenEvent };
