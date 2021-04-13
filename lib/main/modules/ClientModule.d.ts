@@ -35,7 +35,7 @@ declare class ClientModule extends Module {
     requestPasswordReset(email: string, onSuccess: () => void, onError: (error: Error) => void): void;
     confirmPasswordReset(password: string, token: string, onSuccess: () => void, onError: (error: Error) => void): void;
     changePassword(oldPassword: string, newPassword: string, onSuccess: () => void, onError: (error: Error) => void): void;
-    requestEmailChange(email: string, password: string, onSuccess: () => void, onError: (error: Error) => void): void;
+    requestEmailChange(email: string, password: string | null, externalToken: string | null, authID: string | null, onSuccess: () => void, onError: (error: Error) => void): void;
     confirmEmailChange(token: string, newsletterAgreement: Boolean, onSuccess: () => void, onError: (error: Error) => void): void;
     requestPhoneUpdate(phone: string, onSuccess: () => void, onError: (error: Error) => void): void;
     confirmPhoneUpdate(phone: string, confirmationCode: string, smsAgreement: Boolean, onSuccess: () => void, onError: (error: Error) => void): void;

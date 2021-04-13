@@ -1,9 +1,9 @@
 //
 //  RNContent.h
-//  ReactNativeSynerise
+//  react-native-synerise-sdk
 //
-//  Created by Krzysztof Kurzawa on 17/04/2020.
-//  Copyright © 2020 Facebook. All rights reserved.
+//  Created by Synerise
+//  Copyright © 2021 Synerise. All rights reserved.
 //
 
 #import "RNBaseModule.h"

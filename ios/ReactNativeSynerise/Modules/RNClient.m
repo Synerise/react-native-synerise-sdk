@@ -3,7 +3,7 @@
 //  react-native-synerise-sdk
 //
 //  Created by Synerise
-//  Copyright © 2018 Synerise. All rights reserved.
+//  Copyright © 2021 Synerise. All rights reserved.
 //
 
 #import "RNClient.h"
@@ -493,11 +493,11 @@ RCT_EXPORT_METHOD(changePassword:(NSString *)oldPassword newPassword:(NSString *
     }];
 }
 
-//requestEmailChange(email: String, password: String, onSuccess: () => void, onError: (error: Error) => void)
+//  requestEmailChange(email: string, password: string | null, externalToken: string | null, authID: string | null, onSuccess: () => void, onError: (error: Error) => void)
 
-RCT_EXPORT_METHOD(requestEmailChange:(NSString *)email password:(NSString *)password response:(RCTResponseSenderBlock)response)
+RCT_EXPORT_METHOD(requestEmailChange:(NSString *)email password:(nullable NSString *)password externalToken:(nullable NSString *)externalToken authID:(nullable NSString *)authID response:(RCTResponseSenderBlock)response)
 {
-    [SNRClient requestEmailChange:email password:password success:^(BOOL isSuccess) {
+    [SNRClient requestEmailChange:email password:password externalToken:externalToken authID:authID success:^(BOOL isSuccess) {
         [self executeSuccessCallbackResponse:response data:@1];
     } failure:^(NSError *error) {
         [self executeFailureCallbackResponse:response error:error];

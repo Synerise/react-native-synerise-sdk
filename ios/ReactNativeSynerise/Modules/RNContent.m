@@ -1,9 +1,9 @@
 //
 //  RNContent.m
-//  ReactNativeSynerise
+//  react-native-synerise-sdk
 //
-//  Created by Krzysztof Kurzawa on 17/04/2020.
-//  Copyright © 2020 Facebook. All rights reserved.
+//  Created by Synerise
+//  Copyright © 2021 Synerise. All rights reserved.
 //
 
 #import "RNContent.h"
@@ -54,10 +54,10 @@ RCT_EXPORT_MODULE();
 }
 
 - (SNRRecommendationOptions *)modelRecommendationOptionsWithDictionary:(NSDictionary *)dictionary {
-    SNRRecommendationOptions *model = [SNRRecommendationOptions new];
+    NSString *slug = [dictionary getStringForKey:@"slug"];
+    SNRRecommendationOptions *model = [[SNRRecommendationOptions alloc] initWithSlug:slug];
     
     if (dictionary != nil) {
-        model.slug = [dictionary getStringForKey:@"slug"];
         model.productID = [dictionary getStringForKey:@"productID"];
     }
     
@@ -91,27 +91,49 @@ RCT_EXPORT_MODULE();
     if (model != nil) {
         NSMutableDictionary *dictionary = [@{} mutableCopy];
         
-        [dictionary setString:model.gtin forKey:@"gtin"];
-        [dictionary setString:model.productRetailerPartNo forKey:@"productRetailerPartNo"];
+        [dictionary setString:model.itemID forKey:@"itemID"];
+        [dictionary setDictionary:model.attributes forKey:@"attributes"];
         
-        [dictionary setString:model.title forKey:@"title"];
-        [dictionary setString:model.brand forKey:@"brand"];
-        [dictionary setString:model.category forKey:@"category"];
+        return dictionary;
+    }
+    
+    return nil;
+}
+
+- (nullable NSDictionary *)dictionaryWithScreenViewResponse:(SNRScreenViewResponse *)model {
+    if (model != nil) {
+        NSMutableDictionary *dictionary = [@{} mutableCopy];
+        
+        [dictionary setDictionary:[self dictionaryWithScreenViewAudience:model.audience] forKey:@"audience"];
+        
+        [dictionary setString:model.identifier forKey:@"identifier"];
+        [dictionary setString:model.hashString forKey:@"hashString"];
+        [dictionary setString:model.path forKey:@"path"];
+        [dictionary setString:model.name forKey:@"name"];
+        [dictionary setInteger:model.priority.integerValue forKey:@"priority"];
         [dictionary setString:model.descriptionText forKey:@"descriptionText"];
         
-        [dictionary setString:model.gender forKey:@"gender"];
-        [dictionary setString:model.color forKey:@"color"];
-        [dictionary setArray:model.sizes forKey:@"sizes"];
+        [dictionary setGenericObject:model.data forKey:@"data"];
         
-        [dictionary setString:model.priceValue forKey:@"priceValue"];
-        [dictionary setString:model.effectivePriceValue forKey:@"effectivePriceValue"];
-        [dictionary setString:model.salePriceValue forKey:@"salePriceValue"];
-        [dictionary setString:model.priceCurrency forKey:@"priceCurrency"];
+        [dictionary setString:model.version forKey:@"version"];
+        [dictionary setString:model.parentVersion forKey:@"parentVersion"];
         
-        [dictionary setString:model.link forKey:@"link"];
-        [dictionary setString:model.imageLink forKey:@"imageLink"];
-        [dictionary setArray:model.additionalImageLinks forKey:@"additionalImageLinks"];
-        [dictionary setDictionary:model.customAttributes forKey:@"customAttributes"];
+        [dictionary setDate:model.createdAt forKey:@"createdAt"];
+        [dictionary setDate:model.updatedAt forKey:@"updatedAt"];
+        [dictionary setDate:model.deletedAt forKey:@"deletedAt"];
+        
+        return dictionary;
+    }
+    
+    return nil;
+}
+
+- (nullable NSDictionary *)dictionaryWithScreenViewAudience:(SNRScreenViewAudience *)model {
+    if (model != nil) {
+        NSMutableDictionary *dictionary = [@{} mutableCopy];
+        
+        [dictionary setArray:model.IDs forKey:@"IDs"];
+        [dictionary setString:model.query forKey:@"query"];
         
         return dictionary;
     }
@@ -175,6 +197,24 @@ RCT_EXPORT_METHOD(getRecommendations:(NSDictionary *)dictionary response:(RCTRes
             [self executeFailureCallbackResponse:response error:error];
         }];
     }
+}
+
+//getScreenView(onSuccess: (screenViewResponse: ScreenViewResponse) => void, onError: (error: Error) => void)
+
+RCT_REMAP_METHOD(getScreenView, getScreenViewWithResponse:(RCTResponseSenderBlock)response)
+{
+    [SNRContent getScreenViewWithSuccess:^(SNRScreenViewResponse *screenViewResponse) {
+        if (screenViewResponse != nil) {
+            NSDictionary *screenViewResponseDictionary = [self dictionaryWithScreenViewResponse:screenViewResponse];
+            if (screenViewResponseDictionary != nil) {
+                [self executeSuccessCallbackResponse:response data:screenViewResponseDictionary];
+            } else {
+                [self executeDefaultFailureCallbackResponse:response];
+            }
+        }
+    } failure:^(NSError *error) {
+        [self executeFailureCallbackResponse:response error:error];
+    }];
 }
 
 @end

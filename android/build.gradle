@@ -58,5 +58,5 @@ repositories {
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
-    api 'com.synerise.sdk:synerise-mobile-sdk:3.6.22'
+    api 'com.synerise.sdk:synerise-mobile-sdk:3.7.2'
 }

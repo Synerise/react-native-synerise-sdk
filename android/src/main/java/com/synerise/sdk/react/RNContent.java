@@ -9,19 +9,25 @@ import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.google.gson.Gson;
 import com.synerise.sdk.content.Content;
+import com.synerise.sdk.content.model.Audience;
 import com.synerise.sdk.content.model.DocumentsApiQuery;
 import com.synerise.sdk.content.model.DocumentsApiQueryType;
-import com.synerise.sdk.content.model.recommendation.Recommendation;
-import com.synerise.sdk.content.model.recommendation.RecommendationAtribute;
+import com.synerise.sdk.content.model.ScreenViewResponse;
 import com.synerise.sdk.content.model.recommendation.RecommendationRequestBody;
 import com.synerise.sdk.content.model.recommendation.RecommendationResponse;
+import com.synerise.sdk.content.widgets.dataModel.Recommendation;
 import com.synerise.sdk.core.listeners.DataActionListener;
 import com.synerise.sdk.core.net.IDataApiCall;
 import com.synerise.sdk.error.ApiError;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Nonnull;
 
@@ -30,7 +36,9 @@ public class RNContent extends RNBaseModule {
 
     IDataApiCall<Object> getDocumentApiCall;
     IDataApiCall<List<Object>> getDocumentsApiCall;
+    private final String ISO8601_FORMAT = "yyyy-MM-dd'T'kk:mm:ss.SSS'Z'";
     private IDataApiCall<RecommendationResponse> getRecommendationsApiCall;
+    private IDataApiCall<ScreenViewResponse> getScreenViewApiCall;
     private Gson gson = new Gson();
 
     public RNContent(ReactApplicationContext reactApplicationContext) {
@@ -135,29 +143,65 @@ public class RNContent extends RNBaseModule {
 
     }
 
+    @ReactMethod
+    public void getScreenView(Callback callback) {
+        getScreenViewApiCall = Content.getScreenView();
+        getScreenViewApiCall.execute(new DataActionListener<ScreenViewResponse>() {
+            @Override
+            public void onDataAction(ScreenViewResponse response) {
+                WritableMap screenViewMap = Arguments.createMap();
+
+                screenViewMap.putMap("audience", audienceToWritableMap(response.getAudience()));
+                screenViewMap.putString("identifier", response.getId());
+                screenViewMap.putString("hashString", response.getHash());
+                screenViewMap.putString("path", response.getPath());
+                screenViewMap.putString("name", response.getName());
+                screenViewMap.putInt("priority", response.getPriority());
+                screenViewMap.putMap("data", screenViewDataToWritableMap(response.getData()));
+                screenViewMap.putString("version", response.getVersion());
+                screenViewMap.putString("parentVersion", response.getParentVersion());
+
+                try {
+                    Date createdAtDate = new SimpleDateFormat(ISO8601_FORMAT, Locale.getDefault()).parse(response.getCreatedAt());
+                    Date updatedAtDate = new SimpleDateFormat(ISO8601_FORMAT, Locale.getDefault()).parse(response.getUpdatedAt());
+
+                    if (createdAtDate != null) {
+                        screenViewMap.putDouble("createdAt", createdAtDate.getTime());
+                    }
+                    if (updatedAtDate != null) {
+                        screenViewMap.putDouble("updatedAt", updatedAtDate.getTime());
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                executeSuccessCallbackResponse(callback, screenViewMap, null);
+            }
+        }, new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
+        });
+    }
+
     private WritableArray recommendationToWritableArray(List<Recommendation> array) {
         WritableArray writableArray = Arguments.createArray();
 
         for (int i = 0; i < array.size(); i++) {
             Recommendation recommendation = array.get(i);
             WritableMap recommendationMap = Arguments.createMap();
-            recommendationMap.putString("productRetailerPartNo", recommendation.getProductRetailerPartNo());
-            recommendationMap.putString("title", recommendation.getTitle());
-            recommendationMap.putString("brand", recommendation.getBrand());
-            recommendationMap.putString("category", recommendation.getCategory());
-            recommendationMap.putString("description", recommendation.getDescription());
-            recommendationMap.putString("gender", recommendation.getGender());
-            recommendationMap.putString("color", recommendation.getColor());
-            recommendationMap.putString("effectivePrice", recommendation.getEffectivePrice());
-            recommendationMap.putString("priceCurrency", recommendation.getPriceCurrency());
-            recommendationMap.putString("priceValue", recommendation.getPriceValue());
-            recommendationMap.putString("salePriceValue", recommendation.getSalePriceValue());
-            recommendationMap.putString("imageLink", recommendation.getImageLink());
-            recommendationMap.putString("link", recommendation.getLink());
+            WritableMap objectMap = Arguments.createMap();
 
-            recommendationMap.putArray("sizes", listOfStringsIntoWritableArray(recommendation.getSizes()));
-            recommendationMap.putArray("additionalImageLinks", listOfStringsIntoWritableArray(recommendation.getAdditionalImageLinks()));
-            recommendationMap.putArray("customAttributes", recommendationAttributesListIntoWritableArray(recommendation.getCustomAttributes()));
+            try {
+                String jsonObject = gson.toJson(recommendation.getFeed());
+                objectMap = convertJsonToMap(new JSONObject(jsonObject));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            recommendationMap.putString("itemID", recommendation.getItemId());
+            recommendationMap.putMap("attributes", objectMap);
 
             writableArray.pushMap(recommendationMap);
         }
@@ -174,19 +218,25 @@ public class RNContent extends RNBaseModule {
         return writableArray;
     }
 
-    private WritableArray recommendationAttributesListIntoWritableArray(List<RecommendationAtribute> array) {
-        WritableArray writableArray = Arguments.createArray();
-        for (int i = 0; i < array.size(); i++) {
-            RecommendationAtribute attribute = array.get(i);
+    private WritableMap audienceToWritableMap(Audience audience) {
+        WritableMap audienceMap = Arguments.createMap();
+        List<String> idsList = audience.getIds();
+        audienceMap.putString("query", audience.getQuery());
+        audienceMap.putArray("IDs", idsList != null ? listOfStringsIntoWritableArray(idsList) : null);
 
-            WritableMap attributeMap = Arguments.createMap();
-            attributeMap.putString("name", attribute.getName());
-            attributeMap.putString("type", attribute.getType());
-            attributeMap.putString("value", attribute.getValue());
+        return audienceMap;
+    }
 
-            writableArray.pushMap(attributeMap);
+    private WritableMap screenViewDataToWritableMap(Object data) {
+        WritableMap screenViewData = Arguments.createMap();
+
+        String jsonObject = gson.toJson(data);
+        try {
+            screenViewData = convertJsonToMap(new JSONObject(jsonObject));
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
-        return writableArray;
+        return screenViewData;
     }
 }

@@ -3,7 +3,7 @@
 //  react-native-synerise-sdk
 //
 //  Created by Synerise
-//  Copyright © 2018 Synerise. All rights reserved.
+//  Copyright © 2021 Synerise. All rights reserved.
 //
 
 #import "NSMutableDictionary+ReactNative.h"
@@ -11,6 +11,10 @@
 @implementation NSMutableDictionary (ReactNative)
 
 #pragma mark - Public
+
+- (void)setGenericObject:(nullable NSString *)object forKey:(NSString *)key {
+    [self setObject:object properClass:NSObject.class forKey:key];
+}
 
 - (void)setString:(nullable NSString *)string forKey:(NSString *)key {
     [self setObject:string properClass:NSString.class forKey:key];

@@ -411,10 +411,10 @@ public class RNClient extends RNBaseModule {
         });
     }
 
-    //requestEmailChange(email: String, password: String, onSuccess: () => void, onError: (error: Error) => void)
+    //requestEmailChange(email: String, password: String, externalToken: String, authId: String, onSuccess: () => void, onError: (error: Error) => void)
     @ReactMethod
-    public void requestEmailChange(String email, String password, Callback callback) {
-        IApiCall emailChangeCall = Client.requestEmailChange(email, password, null);
+    public void requestEmailChange(String email, String password, @Nullable String externalToken, @Nullable String authId, Callback callback) {
+        IApiCall emailChangeCall = Client.requestEmailChange(email, password, externalToken, authId);
         emailChangeCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
             @Override
             public void onDataAction(ApiError apiError) {
@@ -514,16 +514,16 @@ public class RNClient extends RNBaseModule {
     }
 
     private Attributes attributesMapper(HashMap<String, Object> map) {
-           Attributes attributes = new Attributes();
-            Iterator it = map.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry pair = (Map.Entry) it.next();
-                if (pair.getValue() instanceof String) {
-                    attributes.add(pair.getKey().toString(), pair.getValue().toString());
-                }
-                it.remove(); // avoids a ConcurrentModificationException
+        Attributes attributes = new Attributes();
+        Iterator it = map.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            if (pair.getValue() instanceof String) {
+                attributes.add(pair.getKey().toString(), pair.getValue().toString());
             }
-            return attributes;
+            it.remove(); // avoids a ConcurrentModificationException
+        }
+        return attributes;
     }
 
     private Agreements agreementsMapper(ReadableMap map) {

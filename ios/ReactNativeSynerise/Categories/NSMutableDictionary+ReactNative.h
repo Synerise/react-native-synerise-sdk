@@ -3,13 +3,14 @@
 //  react-native-synerise-sdk
 //
 //  Created by Synerise
-//  Copyright © 2018 Synerise. All rights reserved.
+//  Copyright © 2021 Synerise. All rights reserved.
 //
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface NSMutableDictionary (ReactNative)
 
+- (void)setGenericObject:(nullable NSString *)object forKey:(NSString *)key;
 - (void)setString:(nullable NSString *)string forKey:(NSString *)key;
 - (void)setNumber:(nullable NSNumber *)number forKey:(NSString *)key;
 - (void)setArray:(nullable NSArray *)array forKey:(NSString *)key;

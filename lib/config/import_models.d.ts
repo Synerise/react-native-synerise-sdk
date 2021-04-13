@@ -15,7 +15,8 @@ export { PromotionResponse } from './../classes/models/Promotions/PromotionRespo
 export { RecommendationOptions } from './../classes/models/Content/RecommendationOptions';
 export { RecommendationResponse } from './../classes/models/Content/RecommendationResponse';
 export { Recommendation } from './../classes/models/Content/Recommendation';
-export { RecommendationAttribute } from './../classes/models/Content/RecommendationAttribute';
+export { ScreenViewAudience } from './../classes/models/Content/ScreenViewAudience';
+export { ScreenViewResponse } from './../classes/models/Content/ScreenViewResponse';
 export { AssignVoucherResponse } from './../classes/models/Vouchers/AssignVoucherResponse';
 export { VoucherCodesResponse } from './../classes/models/Vouchers/VoucherCodesResponse';
 export { AssignVoucherData } from './../classes/models/Vouchers/AssignVoucherData';

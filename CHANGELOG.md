@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.9.18] - 2021-04-13
+
+### Added
+- `Content.getScreenView` method.
+
+### Changed
+- `Client.requestEmailChange` method.
+- Support for Recommendations v2.
+- Update of native SDK's.
+- Improvements to stability.
+
+
 ## [0.9.17] - 2021-02-16
 
 ### Changed
