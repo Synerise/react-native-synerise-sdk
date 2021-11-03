@@ -5,6 +5,7 @@ import { Promotion } from './../../classes/models/Promotions/Promotion';
 import { AssignVoucherResponse } from './../../classes/models/Vouchers/AssignVoucherResponse';
 import { VoucherCodesResponse } from './../../classes/models/Vouchers/VoucherCodesResponse';
 import { Error } from './../../classes/types/Error';
+import { PromotionIdentifier } from '../../config/import_models';
 declare class PromotionsModule extends Module {
     private static _instance;
     static instance(): PromotionsModule;
@@ -17,6 +18,8 @@ declare class PromotionsModule extends Module {
     activatePromotionByCode(code: string, onSuccess: () => void, onError: (error: Error) => void): void;
     deactivatePromotionByUUID(uuid: string, onSuccess: () => void, onError: (error: Error) => void): void;
     deactivatePromotionByCode(code: string, onSuccess: () => void, onError: (error: Error) => void): void;
+    activatePromotionsBatch(promotionsIdentifiers: Array<PromotionIdentifier>, onSuccess: () => void, onError: (error: Error) => void): void;
+    deactivatePromotionsBatch(promotionsIdentifiers: Array<PromotionIdentifier>, onSuccess: () => void, onError: (error: Error) => void): void;
     getOrAssignVoucher(poolUuid: string, onSuccess: (assignVoucherRespone: AssignVoucherResponse) => void, onError: (error: Error) => void): void;
     assignVoucherCode(poolUuid: string, onSuccess: (assignVoucherRespone: AssignVoucherResponse) => void, onError: (error: Error) => void): void;
     getAssignedVoucherCodes(onSuccess: (voucherCodesResponse: VoucherCodesResponse) => void, onError: (error: Error) => void): void;

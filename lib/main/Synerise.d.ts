@@ -24,12 +24,12 @@ declare class Synerise {
     static onError(callback: (error: Error) => void): void;
     static isInitialized(): boolean;
     static changeClientApiKey(clientApiKey: string): void;
-    static readonly Settings: Settings;
-    static readonly Client: Client;
-    static readonly Tracker: Tracker;
-    static readonly Notifications: Notifications;
-    static readonly Injector: Injector;
-    static readonly Promotions: Promotions;
-    static readonly Content: Content;
+    static get Settings(): Settings;
+    static get Client(): Client;
+    static get Tracker(): Tracker;
+    static get Notifications(): Notifications;
+    static get Injector(): Injector;
+    static get Promotions(): Promotions;
+    static get Content(): Content;
 }
 export { Synerise };

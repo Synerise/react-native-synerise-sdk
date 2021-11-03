@@ -1,5 +1,5 @@
 import { Event } from './../Event';
 declare class RecognizeClientEvent extends Event {
-    constructor(parameters?: Object);
+    constructor(parameters?: object);
 }
 export { RecognizeClientEvent };

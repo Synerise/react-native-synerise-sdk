@@ -4,6 +4,6 @@ declare enum TokenOrigin {
     Facebook = "FACEBOOK",
     Oauth = "OAUTH"
 }
-declare function TokenOriginFromString(string: String): TokenOrigin;
-declare function TokenOriginToString(tokenOrigin: TokenOrigin): String;
+declare function TokenOriginFromString(string: string): TokenOrigin;
+declare function TokenOriginToString(tokenOrigin: TokenOrigin): string;
 export { TokenOrigin, TokenOriginFromString, TokenOriginToString };

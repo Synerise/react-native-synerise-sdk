@@ -68,6 +68,40 @@ RCT_EXPORT_MODULE();
     return model;
 }
 
+- (NSArray<SNRPromotionIdentifier *> *)modelPromotionIdentifiersWithArray:(NSArray<NSDictionary *> *)array {
+    NSMutableArray *promotionIdentifiers = [@[] mutableCopy];
+    
+    if (array != nil && array.count > 0) {
+        for (NSDictionary *dictionary in array) {
+            SNRPromotionIdentifier *promotionIdentifier = [self modelPromotionIdentifierWithDictionary:dictionary];
+            if (promotionIdentifier != nil) {
+                [promotionIdentifiers addObject:promotionIdentifier];
+            }
+        }
+    }
+        
+    return promotionIdentifiers;
+}
+
+- (nullable SNRPromotionIdentifier *)modelPromotionIdentifierWithDictionary:(NSDictionary *)dictionary {
+    if (dictionary != nil) {
+        NSString *key = [dictionary getStringForKey:@"key"];
+        NSString *value = [dictionary getStringForKey:@"value"];
+        
+        if ((key != nil && [key isKindOfClass:[NSString class]] == YES) && (value != nil && [value isKindOfClass:[NSString class]] == YES)) {
+            if ([key isEqualToString:@"CODE"]) {
+                return [[SNRPromotionIdentifier alloc] initWithCode:value];
+            }
+            
+            if ([key isEqualToString:@"UUID"]) {
+                return [[SNRPromotionIdentifier alloc] initWithUUID:value];
+            }
+        }
+    }
+    
+    return nil;
+}
+
 #pragma mark - JS Mapping
 
 - (nullable NSDictionary *)dictionaryWithPromotionResponse:(SNRPromotionResponse *)model {
@@ -104,16 +138,26 @@ RCT_EXPORT_MODULE();
         [dictionary setString:model.code forKey:@"code"];
         [dictionary setString:SNR_PromotionStatusToString(model.status) forKey:@"status"];
         [dictionary setString:SNR_PromotionTypeToString(model.type) forKey:@"type"];
+        [dictionary setDictionary:[self dictionaryWithPromotionDetails:model.details] forKey:@"details"];
         
         [dictionary setNumber:model.redeemLimitPerClient forKey:@"redeemLimitPerClient"];
         [dictionary setNumber:model.redeemQuantityPerActivation forKey:@"redeemQuantityPerActivation"];
         [dictionary setNumber:model.currentRedeemedQuantity forKey:@"currentRedeemedQuantity"];
         [dictionary setNumber:model.currentRedeemLimit forKey:@"currentRedeemLimit"];
         [dictionary setNumber:model.activationCounter forKey:@"activationCounter"];
+        [dictionary setNumber:model.possibleRedeems forKey:@"possibleRedeems"];
+        [dictionary setNumber:model.requireRedeemedPoints forKey:@"requireRedeemedPoints"];
+        
         [dictionary setString:SNR_PromotionDiscountTypeToString(model.discountType) forKey:@"discountType"];
         [dictionary setNumber:model.discountValue forKey:@"discountValue"];
-        [dictionary setNumber:model.requireRedeemedPoints forKey:@"requireRedeemedPoints"];
+        [dictionary setString:SNR_PromotionDiscountModeToString(model.discountMode) forKey:@"discountMode"];
+        [dictionary setDictionary:[self dictionaryWithPromotionDiscountModeDetails:model.discountModeDetails] forKey:@"discountModeDetails"];
+        
+        [dictionary setNumber:model.priority forKey:@"priority"];
         [dictionary setNumber:model.price forKey:@"price"];
+        [dictionary setString:SNR_PromotionItemScopeToString(model.itemScope) forKey:@"itemScope"];
+        [dictionary setNumber:model.minBasketValue forKey:@"minBasketValue"];
+        [dictionary setNumber:model.maxBasketValue forKey:@"maxBasketValue"];
         
         [dictionary setString:model.name forKey:@"name"];
         [dictionary setString:model.headline forKey:@"headline"];
@@ -123,13 +167,78 @@ RCT_EXPORT_MODULE();
         [dictionary setDate:model.startAt forKey:@"startAt"];
         [dictionary setDate:model.expireAt forKey:@"expireAt"];
         [dictionary setDate:model.lastingAt forKey:@"lastingAt"];
+        [dictionary setNumber:model.lastingTime forKey:@"lastingTime"];
+        [dictionary setString:model.displayFrom forKey:@"displayFrom"];
+        [dictionary setString:model.displayTo forKey:@"displayTo"];
         
         [dictionary setDictionary:model.params forKey:@"params"];
         [dictionary setArray:model.catalogIndexItems forKey:@"catalogIndexItems"];
+        [dictionary setArray:model.tags forKey:@"tags"];
         
         return dictionary;
     }
     
+    return nil;
+}
+
+- (nullable NSDictionary *)dictionaryWithPromotionDetails:(SNRPromotionDetails *)model {
+    if (model != nil) {
+        NSMutableDictionary *dictionary = [@{} mutableCopy];
+        
+        [dictionary setDictionary:[self dictionaryWithPromotionDiscountTypeDetails:model.discountType] forKey:@"discountType"];
+        
+        return dictionary;
+    }
+
+    return nil;
+}
+
+- (nullable NSDictionary *)dictionaryWithPromotionDiscountTypeDetails:(SNRPromotionDiscountTypeDetails *)model {
+    if (model != nil) {
+        NSMutableDictionary *dictionary = [@{} mutableCopy];
+        
+        [dictionary setString:model.name forKey:@"name"];
+        [dictionary setBool:model.outerScope forKey:@"outerScope"];
+        [dictionary setInteger:model.requiredItemsCount forKey:@"requiredItemsCount"];
+        [dictionary setInteger:model.discountedItemsCount forKey:@"discountedItemsCount"];
+        
+        return dictionary;
+    }
+
+    return nil;
+}
+
+- (nullable NSDictionary *)dictionaryWithPromotionDiscountModeDetails:(SNRPromotionDiscountModeDetails *)model {
+    if (model != nil) {
+        NSMutableDictionary *dictionary = [@{} mutableCopy];
+        
+        NSMutableArray *promotionDiscountSteps = [@[] mutableCopy];
+        for (SNRPromotionDiscountStep *promotionDiscountStep in model.discountSteps) {
+            NSDictionary *promotionDiscountStepDictionary = [self dictionaryWithPromotionDiscountStep:promotionDiscountStep];
+            if (promotionDiscountStepDictionary != nil) {
+                [promotionDiscountSteps addObject:promotionDiscountStepDictionary];
+            }
+        }
+        
+        [dictionary setArray:promotionDiscountSteps forKey:@"discountSteps"];
+        [dictionary setString:SNR_PromotionDiscountUsageTriggerToString(model.discountUsageTrigger) forKey:@"discountUsageTrigger"];
+        
+        return dictionary;
+    }
+
+    return nil;
+}
+
+- (nullable NSDictionary *)dictionaryWithPromotionDiscountStep:(SNRPromotionDiscountStep *)model {
+    if (model != nil) {
+        NSMutableDictionary *dictionary = [@{} mutableCopy];
+        
+        [dictionary setNumber:model.discountValue forKey:@"discountValue"];
+        [dictionary setNumber:model.usageThreshold forKey:@"usageThreshold"];
+        
+        return dictionary;
+    }
+
     return nil;
 }
 
@@ -185,7 +294,7 @@ RCT_EXPORT_MODULE();
         NSMutableDictionary *dictionary = [@{} mutableCopy];
         
         [dictionary setString:model.code forKey:@"code"];
-        [dictionary setString:SNR_VoucherStatusToString(model.status) forKey:@"status"];
+        [dictionary setString:SNR_VoucherCodeStatusToString(model.status) forKey:@"status"];
         [dictionary setString:model.clientId forKey:@"clientId"];
         [dictionary setString:model.clientUuid forKey:@"clientUuid"];
         [dictionary setString:model.poolUuid forKey:@"poolUuid"];
@@ -292,6 +401,18 @@ RCT_EXPORT_METHOD(activatePromotionByCode:(NSString *)code response:(RCTResponse
     }];
 }
 
+//activatePromotionsBatch(promotionsToActivate: Array<PromotionIdentifier>, onSuccess: () => void, onError: (error: Error) => void)
+
+RCT_EXPORT_METHOD(activatePromotionsBatch:(NSArray *)array response:(RCTResponseSenderBlock)response)
+{
+    NSArray *promotionIdentifiers = [self modelPromotionIdentifiersWithArray:array];
+    [SNRPromotions activatePromotionsWithIdentifiers:promotionIdentifiers success:^(BOOL isSuccess) {
+        [self executeSuccessCallbackResponse:response data:@1];
+    } failure:^(NSError *error) {
+        [self executeFailureCallbackResponse:response error:error];
+    }];
+}
+
 //deactivatePromotionByUUID(uuid: string, onSuccess: () => void, onError: (error: Error) => void)
 
 RCT_EXPORT_METHOD(deactivatePromotionByUUID:(NSString *)UUID response:(RCTResponseSenderBlock)response)
@@ -308,6 +429,18 @@ RCT_EXPORT_METHOD(deactivatePromotionByUUID:(NSString *)UUID response:(RCTRespon
 RCT_EXPORT_METHOD(deactivatePromotionByCode:(NSString *)code response:(RCTResponseSenderBlock)response)
 {
     [SNRPromotions deactivatePromotionByCode:code success:^(BOOL isSuccess) {
+        [self executeSuccessCallbackResponse:response data:@1];
+    } failure:^(NSError *error) {
+        [self executeFailureCallbackResponse:response error:error];
+    }];
+}
+
+//deactivatePromotionsBatch(promotionsToDeactivate: Array<PromotionIdentifier>, onSuccess: () => void, onError: (error: Error) => void)
+
+RCT_EXPORT_METHOD(deactivatePromotionsBatch:(NSArray *)array response:(RCTResponseSenderBlock)response)
+{
+    NSArray *promotionIdentifiers = [self modelPromotionIdentifiersWithArray:array];
+    [SNRPromotions deactivatePromotionsWithIdentifiers:promotionIdentifiers success:^(BOOL isSuccess) {
         [self executeSuccessCallbackResponse:response data:@1];
     } failure:^(NSError *error) {
         [self executeFailureCallbackResponse:response error:error];

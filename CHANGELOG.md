@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.9.19] - 2021-11-03
+
+### Added
+- `Client.signInConditionally` method.
+- `Client.authenticate` method.
+- `Client.authenticateConditionally` method.
+- `Client.requestAccountActivationByPin` method.
+- `Client.confirmAccountActivationByPin` method.
+- `Promotions.activatePromotionsBatch` method.
+- `Promotions.deactivatePromotionsBatch` method.
+- Client State Change listener in `Synerise.Client` module.
+- Promotion models update.
+
+### Changed
+- Update of native SDK's dependencies.
+- Improvements to stability.
+
+
 ## [0.9.18] - 2021-04-13
 
 ### Added

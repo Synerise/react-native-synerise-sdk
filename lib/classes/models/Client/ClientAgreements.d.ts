@@ -1,19 +1,19 @@
 import { BaseModel } from './../BaseModel';
 interface IClientAgreements {
-    email?: Boolean;
-    sms?: Boolean;
-    push?: Boolean;
-    bluetooth?: Boolean;
-    rfid?: Boolean;
-    wifi?: Boolean;
+    email?: boolean;
+    sms?: boolean;
+    push?: boolean;
+    bluetooth?: boolean;
+    rfid?: boolean;
+    wifi?: boolean;
 }
 declare class ClientAgreements extends BaseModel {
-    email: Boolean;
-    sms: Boolean;
-    push: Boolean;
-    bluetooth: Boolean;
-    rfid: Boolean;
-    wifi: Boolean;
+    email: boolean;
+    sms: boolean;
+    push: boolean;
+    bluetooth: boolean;
+    rfid: boolean;
+    wifi: boolean;
     constructor(modelObject?: IClientAgreements);
 }
 export { IClientAgreements, ClientAgreements };

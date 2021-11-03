@@ -26,8 +26,9 @@ RCT_EXPORT_MODULE();
         kRNSyneriseWalkthroughLoadedEvent,
         kRNSyneriseWalkthroughLoadingErrorEvent,
         kRNSyneriseWalkthroughPresentedEvent,
-        kRNSyneriseWalkthroughHiddenEvent
-
+        kRNSyneriseWalkthroughHiddenEvent,
+        kRNSyneriseClientIsSignedInEvent,
+        kRNSyneriseClientIsSignedOutEvent
     ];
 }
 
@@ -48,6 +49,9 @@ RCT_EXPORT_MODULE();
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseWalkthroughLoadingErrorEvent object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseWalkthroughPresentedEvent object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseWalkthroughHiddenEvent object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseClientIsSignedInEvent object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseClientIsSignedOutEvent object:nil];
 }
 
 - (void)stopObserving {

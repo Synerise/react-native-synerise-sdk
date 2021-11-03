@@ -19,7 +19,12 @@ import com.synerise.sdk.promotions.model.AssignVoucherData;
 import com.synerise.sdk.promotions.model.AssignVoucherResponse;
 import com.synerise.sdk.promotions.model.VoucherCodesData;
 import com.synerise.sdk.promotions.model.VoucherCodesResponse;
+import com.synerise.sdk.promotions.model.promotion.DiscountModeDetails;
+import com.synerise.sdk.promotions.model.promotion.DiscountStep;
 import com.synerise.sdk.promotions.model.promotion.Promotion;
+import com.synerise.sdk.promotions.model.promotion.PromotionActivationKey;
+import com.synerise.sdk.promotions.model.promotion.PromotionDetails;
+import com.synerise.sdk.promotions.model.promotion.PromotionIdentifier;
 import com.synerise.sdk.promotions.model.promotion.PromotionImage;
 import com.synerise.sdk.promotions.model.promotion.PromotionResponse;
 import com.synerise.sdk.promotions.model.promotion.PromotionSortingKey;
@@ -30,6 +35,7 @@ import com.synerise.sdk.promotions.model.promotion.SinglePromotionResponse;
 import com.synerise.sdk.react.utils.ArrayUtil;
 import com.synerise.sdk.react.utils.MapUtil;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -215,6 +221,30 @@ public class RNPromotions extends RNBaseModule {
     }
 
     @ReactMethod
+    public void activatePromotionsBatch(ReadableArray array, Callback callback) {
+        if (activatePromotionCall != null) activatePromotionCall.cancel();
+        activatePromotionCall = Promotions.activatePromotionsBatch(readableArrayToPromotionIdentifierList(array));
+        activatePromotionCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
+        });
+    }
+
+    @ReactMethod
+    public void deactivatePromotionsBatch(ReadableArray array, Callback callback) {
+        if (deactivatePromotionCall != null) deactivatePromotionCall.cancel();
+        deactivatePromotionCall = Promotions.deactivatePromotionsBatch(readableArrayToPromotionIdentifierList(array));
+        deactivatePromotionCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
+        });
+    }
+
+    @ReactMethod
     public void getOrAssignVoucher(String poolUuid, Callback callback) {
         if (getOrAssignVoucherCall != null) getOrAssignVoucherCall.cancel();
         getOrAssignVoucherCall = Promotions.getOrAssignVoucher(poolUuid);
@@ -283,10 +313,10 @@ public class RNPromotions extends RNBaseModule {
                 executeSuccessCallbackResponse(callback, voucherCodesMap, null);
             }
         }, new DataActionListener<ApiError>() {
-                @Override
-                public void onDataAction(ApiError apiError) {
-                    executeFailureCallbackResponse(callback, null, apiError);
-                }
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
         });
     }
 
@@ -296,6 +326,7 @@ public class RNPromotions extends RNBaseModule {
         for (int i = 0; i < array.size(); i++) {
             Promotion promotion = array.get(i);
             WritableMap promotionMap = Arguments.createMap();
+
             promotionMap.putString("uuid", promotion.getUuid());
             promotionMap.putString("code", promotion.getCode());
             promotionMap.putString("status", promotion.getStatus().getStatus());
@@ -305,13 +336,29 @@ public class RNPromotions extends RNBaseModule {
             promotionMap.putInt("currentRedeemedQuantity", promotion.getCurrentRedeemedQuantity());
             promotionMap.putInt("currentRedeemLimit", promotion.getCurrentRedeemLimit());
             promotionMap.putInt("activationCounter", promotion.getActivationCounter());
+            promotionMap.putInt("possibleRedeems", promotion.getPossibleRedeems());
             promotionMap.putString("discountType", promotion.getDiscountType().getApiName());
             promotionMap.putInt("discountValue", promotion.getDiscountValue());
+            promotionMap.putString("discountMode", promotion.getDiscountMode());
             promotionMap.putInt("requireRedeemedPoints", promotion.getRequireRedeemedPoints());
             promotionMap.putString("name", promotion.getName());
             promotionMap.putString("headline", promotion.getHeadline());
-            promotionMap.putString("description", promotion.getDescription());
+            promotionMap.putString("descriptionText", promotion.getDescription());
             promotionMap.putDouble("price", promotion.getPrice());
+            promotionMap.putInt("priority", promotion.getPriority());
+            promotionMap.putString("itemScope", promotion.getItermScope());
+            promotionMap.putString("displayFrom", promotion.getDisplayFrom());
+            promotionMap.putString("displayTo", promotion.getDisplayTo());
+            promotionMap.putInt("lastingTime", promotion.getLastingTime());
+            if (promotion.getMinBasketValue() != null) {
+                promotionMap.putInt("minBasketValue", promotion.getMinBasketValue());
+            }
+            if (promotion.getMaxBasketValue() != null) {
+                promotionMap.putInt("maxBasketValue", promotion.getMaxBasketValue());
+            }
+            if (promotion.getAssignedAt() != null) {
+                promotionMap.putDouble("assignedAt", promotion.getAssignedAt().getTime());
+            }
             if (promotion.getStartAt() != null) {
                 promotionMap.putDouble("startAt", promotion.getStartAt().getTime());
             }
@@ -329,6 +376,12 @@ public class RNPromotions extends RNBaseModule {
             }
             if (promotion.getParams() != null) {
                 promotionMap.putMap("params", MapUtil.toWritableMap(promotion.getParams()));
+            }
+            if (promotion.getDetails() != null) {
+                promotionMap.putMap("details", promotionDetailsToWritableMap(promotion.getDetails()));
+            }
+            if (promotion.getDiscountModeDetails() != null) {
+                promotionMap.putMap("discountModeDetails", discountModeDetailsToWritableMap(promotion.getDiscountModeDetails()));
             }
 
             writableArray.pushMap(promotionMap);
@@ -349,21 +402,29 @@ public class RNPromotions extends RNBaseModule {
         promotionMap.putInt("currentRedeemedQuantity", promotion.getCurrentRedeemedQuantity());
         promotionMap.putInt("currentRedeemLimit", promotion.getCurrentRedeemLimit());
         promotionMap.putInt("activationCounter", promotion.getActivationCounter());
+        promotionMap.putInt("possibleRedeems", promotion.getPossibleRedeems());
         promotionMap.putString("discountType", promotion.getDiscountType().getApiName());
         promotionMap.putInt("discountValue", promotion.getDiscountValue());
+        promotionMap.putString("discountMode", promotion.getDiscountMode());
         promotionMap.putInt("requireRedeemedPoints", promotion.getRequireRedeemedPoints());
         promotionMap.putString("name", promotion.getName());
         promotionMap.putString("headline", promotion.getHeadline());
-        promotionMap.putString("description", promotion.getDescription());
+        promotionMap.putString("descriptionText", promotion.getDescription());
         promotionMap.putDouble("price", promotion.getPrice());
-        if (promotion.getImages() != null) {
-            promotionMap.putArray("images", promotionImageToWritableArray(promotion.getImages()));
+        promotionMap.putInt("priority", promotion.getPriority());
+        promotionMap.putString("itemScope", promotion.getItermScope());
+        promotionMap.putString("displayFrom", promotion.getDisplayFrom());
+        promotionMap.putString("displayTo", promotion.getDisplayTo());
+        promotionMap.putInt("lastingTime", promotion.getLastingTime());
+
+        if (promotion.getMinBasketValue() != null) {
+            promotionMap.putInt("minBasketValue", promotion.getMinBasketValue());
         }
-        if (promotion.getParams() != null) {
-            promotionMap.putMap("params", MapUtil.toWritableMap(promotion.getParams()));
+        if (promotion.getMaxBasketValue() != null) {
+            promotionMap.putInt("maxBasketValue", promotion.getMaxBasketValue());
         }
-        if (promotion.getCatalogIndexItems() != null) {
-            promotionMap.putArray("catalogIndexItems", ArrayUtil.toWritableArray(promotion.getCatalogIndexItems()));
+        if (promotion.getAssignedAt() != null) {
+            promotionMap.putDouble("assignedAt", promotion.getAssignedAt().getTime());
         }
         if (promotion.getStartAt() != null) {
             promotionMap.putDouble("startAt", promotion.getStartAt().getTime());
@@ -373,6 +434,21 @@ public class RNPromotions extends RNBaseModule {
         }
         if (promotion.getExpireAt() != null) {
             promotionMap.putDouble("expireAt", promotion.getExpireAt().getTime());
+        }
+        if (promotion.getImages() != null) {
+            promotionMap.putArray("images", promotionImageToWritableArray(promotion.getImages()));
+        }
+        if (promotion.getCatalogIndexItems() != null) {
+            promotionMap.putArray("catalogIndexItems", ArrayUtil.toWritableArray(promotion.getCatalogIndexItems()));
+        }
+        if (promotion.getParams() != null) {
+            promotionMap.putMap("params", MapUtil.toWritableMap(promotion.getParams()));
+        }
+        if (promotion.getDetails() != null) {
+            promotionMap.putMap("details", promotionDetailsToWritableMap(promotion.getDetails()));
+        }
+        if (promotion.getDiscountModeDetails() != null) {
+            promotionMap.putMap("discountModeDetails", discountModeDetailsToWritableMap(promotion.getDiscountModeDetails()));
         }
 
         return promotionMap;
@@ -408,16 +484,30 @@ public class RNPromotions extends RNBaseModule {
         return list;
     }
 
+    private List<PromotionIdentifier> readableArrayToPromotionIdentifierList(ReadableArray readableArray) {
+        List<PromotionIdentifier> list = new ArrayList<>(readableArray.size());
+        for (int i = 0; i < readableArray.size(); i++) {
+            ReadableType type = readableArray.getType(i);
+            if (type == ReadableType.Map) {
+                PromotionActivationKey key = PromotionActivationKey.valueOf(readableArray.getMap(i).getString("key"));
+                String value = readableArray.getMap(i).getString("value");
+                list.add(new PromotionIdentifier(key, value));
+            }
+        }
+
+        return list;
+    }
+
     private static LinkedHashMap<PromotionSortingKey, ApiQuerySortingOrder> readableArrayToLinkedHashMapSorting(ReadableArray readableArray) {
         LinkedHashMap<PromotionSortingKey, ApiQuerySortingOrder> sorting = new LinkedHashMap<>();
 
         for (int i = 0; i < readableArray.size(); i++) {
             ReadableType type = readableArray.getType(i);
             if (type == ReadableType.Map) {
-                    PromotionSortingKey key = PromotionSortingKey.getByPromotionSortingKey(readableArray.getMap(i).getString("property"));
-                    ApiQuerySortingOrder order = ApiQuerySortingOrder.getBySortingOrder(readableArray.getMap(i).getString("order"));
-                    sorting.put(key, order);
-                }
+                PromotionSortingKey key = PromotionSortingKey.getByPromotionSortingKey(readableArray.getMap(i).getString("property"));
+                ApiQuerySortingOrder order = ApiQuerySortingOrder.getBySortingOrder(readableArray.getMap(i).getString("order"));
+                sorting.put(key, order);
+            }
         }
         return null;
     }
@@ -434,6 +524,43 @@ public class RNPromotions extends RNBaseModule {
         }
 
         return writableArray;
+    }
+
+    private WritableMap promotionDetailsToWritableMap(PromotionDetails details) {
+        WritableMap promotionDetailsMap = Arguments.createMap();
+        WritableMap promotionDiscountType = Arguments.createMap();
+
+        if (details.getDiscountType() != null) {
+            promotionDiscountType.putString("name", details.getDiscountType().getName());
+            promotionDiscountType.putBoolean("outerScope", details.getDiscountType().getOuterScope());
+            promotionDiscountType.putInt("requiredItemsCount", details.getDiscountType().getRequiredItemsCount());
+            promotionDiscountType.putInt("discountedItemsCount", details.getDiscountType().getDiscountedItemsCount());
+
+        }
+
+        promotionDetailsMap.putMap("discountType", promotionDiscountType);
+
+        return promotionDetailsMap;
+    }
+
+    private WritableMap discountModeDetailsToWritableMap(DiscountModeDetails discountModeDetails) {
+        WritableMap discountModeDetailsMap = Arguments.createMap();
+        discountModeDetailsMap.putString("discountUsageTrigger", discountModeDetails.getDiscountUsageTrigger());
+
+        WritableArray discountStepsArray = Arguments.createArray();
+        List<DiscountStep> discountSteps = discountModeDetails.getDiscountSteps();
+        for (int i = 0; i < discountSteps.size(); i++) {
+            DiscountStep step = discountSteps.get(i);
+            WritableMap discountStepMap = Arguments.createMap();
+            discountStepMap.putInt("discountValue", step.getDiscountValue());
+            discountStepMap.putInt("usageThreshold", step.getUsageThreshold());
+
+            discountStepsArray.pushMap(discountStepMap);
+        }
+
+        discountModeDetailsMap.putArray("discountSteps", discountStepsArray);
+
+        return discountModeDetailsMap;
     }
 
     private WritableMap insertMetaDataToMap(WritableMap promotionMap, PromotionResponse promotionResponse) {

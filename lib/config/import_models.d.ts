@@ -1,3 +1,4 @@
+export { IClientAuthContext, ClientAuthContext } from '../classes/models/Client/ClientAuthContext';
 export { IClientOAuthAuthenticationContext, ClientOAuthAuthenticationContext } from './../classes/models/Client/ClientOAuthAuthenticationContext';
 export { IClientFacebookAuthenticationContext, ClientFacebookAuthenticationContext } from './../classes/models/Client/ClientFacebookAuthenticationContext';
 export { IClientAppleSignInAuthenticationContext, ClientAppleSignInAuthenticationContext } from './../classes/models/Client/ClientAppleSignInAuthenticationContext';
@@ -7,11 +8,21 @@ export { IClientAccountUpdateContext, ClientAccountUpdateContext } from './../cl
 export { IClientAgreements, ClientAgreements } from './../classes/models/Client/ClientAgreements';
 export { ClientSex, ClientSexFromString, ClientSexToString } from './../classes/models/Client/ClientSex';
 export { ClientIdentityProvider } from './../classes/models/Client/ClientIdentityProvider';
+export { ClientSessionEndReason, ClientSessionEndReasonFromString, ClientSessionEndReasonToString } from './../classes/models/Client/ClientSessionEndReason';
+export { IClientConditionalAuthResult, ClientConditionalAuthResult } from '../classes/models/Client/ClientConditionalAuthResult';
+export { ClientConditionalAuthStatus } from '../classes/models/Client/ClientConditionalAuthStatus';
 export { PromotionStatus } from './../classes/models/Promotions/PromotionStatus';
 export { PromotionType } from './../classes/models/Promotions/PromotionType';
 export { PromotionDiscountType } from './../classes/models/Promotions/PromotionDiscountType';
+export { PromotionItemScope } from './../classes/models/Promotions/PromotionItemScope';
 export { Promotion, PromotionSortingKey } from './../classes/models/Promotions/Promotion';
 export { PromotionResponse } from './../classes/models/Promotions/PromotionResponse';
+export { PromotionIdentifier } from './../classes/models/Promotions/PromotionIdentifier';
+export { PromotionIdentifierKey } from '../classes/models/Promotions/PromotionIdentifierKey';
+export { IPromotionDiscountTypeDetails, PromotionDiscountTypeDetails } from '../classes/models/Promotions/PromotionDiscountTypeDetails';
+export { IPromotionDetails, PromotionDetails } from './../classes/models/Promotions/PromotionDetails';
+export { IPromotionDiscountStep, PromotionDiscountStep } from '../classes/models/Promotions/PromotionDiscountStep';
+export { IPromotionDiscountModeDetails, PromotionDiscountModeDetails } from '../classes/models/Promotions/PromotionDiscountModeDetails';
 export { RecommendationOptions } from './../classes/models/Content/RecommendationOptions';
 export { RecommendationResponse } from './../classes/models/Content/RecommendationResponse';
 export { Recommendation } from './../classes/models/Content/Recommendation';
@@ -20,7 +31,7 @@ export { ScreenViewResponse } from './../classes/models/Content/ScreenViewRespon
 export { AssignVoucherResponse } from './../classes/models/Vouchers/AssignVoucherResponse';
 export { VoucherCodesResponse } from './../classes/models/Vouchers/VoucherCodesResponse';
 export { AssignVoucherData } from './../classes/models/Vouchers/AssignVoucherData';
-export { VoucherCodeData } from './../classes/models/Vouchers/VoucherCodeData';
+export { VoucherCodesData } from './../classes/models/Vouchers/VoucherCodesData';
 export { VoucherCodeStatus } from './../classes/models/Vouchers/VoucherCodeStatus';
 export { BaseApiQuery, IApiQuerySorting, ApiQuerySortingOrder } from './../classes/api_queries/BaseApiQuery';
 export { PromotionsApiQuery } from './../classes/api_queries/PromotionsApiQuery';

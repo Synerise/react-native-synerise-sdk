@@ -37,3 +37,6 @@ static NSString * const kRNSyneriseWalkthroughLoadedEvent = @"kRNSyneriseWalkthr
 static NSString * const kRNSyneriseWalkthroughLoadingErrorEvent = @"kRNSyneriseWalkthroughLoadingErrorEvent";
 static NSString * const kRNSyneriseWalkthroughPresentedEvent = @"kRNSyneriseWalkthroughPresentedEvent";
 static NSString * const kRNSyneriseWalkthroughHiddenEvent = @"kRNSyneriseWalkthroughHiddenEvent";
+
+static NSString * const kRNSyneriseClientIsSignedInEvent = @"kRNSyneriseClientIsSignedInEvent";
+static NSString * const kRNSyneriseClientIsSignedOutEvent = @"kRNSyneriseClientIsSignedOutEvent";

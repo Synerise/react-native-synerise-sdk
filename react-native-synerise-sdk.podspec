@@ -2,7 +2,7 @@ require 'json'
 
 package = JSON.parse(File.read('./package.json'))
 
-SYNERISE_SDK_FRAMEWORK_VERSION = '3.7.3'
+SYNERISE_SDK_FRAMEWORK_VERSION = '3.8.8'
 
 Pod::Spec.new do |s|
   s.name          = package['name']
@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.homepage      = "https://synerise.com"
   s.license       = "MIT"
   s.author        = { "Synerise" => "developer@synerise.com" }
-  s.platform      = :ios, "9.0"
+  s.platform      = :ios, "11.0"
   s.source        = { :git => "https://github.com/Synerise/react-native-synerise-sdk", :tag => s.version.to_s }
   s.source_files  = "ios/ReactNativeSynerise/**/*.{h,m}"
   s.requires_arc  = true

@@ -19,7 +19,7 @@ interface IClientAccountInformation {
     province?: string;
     zipCode?: string;
     countryCode?: string;
-    anonymous: Boolean;
+    anonymous: boolean;
     lastActivityDate: number;
     agreements?: IClientAgreements;
     attributes?: object;
@@ -43,7 +43,7 @@ declare class ClientAccountInformation extends BaseModel {
     province?: string;
     zipCode?: string;
     countryCode?: string;
-    anonymous: Boolean;
+    anonymous: boolean;
     lastActivityDate: Date;
     agreements?: ClientAgreements;
     attributes?: object;

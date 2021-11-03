@@ -1,10 +1,10 @@
 import { BaseModel } from '../BaseModel';
-import { IVoucherCodeData, VoucherCodeData } from './VoucherCodeData';
+import { IVoucherCodesData, VoucherCodesData } from './VoucherCodesData';
 interface IVoucherCodesResponse {
-    data: Array<IVoucherCodeData>;
+    data: Array<IVoucherCodesData>;
 }
 declare class VoucherCodesResponse extends BaseModel {
-    data: Array<VoucherCodeData>;
+    data: Array<VoucherCodesData>;
     constructor(modelObject: IVoucherCodesResponse);
 }
 export { IVoucherCodesResponse, VoucherCodesResponse };

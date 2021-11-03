@@ -1,5 +1,7 @@
 package com.synerise.sdk.react;
 
+import android.util.Log;
+
 import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.Arguments;
@@ -7,8 +9,14 @@ import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.google.gson.Gson;
+import com.synerise.sdk.client.model.AuthConditions;
 import com.synerise.sdk.client.model.ClientIdentityProvider;
+import com.synerise.sdk.client.model.listener.OnClientStateChangeListener;
+import com.synerise.sdk.core.listeners.ActionListener;
+import com.synerise.sdk.core.types.enums.ClientSessionEndReason;
 import com.synerise.sdk.react.utils.ArrayUtil;
 import com.synerise.sdk.react.utils.MapUtil;
 import com.synerise.sdk.client.Client;
@@ -26,6 +34,10 @@ import com.synerise.sdk.core.types.model.Sex;
 import com.synerise.sdk.core.types.model.Token;
 import com.synerise.sdk.error.ApiError;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -34,13 +46,46 @@ import javax.annotation.Nonnull;
 
 public class RNClient extends RNBaseModule {
 
+    private ReactApplicationContext reactApplicationContext;
     private IApiCall signInCall, signUpCall, confirmCall, activateCall, updateAccountCall, refreshTokenCall;
     private IApiCall passwordResetCall, deleteAccountByFacebookCall, deleteAccountByOAuthCall;
     private IDataApiCall<Token> getTokenCall;
     private IDataApiCall<GetAccountInformation> getAccountCall;
+    private Gson gson = new Gson();
+    private static OnClientStateChangeListener clientStateChangeListener;
+    private final String CLIENT_SIGNED_IN_LISTENER_KEY = "CLIENT_SIGNED_IN_LISTENER_KEY";
+    private final String CLIENT_SIGNED_OUT_LISTENER_KEY = "CLIENT_SIGNED_OUT_LISTENER_KEY";
+    private final String CLIENT_SIGNED_IN_LISTENER_VALUE = "OnClientSignedIn";
+    private final String CLIENT_SIGNED_OUT_LISTENER_VALUE = "OnClientSignedOut";
+    private final String SESSION_END_REASON_KEY = "reason";
 
     public RNClient(ReactApplicationContext reactApplicationContext) {
         super(reactApplicationContext);
+
+        this.reactApplicationContext = reactApplicationContext;
+
+        clientStateChangeListener = new OnClientStateChangeListener() {
+            @Override
+            public void onClientSignedIn() {
+                super.onClientSignedIn();
+                sendUserSignedInEvent();
+            }
+
+            @Override
+            public void onClientSignedOut(ClientSessionEndReason reason) {
+                super.onClientSignedOut(reason);
+                sendUserSignedOutEvent(reason);
+            }
+        };
+    }
+
+    @javax.annotation.Nullable
+    @Override
+    public Map<String, Object> getConstants() {
+        final Map<String, Object> constants = new HashMap<>();
+        constants.put(CLIENT_SIGNED_IN_LISTENER_KEY, CLIENT_SIGNED_IN_LISTENER_VALUE);
+        constants.put(CLIENT_SIGNED_OUT_LISTENER_KEY, CLIENT_SIGNED_OUT_LISTENER_VALUE);
+        return constants;
     }
 
     @Nonnull
@@ -87,6 +132,124 @@ public class RNClient extends RNBaseModule {
         if (refreshTokenCall != null) refreshTokenCall.cancel();
         refreshTokenCall = Client.refreshToken();
         refreshTokenCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
+        });
+    }
+
+    //authenticate(token: string, provider: ClientIdentityProvider, context: ClientAuthContext, onSuccess: () => void, onError: (error: Error) => void)
+    @ReactMethod
+    public void authenticate(String token, String clientIdentityProvider, ReadableMap contextMap, Callback callback) {
+        Agreements agreements = null;
+        Attributes attributes = null;
+        String authID = null;
+        if (contextMap.hasKey("agreements")) {
+            agreements = agreementsMapper(contextMap.getMap("agreements"));
+        }
+
+        if (contextMap.hasKey("attributes") && contextMap.getMap("attributes") != null) {
+            attributes = attributesMapper(contextMap.getMap("attributes").toHashMap());
+        }
+
+        if (contextMap.hasKey("authID")) {
+            authID = contextMap.getString("authID");
+        }
+
+        IApiCall authenticateCall = Client.authenticate(token, ClientIdentityProvider.getByProvider(clientIdentityProvider), agreements, attributes, authID);
+        authenticateCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
+        });
+    }
+
+    //signInConditionally(email: string, password: string, onSuccess: (authResult: ClientConditionalAuthResult) => void, onError: (error: Error) => void)
+    @ReactMethod
+    public void signInConditionally(String email, String password, Callback callback) {
+        IDataApiCall<AuthConditions> apiDataCallConditional = Client.signInConditionally(email, password);
+        apiDataCallConditional.execute(new DataActionListener<AuthConditions>() {
+            @Override
+            public void onDataAction(AuthConditions response) {
+                WritableMap authMap = Arguments.createMap();
+
+                if (response.getStatus() != null) {
+                    authMap.putString("status", response.getStatus().toString());
+                }
+
+                ArrayList<Object> conditions = response.getConditions();
+                if (conditions != null) {
+                    WritableArray array = Arguments.createArray();
+                    for (Object object : conditions) {
+                        try {
+                            String jsonObject = gson.toJson(object);
+                            WritableMap objectMap = convertJsonToMap(new JSONObject(jsonObject));
+                            array.pushMap(objectMap);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    authMap.putArray("conditions", array);
+                }
+
+                executeSuccessCallbackResponse(callback, authMap, null);
+            }
+        }, new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
+        });
+    }
+
+    //authenticateConditionally(token: string, provider: ClientIdentityProvider, context: ClientAuthContext, onSuccess: (authResult: ClientConditionalAuthResult) => void, onError: (error: Error) => void)
+    @ReactMethod
+    public void authenticateConditionally(String token, String provider, ReadableMap contextMap, Callback callback) {
+        Agreements agreements = null;
+        Attributes attributes = null;
+        String authID = null;
+        if (contextMap.hasKey("agreements")) {
+            agreements = agreementsMapper(contextMap.getMap("agreements"));
+        }
+
+        if (contextMap.hasKey("attributes") && contextMap.getMap("attributes") != null) {
+            attributes = attributesMapper(contextMap.getMap("attributes").toHashMap());
+        }
+
+        if (contextMap.hasKey("authID")) {
+            authID = contextMap.getString("authID");
+        }
+
+        IDataApiCall<AuthConditions> apiDataCallConditional = Client.authenticateConditionally(token, ClientIdentityProvider.getByProvider(provider), agreements, attributes, authID);
+        apiDataCallConditional.execute(new DataActionListener<AuthConditions>() {
+            @Override
+            public void onDataAction(AuthConditions response) {
+                WritableMap authMap = Arguments.createMap();
+
+                if (response.getStatus() != null) {
+                    authMap.putString("status", response.getStatus().toString());
+                }
+
+                ArrayList<Object> conditions = response.getConditions();
+                if (conditions != null) {
+                    WritableArray array = Arguments.createArray();
+                    for (Object object : conditions) {
+                        try {
+                            String jsonObject = gson.toJson(object);
+                            WritableMap objectMap = convertJsonToMap(new JSONObject(jsonObject));
+                            array.pushMap(objectMap);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    authMap.putArray("conditions", array);
+                }
+
+                executeSuccessCallbackResponse(callback, authMap, null);
+            }
+        }, new DataActionListener<ApiError>() {
             @Override
             public void onDataAction(ApiError apiError) {
                 executeFailureCallbackResponse(callback, null, apiError);
@@ -460,6 +623,28 @@ public class RNClient extends RNBaseModule {
     }
 
     @ReactMethod
+    public void requestAccountActivationByPin(String email, Callback callback) {
+        IApiCall requestAccountActivationCall = Client.requestAccountActivationByPin(email);
+        requestAccountActivationCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
+        });
+    }
+
+    @ReactMethod
+    public void confirmAccountActivationByPin(String pinCode, String email, Callback callback) {
+        IApiCall confirmAccountActivationCall = Client.confirmAccountActivationByPin(pinCode, email);
+        confirmAccountActivationCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
+        });
+    }
+
+    @ReactMethod
     public void deleteAccountByIdentityProvider(String clientAuthFactor, String clientIdentityProvider, String authId, Callback callback) {
         IApiCall deleteAccountCall = Client.deleteAccount(clientAuthFactor, ClientIdentityProvider.getByProvider(clientIdentityProvider), authId);
         deleteAccountCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
@@ -539,6 +724,29 @@ public class RNClient extends RNBaseModule {
             return agreements;
         } else {
             return null;
+        }
+    }
+
+    protected static void initializeClient() {
+        registerClientStateListener();
+    }
+
+    private static void registerClientStateListener() {
+        Client.setOnClientStateChangeListener(clientStateChangeListener);
+    }
+
+    private void sendUserSignedInEvent() {
+        if (RNSyneriseInitializer.isInitialized) {
+            WritableMap data = Arguments.createMap();
+            sendEventToJs(CLIENT_SIGNED_IN_LISTENER_VALUE, data, reactApplicationContext);
+        }
+    }
+
+    private void sendUserSignedOutEvent(ClientSessionEndReason reason) {
+        if (RNSyneriseInitializer.isInitialized) {
+            WritableMap data = Arguments.createMap();
+            data.putString(SESSION_END_REASON_KEY, reason.toString());
+            sendEventToJs(CLIENT_SIGNED_OUT_LISTENER_VALUE, data, reactApplicationContext);
         }
     }
 }

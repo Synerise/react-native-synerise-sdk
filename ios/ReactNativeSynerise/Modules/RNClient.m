@@ -8,7 +8,16 @@
 
 #import "RNClient.h"
 
+static NSString * const RNClientEventListenerClientIsSignedInKey = @"CLIENT_SIGNED_IN_LISTENER_KEY";
+static NSString * const RNClientEventListenerClientIsSignedOutKey = @"CLIENT_SIGNED_OUT_LISTENER_KEY";
+
+static NSString * const RNClientEventObjectReasonKey = @"reason";
+
 NS_ASSUME_NONNULL_BEGIN
+
+@interface RNClient () <RNSyneriseManagerDelegate, SNRClientStateDelegate>
+
+@end
 
 @implementation RNClient
 
@@ -26,12 +35,44 @@ RCT_EXPORT_MODULE();
     self = [super init];
     
     if (self) {
-        
+        [[RNSyneriseManager sharedInstance] addDelegate:self];
     }
     
     moduleInstance = self;
     
     return self;
+}
+
+#pragma mark - Private
+
+- (void)sendClientIsSignedInToJS {
+    [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseClientIsSignedInEvent object:nil userInfo:nil];
+}
+
+- (void)sendClientIsSignedOutToJS:(SNRClientSessionEndReason)reason {
+    id eventBody = [self dictionaryWithClientSessionEndReason:reason];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseClientIsSignedOutEvent object:nil userInfo:eventBody];
+}
+
+#pragma mark - RNSyneriseManagerDelegate
+
+- (void)applicationJavaScriptDidLoad {
+    // nothing for yet
+}
+
+- (void)syneriseJavaScriptDidLoad {
+    [SNRClient setClientStateDelegate:self];
+}
+
+#pragma mark - SNRClientStateDelegate
+
+
+- (void)SNR_clientIsSignedIn {
+    [self sendClientIsSignedInToJS];
+}
+
+- (void)SNR_clientIsSignedOutWithReason:(SNRClientSessionEndReason)reason {
+    [self sendClientIsSignedOutToJS:reason];
 }
 
 #pragma mark - SDK Mapping
@@ -63,6 +104,30 @@ RCT_EXPORT_MODULE();
             
             return model;
         }
+    }
+    
+    return nil;
+}
+
+- (nullable SNRClientAuthenticationContext *)modelClientAuthenticationContextWithDictionary:(nullable NSDictionary *)dictionary {
+    if (dictionary != nil) {
+        SNRClientAuthenticationContext *model = [SNRClientAuthenticationContext new];
+        model.attributes = [dictionary getDictionaryForKey:@"attributes"];
+        model.agreements = [self modelClientAgreementsWithDictionary:[dictionary getDictionaryForKey:@"agreements"]];
+        
+        return model;
+    }
+    
+    return nil;
+}
+
+- (nullable SNRClientConditionalAuthenticationContext *)modelClientConditionalAuthenticationContextWithDictionary:(nullable NSDictionary *)dictionary {
+    if (dictionary != nil) {
+        SNRClientConditionalAuthenticationContext *model = [SNRClientConditionalAuthenticationContext new];
+        model.attributes = [dictionary getDictionaryForKey:@"attributes"];
+        model.agreements = [self modelClientAgreementsWithDictionary:[dictionary getDictionaryForKey:@"agreements"]];
+        
+        return model;
     }
     
     return nil;
@@ -154,6 +219,19 @@ RCT_EXPORT_MODULE();
 
 #pragma mark - JS Mapping
 
+- (nullable NSDictionary *)dictionaryWithClientConditionalAuthResult:(nullable SNRClientAuthenticationResult *)model {
+    if (model != nil) {
+        NSMutableDictionary *dictionary = [@{} mutableCopy];
+        [dictionary setString:model.token forKey:@"token"];
+        [dictionary setString:SNR_ClientAuthenticationStatusToString(model.status) forKey:@"status"];
+        [dictionary setArray:model.conditions forKey:@"conditions"];
+        
+        return dictionary;
+    }
+    
+    return nil;
+}
+
 - (nullable NSDictionary *)dictionaryWithClientAccountInformation:(nullable SNRClientAccountInformation *)model {
     if (model != nil) {
         NSMutableDictionary *dictionary = [@{} mutableCopy];
@@ -223,7 +301,43 @@ RCT_EXPORT_MODULE();
     return nil;
 }
 
+- (NSString *)stringWithClientSessionEndReason:(SNRClientSessionEndReason)reason {
+    if (reason == SNRClientSessionEndReasonUserSignOut) {
+        return @"USER_SIGN_OUT";
+    } else if (reason == SNRClientSessionEndReasonSystemSignOut) {
+        return @"SYSTEM_SIGN_OUT";
+    } else if (reason == SNRClientSessionEndReasonSessionExpiration) {
+        return @"SESSION_EXPIRATION";
+    } else if (reason == SNRClientSessionEndReasonSessionDestroyed) {
+        return @"SESSION_DESTROYED";
+    } else if (reason == SNRClientSessionEndReasonSecurityException) {
+        return @"SECURITY_EXCEPTION";
+    } else if (reason == SNRClientSessionEndReasonClientRejected) {
+        return @"CLIENT_REJECTED";
+    } else if (reason == SNRClientSessionEndReasonUserAccountDeleted) {
+        return @"USER_ACCOUNT_DELETED";
+    } else {
+        return @"NOT_SPECIFIED";
+    }
+}
+
+- (NSDictionary *)dictionaryWithClientSessionEndReason:(SNRClientSessionEndReason)reason {
+    NSString *clientSessionEndReasonString = [self stringWithClientSessionEndReason:reason];
+    
+    return @{
+        RNClientEventObjectReasonKey: clientSessionEndReasonString
+    };
+}
+
 #pragma mark - JS Module
+
+- (NSDictionary *)constantsToExport
+{
+  return @{
+      RNClientEventListenerClientIsSignedInKey: kRNSyneriseClientIsSignedInEvent,
+      RNClientEventListenerClientIsSignedOutKey: kRNSyneriseClientIsSignedOutEvent
+  };
+}
 
 //registerAccount(context: ClientAccountRegisterContext, onSuccess: () => void, onError: (error: Error) => void)
 
@@ -243,7 +357,7 @@ RCT_EXPORT_METHOD(registerAccount:(NSDictionary *)dictionary response:(RCTRespon
 
 //confirmAccount(token: String, onSuccess: () => void, onError: (error: Error) => void)
 
-RCT_EXPORT_METHOD(token:(NSString *)token response:(RCTResponseSenderBlock)response)
+RCT_EXPORT_METHOD(confirmAccount:(NSString *)token response:(RCTResponseSenderBlock)response)
 {
    [SNRClient confirmAccount:token success:^(BOOL isSuccess) {
        [self executeSuccessCallbackResponse:response data:@1];
@@ -254,13 +368,35 @@ RCT_EXPORT_METHOD(token:(NSString *)token response:(RCTResponseSenderBlock)respo
 
 //activateAccount(email: String, onSuccess: () => void, onError: (error: Error) => void)
 
-RCT_EXPORT_METHOD(email:(NSString *)email response:(RCTResponseSenderBlock)response)
+RCT_EXPORT_METHOD(activateAccount:(NSString *)email response:(RCTResponseSenderBlock)response)
 {
    [SNRClient activateAccount:email success:^(BOOL isSuccess) {
        [self executeSuccessCallbackResponse:response data:@1];
    } failure:^(NSError *error) {
        [self executeFailureCallbackResponse:response error:error];
    }];
+}
+
+//requestAccountActivationByPin(email: string, onSuccess: () => void, onError: (error: Error) => void)
+
+RCT_EXPORT_METHOD(requestAccountActivationByPin:(NSString *)email response:(RCTResponseSenderBlock)response)
+{
+    [SNRClient requestAccountActivationByPinWithEmail:email success:^(BOOL isSuccess) {
+        [self executeSuccessCallbackResponse:response data:@1];
+    } failure:^(NSError *error) {
+        [self executeFailureCallbackResponse:response error:error];
+    }];
+}
+
+//confirmAccountActivationByPin(pinCode: string, email: string, onSuccess: () => void, onError: (error: Error) => void)
+
+RCT_EXPORT_METHOD(confirmAccountActivationByPin:(NSString *)pinCode email:(NSString *)email response:(RCTResponseSenderBlock)response)
+{
+    [SNRClient confirmAccountActivationByPin:pinCode email:email success:^(BOOL isSuccess) {
+        [self executeSuccessCallbackResponse:response data:@1];
+    } failure:^(NSError *error) {
+        [self executeFailureCallbackResponse:response error:error];
+    }];
 }
 
 //signIn(email: string, password: string, onSuccess: () => void, onError: (error: Error) => void)
@@ -274,6 +410,62 @@ RCT_EXPORT_METHOD(signIn:(NSString *)email password:(NSString *)password respons
     }];
 }
 
+//signInConditionally(email: string, password: string, onSuccess: (result: ClientConditionalAuthResult) => void, onError: (error: Error) => void)
+
+RCT_EXPORT_METHOD(signInConditionally:(NSString *)email password:(NSString *)password response:(RCTResponseSenderBlock)response)
+{
+    [SNRClient signInConditionallyWithEmail:email password:password success:^(SNRClientAuthenticationResult *authResult) {
+        NSDictionary *authResultDictionary = [self dictionaryWithClientConditionalAuthResult:authResult];
+        if (authResultDictionary != nil) {
+            [self executeSuccessCallbackResponse:response data:authResultDictionary];
+        } else {
+            [self executeDefaultFailureCallbackResponse:response];
+        }
+        
+        [self executeSuccessCallbackResponse:response data:@1];
+    } failure:^(NSError *error) {
+        [self executeFailureCallbackResponse:response error:error];
+    }];
+}
+
+
+//authenticate(token: string, provider: ClientIdentityProvider, context: ClientConditionalAuthContext, onSuccess: () => void, onError: (error: Error) => void)
+
+RCT_EXPORT_METHOD(authenticate:(NSString *)token provider:(NSString *)provider context:(NSDictionary *)contextDictionary response:(RCTResponseSenderBlock)response)
+{
+    NSString *authID = contextDictionary[@"authID"];
+    SNRClientIdentityProvider clientIdentityProvider = SNR_StringToClientIdentityProvider(provider);
+    SNRClientAuthenticationContext *context = [self modelClientAuthenticationContextWithDictionary:contextDictionary];
+    
+    [SNRClient authenticateWithToken:token clientIdentityProvider:clientIdentityProvider authID:authID context:context success:^(BOOL isSuccess) {
+        [self executeSuccessCallbackResponse:response data:@1];
+    } failure:^(NSError *error) {
+        [self executeFailureCallbackResponse:response error:error];
+    }];
+}
+    
+//authenticateConditionally(token: string, provider: ClientIdentityProvider, context: ClientConditionalAuthContext, onSuccess: (result: ClientConditionalAuthResult) => void, onError: (error: Error) => void)
+
+RCT_EXPORT_METHOD(authenticateConditionally:(NSString *)token provider:(NSString *)provider context:(NSDictionary *)contextDictionary response:(RCTResponseSenderBlock)response)
+{
+    NSString *authID = contextDictionary[@"authID"];
+    SNRClientIdentityProvider clientIdentityProvider = SNR_StringToClientIdentityProvider(provider);
+    SNRClientConditionalAuthenticationContext *context = [self modelClientConditionalAuthenticationContextWithDictionary:contextDictionary];
+    
+    [SNRClient authenticateConditionallyWithToken:token clientIdentityProvider:clientIdentityProvider authID:authID context:context success:^(SNRClientAuthenticationResult *authResult) {
+        NSDictionary *authResultDictionary = [self dictionaryWithClientConditionalAuthResult:authResult];
+        if (authResultDictionary != nil) {
+            [self executeSuccessCallbackResponse:response data:authResultDictionary];
+        } else {
+            [self executeDefaultFailureCallbackResponse:response];
+        }
+        
+        [self executeSuccessCallbackResponse:response data:@1];
+    } failure:^(NSError *error) {
+        [self executeFailureCallbackResponse:response error:error];
+    }];
+}
+    
 //authenticateByOAuth(accessToken: string, context: ClientOAuthAuthenticationContext, onSuccess: () => void, onError: (error: Error) => void)
 
 RCT_EXPORT_METHOD(authenticateByOAuth:(NSString *)accessToken context:(NSDictionary *)contextDictionary response:(RCTResponseSenderBlock)response)

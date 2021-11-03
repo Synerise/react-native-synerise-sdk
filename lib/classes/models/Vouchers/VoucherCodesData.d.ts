@@ -1,5 +1,5 @@
 import { BaseModel } from '../BaseModel';
-interface IVoucherCodeData {
+interface IVoucherCodesData {
     code: string;
     status: string;
     clientUuid: string;
@@ -10,7 +10,7 @@ interface IVoucherCodeData {
     createdAt: number;
     updatedAt: number;
 }
-declare class VoucherCodeData extends BaseModel {
+declare class VoucherCodesData extends BaseModel {
     code: string;
     status: string;
     clientUuid: string;
@@ -20,6 +20,6 @@ declare class VoucherCodeData extends BaseModel {
     assignedAt?: Date;
     createdAt: Date;
     updatedAt: Date;
-    constructor(modelObject: IVoucherCodeData);
+    constructor(modelObject: IVoucherCodesData);
 }
-export { IVoucherCodeData, VoucherCodeData };
+export { IVoucherCodesData, VoucherCodesData };

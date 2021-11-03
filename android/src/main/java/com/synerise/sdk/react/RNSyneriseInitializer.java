@@ -43,5 +43,6 @@ public class RNSyneriseInitializer {
     protected void notifyModules() {
         RNNotifications.initializeNotifications();
         RNInjector.initializeInjector();
+        RNClient.initializeClient();
     }
 }

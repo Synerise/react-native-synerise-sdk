@@ -10,7 +10,7 @@ interface IScreenViewResponse {
     descriptionText?: string;
     data: any;
     version: string;
-    parentVersion: string;
+    parentVersion?: string;
     createdAt: number;
     updatedAt: number;
     deletedAt?: number;
@@ -25,7 +25,7 @@ declare class ScreenViewResponse extends BaseModel {
     descriptionText?: string;
     data: any;
     version: string;
-    parentVersion: string;
+    parentVersion?: string;
     createdAt: Date;
     updatedAt: Date;
     deletedAt?: Date;

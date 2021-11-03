@@ -104,6 +104,17 @@ RCT_EXPORT_MODULE();
     [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseWalkthroughHiddenEvent object:nil userInfo:nil];
 }
 
+#pragma mark - RNSyneriseManagerDelegate
+
+- (void)applicationJavaScriptDidLoad {
+    // nothing for yet
+}
+
+- (void)syneriseJavaScriptDidLoad {
+    [SNRInjector setBannerDelegate:self];
+    [SNRInjector setWalkthroughDelegate:self];
+}
+
 #pragma mark - SNRInjectorBannerDelegate
 
 - (BOOL)SNR_shouldBannerAppear:(NSDictionary *)bannerDictionary {
@@ -152,17 +163,6 @@ RCT_EXPORT_MODULE();
     return @{
         RNInjectorEventObjectDeepLinkKey: deepLink
     };
-}
-
-#pragma mark - RNSyneriseManagerDelegate
-
-- (void)applicationJavaScriptDidLoad {
-    // nothing for yet
-}
-
-- (void)syneriseJavaScriptDidLoad {
-    [SNRInjector setBannerDelegate:self];
-    [SNRInjector setWalkthroughDelegate:self];
 }
 
 #pragma mark - JS Module
