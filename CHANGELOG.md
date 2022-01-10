@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.9.19] - 2022-01-05
+
+### Changed
+- Update of native SDK's dependencies.
+
+
 ## [0.9.19] - 2021-11-03
 
 ### Added

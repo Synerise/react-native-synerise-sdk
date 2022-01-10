@@ -219,11 +219,10 @@ RCT_EXPORT_MODULE();
 
 #pragma mark - JS Mapping
 
-- (nullable NSDictionary *)dictionaryWithClientConditionalAuthResult:(nullable SNRClientAuthenticationResult *)model {
+- (nullable NSDictionary *)dictionaryWithClientConditionalAuthResult:(nullable SNRClientConditionalAuthResult *)model {
     if (model != nil) {
         NSMutableDictionary *dictionary = [@{} mutableCopy];
-        [dictionary setString:model.token forKey:@"token"];
-        [dictionary setString:SNR_ClientAuthenticationStatusToString(model.status) forKey:@"status"];
+        [dictionary setString:SNR_ClientConditionalAuthStatusToString(model.status) forKey:@"status"];
         [dictionary setArray:model.conditions forKey:@"conditions"];
         
         return dictionary;
@@ -414,7 +413,7 @@ RCT_EXPORT_METHOD(signIn:(NSString *)email password:(NSString *)password respons
 
 RCT_EXPORT_METHOD(signInConditionally:(NSString *)email password:(NSString *)password response:(RCTResponseSenderBlock)response)
 {
-    [SNRClient signInConditionallyWithEmail:email password:password success:^(SNRClientAuthenticationResult *authResult) {
+    [SNRClient signInConditionallyWithEmail:email password:password success:^(SNRClientConditionalAuthResult *authResult) {
         NSDictionary *authResultDictionary = [self dictionaryWithClientConditionalAuthResult:authResult];
         if (authResultDictionary != nil) {
             [self executeSuccessCallbackResponse:response data:authResultDictionary];
@@ -452,7 +451,7 @@ RCT_EXPORT_METHOD(authenticateConditionally:(NSString *)token provider:(NSString
     SNRClientIdentityProvider clientIdentityProvider = SNR_StringToClientIdentityProvider(provider);
     SNRClientConditionalAuthenticationContext *context = [self modelClientConditionalAuthenticationContextWithDictionary:contextDictionary];
     
-    [SNRClient authenticateConditionallyWithToken:token clientIdentityProvider:clientIdentityProvider authID:authID context:context success:^(SNRClientAuthenticationResult *authResult) {
+    [SNRClient authenticateConditionallyWithToken:token clientIdentityProvider:clientIdentityProvider authID:authID context:context success:^(SNRClientConditionalAuthResult *authResult) {
         NSDictionary *authResultDictionary = [self dictionaryWithClientConditionalAuthResult:authResult];
         if (authResultDictionary != nil) {
             [self executeSuccessCallbackResponse:response data:authResultDictionary];
