@@ -3,6 +3,5 @@ declare class BaseModule {
     constructor();
     configure(configuration: object): void;
     isAlwaysActive(): boolean;
-    private assertSyneriseInitialized;
 }
 export { BaseModule };

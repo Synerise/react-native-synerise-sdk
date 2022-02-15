@@ -3,7 +3,7 @@ import { Error } from './../../classes/types/Error';
 interface INotificationsListener {
     onRegistrationToken?(token: string): void;
     onRegistrationRequired?(): void;
-    onNotification(payload: object): void;
+    onNotification(payload: object, actionIdentifier: string | null): void;
 }
 declare class NotificationsModule extends Module {
     private static _instance;
@@ -26,6 +26,6 @@ declare class NotificationsModule extends Module {
     isSilentSDKCommand(payload: object): boolean;
     isNotificationEncrypted(payload: object): boolean;
     decryptNotification(payload: object): object | null;
-    handleNotification(payload: object): void;
+    handleNotification(payload: object, actionIdentifier: string | null): void;
 }
 export { NotificationsModule, INotificationsListener };

@@ -1,6 +1,8 @@
 package com.synerise.sdk.react;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
@@ -41,6 +43,7 @@ public class RNNotifications extends RNBaseModule {
     protected static OnRegisterForPushListener registerNativeForPushListener;
     private static final String TOKEN_KEY = "token";
     private static final String PAYLOAD_KEY = "payload";
+    private static final String ACTION_IDENTIFIER_KEY = "actionIdentifier";
     private static final String REGISTRATION_TOKEN_LISTENER_KEY = "REGISTRATION_TOKEN_LISTENER_KEY";
     private static final String NOTIFICATION_LISTENER_KEY = "NOTIFICATION_LISTENER_KEY";
     private static final String REGISTRATION_REQUIRED_LISTENER_KEY = "REGISTRATION_REQUIRED_LISTENER_KEY";
@@ -147,8 +150,14 @@ public class RNNotifications extends RNBaseModule {
     }
 
     public static void onNotificationReceive(Map<String, String> data) {
-        dataToSend.add(data);
-        flushNotifications();
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dataToSend.add(data);
+                flushNotifications();
+            }
+        }, 3000);
     }
 
     public static void onNotificationReceive(Bundle bundle) {
@@ -220,6 +229,7 @@ public class RNNotifications extends RNBaseModule {
         HashMap<String, String> dataAsHashmap = new HashMap<>(data);
         WritableMap pushData = Arguments.createMap();
         pushData.putMap(PAYLOAD_KEY, MapUtil.stringMapToWritableMap(dataAsHashmap));
+        pushData.putNull(ACTION_IDENTIFIER_KEY);
         sendEventToJs(NOTIFICATION_LISTENER_VALUE, pushData, reactApplicationContext);
     }
 

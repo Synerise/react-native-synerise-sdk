@@ -53,12 +53,12 @@ declare class ClientModule extends Module {
     authenticateByAppleSignInIfRegistered(identityToken: string, authID: string, onSuccess: () => void, onError: (error: Error) => void): void;
     isSignedIn(): boolean;
     signOut(): void;
-    destroySession(): void;
     refreshToken(onSuccess: () => void, onError: (error: Error) => void): void;
     retrieveToken(onSuccess: (token: Token) => void, onError: (error: Error) => void): void;
     getUUID(): string;
     regenerateUUID(): void;
     regenerateUUIDWithClientIdentifier(clientIdentifier: string): void;
+    destroySession(): void;
     getAccount(onSuccess: (clientAccountInformation: ClientAccountInformation) => void, onError: (error: Error) => void): void;
     updateAccount(context: ClientAccountUpdateContext, onSuccess: () => void, onError: (error: Error) => void): void;
     requestPasswordReset(email: string, onSuccess: () => void, onError: (error: Error) => void): void;

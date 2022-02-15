@@ -2,7 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.9.19] - 2022-01-05
+## [0.10.0] - 2022-02-15
+
+### Fixed
+- Android notifications not showing when app is killed.
+
+### Added
+- React Native Reload support.
+- [iOS] Notification responses (tap on push, push buttons etc.) are supported now.
 
 ### Changed
 - Update of native SDK's dependencies.

@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)didChangeRegistrationToken:(NSString *)registrationToken;
 + (void)didReceiveNotification:(NSDictionary *)userInfo;
++ (void)didReceiveNotification:(NSDictionary *)userInfo actionIdentifier:(nullable NSString *)actionIdentifier;
 
 - (void)executeRegistrationRequired;
 

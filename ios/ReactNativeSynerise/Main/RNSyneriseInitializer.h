@@ -17,8 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign, nonatomic, readwrite) BOOL debugModeEnabled;
 @property (assign, nonatomic, readwrite) BOOL crashHandlingEnabled;
 
-- (void)initialize;
-- (void)initialized;
+- (void)initializeSynerise;
+- (void)syneriseInitialized;
 
 @end
 

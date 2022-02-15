@@ -75,7 +75,7 @@ public class RNSynerise extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void initialize() {
+  public void initializeSynerise() {
     if (initializer != null) {
       initializer.initialize(app);
       WritableMap map = Arguments.createMap();
@@ -84,13 +84,18 @@ public class RNSynerise extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void initialized() {
+  public void syneriseInitialized() {
     initializer.notifyModules();
   }
 
   @ReactMethod
   public void changeClientApiKey(String apiKey) {
     Client.changeApiKey(apiKey);
+  }
+
+  @ReactMethod(isBlockingSynchronousMethod = true)
+  public boolean isSyneriseInitialized() {
+    return RNSyneriseInitializer.isInitialized;
   }
 
   private void sendEventToJs(String eventName, @Nullable WritableMap data, ReactApplicationContext context) {

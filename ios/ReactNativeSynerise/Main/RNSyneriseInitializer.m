@@ -12,7 +12,7 @@
 
 #pragma mark - Public
 
-- (void)initialize {
+- (void)initializeSynerise {
     dispatch_sync(dispatch_get_main_queue(), ^{
         [self overwriteDefaultSettings];
         
@@ -23,7 +23,7 @@
     });
 }
 
-- (void)initialized {
+- (void)syneriseInitialized {
     [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseJavaScriptDidLoadNotification object:nil userInfo:@{}];
 }
 

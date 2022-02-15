@@ -17,15 +17,27 @@ static NSString * const RNNotificationsEventListenerNotificationKey = @"NOTIFICA
 
 static NSString * const RNNotificationsEventObjectTokenKey = @"token";
 static NSString * const RNNotificationsEventObjectPayloadKey = @"payload";
+static NSString * const RNNotificationsEventObjectActionIdentifierKey = @"actionIdentifier";
 
 NS_ASSUME_NONNULL_BEGIN
+
+@interface RNNotificationItem: NSObject
+
+@property (copy, nonatomic, nonnull, readwrite) NSDictionary *userInfo;
+@property (copy, nonatomic, nullable, readwrite) NSString *actionIdentifier;
+
+@end
+
+@implementation RNNotificationItem
+
+@end
 
 @interface RNNotifications () <RNSyneriseManagerDelegate>
 
 @property (strong, nonatomic, nonnull, readonly) dispatch_queue_t queue;
 
 @property (copy, nonatomic, nullable, readwrite) NSString *registrationToken;
-@property (copy, nonatomic, nonnull, readonly) NSMutableArray<NSDictionary *> *pendingNotifications;
+@property (copy, nonatomic, nonnull, readonly) NSMutableArray<RNNotificationItem *> *pendingNotificationItems;
 
 @end
 
@@ -44,7 +56,11 @@ RCT_EXPORT_MODULE();
 }
 
 + (void)didReceiveNotification:(NSDictionary *)userInfo {
-    [moduleInstance didReceiveNotification:userInfo];
+    [moduleInstance didReceiveNotification:userInfo actionIdentifier:nil];
+}
+
++ (void)didReceiveNotification:(NSDictionary *)userInfo actionIdentifier:(nullable NSString *)actionIdentifier {
+    [moduleInstance didReceiveNotification:userInfo actionIdentifier:actionIdentifier];
 }
 
 #pragma mark - Lifecycle
@@ -58,7 +74,7 @@ RCT_EXPORT_MODULE();
     
     if (self) {
         _queue = dispatch_queue_create(RNNotificationsQueueLabel, DISPATCH_QUEUE_SERIAL);
-        _pendingNotifications = [@[] mutableCopy];
+        _pendingNotificationItems = [@[] mutableCopy];
 
         _isProcessing = NO;
         
@@ -88,12 +104,33 @@ RCT_EXPORT_MODULE();
     }
 }
 
-- (void)didReceiveNotification:(NSDictionary *)userInfo {
-    if ([self isProcessing] == YES) {
-        [self sendNotificationToJS:userInfo];
-    } else {
-        [self addPendingNotification:userInfo];
+- (void)didReceiveNotification:(NSDictionary *)userInfo actionIdentifier:(nullable NSString *)actionIdentifier {
+    RNNotificationItem *notificationItem = [self notificationItemWithUserInfo:userInfo andActionIdentifier:actionIdentifier];
+    if (notificationItem == nil) {
+        return;
     }
+    
+    if ([self isProcessing] == YES) {
+        [self sendNotificationItemToJS:notificationItem];
+    } else {
+        [self addPendingNotificationItem:notificationItem];
+    }
+}
+
+- (nullable RNNotificationItem *)notificationItemWithUserInfo:(NSDictionary *)userInfo andActionIdentifier:(nullable NSString *)actionIdentifier {
+    RNNotificationItem *notificationItem = [RNNotificationItem new];
+    
+    if (userInfo != nil) {
+        notificationItem.userInfo = userInfo;
+    } else {
+        return nil;
+    }
+    
+    if (actionIdentifier != nil) {
+        notificationItem.actionIdentifier = actionIdentifier;
+    }
+    
+    return notificationItem;
 }
 
 - (BOOL)canStartProcessing {
@@ -118,28 +155,28 @@ RCT_EXPORT_MODULE();
             [self sendRegistrationTokenToJS:registrationToken];
         }
         
-        [self flushPendingNotifications];
+        [self flushPendingNotificationItems];
     }
 }
 
-- (void)addPendingNotification:(NSDictionary *)userInfo {
+- (void)addPendingNotificationItem:(RNNotificationItem *)notificationItem {
     dispatch_async(self.queue, ^{
-        [self.pendingNotifications addObject:userInfo];
+        [self.pendingNotificationItems addObject:notificationItem];
     });
 }
 
-- (void)flushPendingNotifications {
+- (void)flushPendingNotificationItems {
     dispatch_async(self.queue, ^{
-        NSArray *pendingNotificationsCopied = [self.pendingNotifications copy];
-        NSInteger countNotifications = [pendingNotificationsCopied count];
-        
-        for (NSInteger i = 0; i < countNotifications; i++) {
-            NSDictionary *notification = pendingNotificationsCopied[i];
-            
-            [self sendNotificationToJS:notification];
+        NSArray *pendingNotificationItemsCopied = [self.pendingNotificationItems copy];
+        NSInteger countNotificationItems = [pendingNotificationItemsCopied count];
+
+        for (NSInteger i = 0; i < countNotificationItems; i++) {
+            RNNotificationItem *notificationItem = pendingNotificationItemsCopied[i];
+
+            [self sendNotificationItemToJS:notificationItem];
         }
-        
-        [self.pendingNotifications removeAllObjects];
+
+        [self.pendingNotificationItems removeAllObjects];
     });
 }
 
@@ -152,8 +189,8 @@ RCT_EXPORT_MODULE();
     [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseRegistrationRequiredEvent object:nil userInfo:nil];
 }
 
-- (void)sendNotificationToJS:(NSDictionary *)userInfo {
-    id eventBody = [self dictionaryWithNotification:userInfo];
+- (void)sendNotificationItemToJS:(RNNotificationItem *)notificationItem {
+    id eventBody = [self dictionaryWithNotificationItem:notificationItem];
     [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseNotificationEvent object:nil userInfo:eventBody];
 }
 
@@ -165,20 +202,23 @@ RCT_EXPORT_MODULE();
     };
 }
 
-- (NSDictionary *)dictionaryWithNotification:(NSDictionary *)userInfo {
+- (NSDictionary *)dictionaryWithNotificationItem:(RNNotificationItem *)notificationItem {
     return @{
-        RNNotificationsEventObjectPayloadKey: userInfo
+        RNNotificationsEventObjectPayloadKey: notificationItem.userInfo,
+        RNNotificationsEventObjectActionIdentifierKey: notificationItem.actionIdentifier ?: [NSNull null]
     };
 }
 
 #pragma mark - RNSyneriseManagerDelegate
 
 - (void)applicationJavaScriptDidLoad {
-    [self startProcessingIfPossible];
+    // nothing for yet
 }
 
 - (void)syneriseJavaScriptDidLoad {
-    [self startProcessingIfPossible];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self performSelector:@selector(startProcessingIfPossible) withObject:nil afterDelay:0.25f];
+    });
 }
 
 #pragma mark - JS Module
@@ -269,6 +309,15 @@ RCT_EXPORT_METHOD(handleNotification:(NSDictionary *)userInfo)
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [SNRSynerise handleNotification:userInfo];
+    });
+}
+
+//handleNotification(payload: object, actionIdentifier: string)
+
+RCT_EXPORT_METHOD(handleNotification:(NSDictionary *)userInfo actionIdentifier:(NSString *)actionIdentifier)
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [SNRSynerise handleNotification:userInfo actionIdentifier:actionIdentifier];
     });
 }
 

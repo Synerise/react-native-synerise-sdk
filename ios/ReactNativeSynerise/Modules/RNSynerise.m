@@ -26,6 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 static RNSynerise *moduleInstance;
 
+static BOOL isInitialized = NO;
+
 RCT_EXPORT_MODULE();
 
 #pragma mark - Lifecycle
@@ -121,20 +123,21 @@ RCT_EXPORT_METHOD(withCrashHandlingEnabled:(BOOL)crashHandlingEnabled) {
     self.initializer.crashHandlingEnabled = crashHandlingEnabled;
 }
 
-RCT_EXPORT_METHOD(initialize) {
-    static BOOL isInitialized = NO;
-    
+RCT_EXPORT_METHOD(initializeSynerise) {
     if (isInitialized == YES) {
-        [self sendInitializationSuccessToJS];
         return;
     }
     
-    [self.initializer initialize];
+    [self.initializer initializeSynerise];
     isInitialized = YES;
 }
 
-RCT_EXPORT_METHOD(initialized) {
-    [self.initializer initialized];
+RCT_EXPORT_METHOD(syneriseInitialized) {
+    [self.initializer syneriseInitialized];
+}
+
+RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(isSyneriseInitialized) {
+    return [NSNumber numberWithBool:isInitialized];
 }
 
 RCT_EXPORT_METHOD(changeClientApiKey:(NSString *)clientApiKey) {
