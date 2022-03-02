@@ -2,10 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.10.0] - 2022-02-15
+## [0.10.1] - 2022-03-01
 
 ### Fixed
-- Android notifications not showing when app is killed.
+- [Android] Added action_view intent for deeplinks on Android.
+- [iOS] Notification category collision when Simple Push campaign contains configured buttons and Rich Media (Single Image).
+
+### Changed
+- Update of native SDK's dependencies.
+
+
+## [0.10.0] - 2022-02-15
 
 ### Added
 - React Native Reload support.
