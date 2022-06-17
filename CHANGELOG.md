@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.10.3] - 2022-06-17
+
+### Fixed
+- [iOS] Potential issue with sending push.view events in notification services.
+- [iOS] Some clients have issue with correct value of sdkVersion in AppStarted event, which propably occurs depending to project settings. We have changed it to save hardcoded value so it will solve those issues permanently.
+
+### Changed
+- Update of native SDK's dependencies.
+
+
 ## [0.10.2] - 2022-04-27
 
 ### Changed
