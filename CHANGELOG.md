@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.10.4] - 2022-07-15
+
+### Fixed
+- [Android] Fix issue with push notification click tracker.
+
+
 ## [0.10.3] - 2022-06-17
 
 ### Fixed
