@@ -714,12 +714,12 @@ public class RNClient extends RNBaseModule {
     private Agreements agreementsMapper(ReadableMap map) {
         if (map != null) {
             Agreements agreements = new Agreements();
-            agreements.setBluetooth(map.getBoolean("bluetooth"));
-            agreements.setEmail(map.getBoolean("email"));
-            agreements.setPush(map.getBoolean("push"));
-            agreements.setRfid(map.getBoolean("rfid"));
-            agreements.setWifi(map.getBoolean("wifi"));
-            agreements.setSms(map.getBoolean("sms"));
+            if (map.hasKey("bluetooth")) agreements.setBluetooth(map.getBoolean("bluetooth"));
+            if (map.hasKey("email")) agreements.setEmail(map.getBoolean("email"));
+            if (map.hasKey("push")) agreements.setPush(map.getBoolean("push"));
+            if (map.hasKey("rfid")) agreements.setRfid(map.getBoolean("rfid"));
+            if (map.hasKey("wifi")) agreements.setWifi(map.getBoolean("wifi"));
+            if (map.hasKey("sms")) agreements.setSms(map.getBoolean("sms"));
 
             return agreements;
         } else {

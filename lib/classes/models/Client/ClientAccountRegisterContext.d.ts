@@ -30,7 +30,7 @@ declare class ClientAccountRegisterContext extends BaseModel {
     province?: string;
     zipCode?: string;
     countryCode?: string;
-    agreements?: ClientAgreements;
+    agreements: ClientAgreements;
     attributes?: object;
     constructor(email: string, password: string, modelObject?: IClientAccountRegisterContext);
     toObject(): object;

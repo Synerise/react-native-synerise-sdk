@@ -8,12 +8,13 @@ interface IClientAgreements {
     wifi?: boolean;
 }
 declare class ClientAgreements extends BaseModel {
-    email: boolean;
-    sms: boolean;
-    push: boolean;
-    bluetooth: boolean;
-    rfid: boolean;
-    wifi: boolean;
+    email?: boolean;
+    sms?: boolean;
+    push?: boolean;
+    bluetooth?: boolean;
+    rfid?: boolean;
+    wifi?: boolean;
     constructor(modelObject?: IClientAgreements);
+    toObject(): object;
 }
 export { IClientAgreements, ClientAgreements };

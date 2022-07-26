@@ -204,12 +204,30 @@ RCT_EXPORT_MODULE();
 - (nullable SNRClientAgreements *)modelClientAgreementsWithDictionary:(nullable NSDictionary *)dictionary {
     if (dictionary != nil) {
         SNRClientAgreements *model = [SNRClientAgreements new];
-        model.email = [dictionary getBoolForKey:@"email"];
-        model.sms = [dictionary getBoolForKey:@"sms"];
-        model.push = [dictionary getBoolForKey:@"push"];
-        model.bluetooth = [dictionary getBoolForKey:@"bluetooth"];
-        model.rfid = [dictionary getBoolForKey:@"rfid"];
-        model.wifi = [dictionary getBoolForKey:@"wifi"];
+        
+        if ([dictionary isValueNotNilForKey:@"email"] == YES) {
+            model.email = [dictionary getBoolForKey:@"email"];
+        }
+        
+        if ([dictionary isValueNotNilForKey:@"sms"] == YES) {
+            model.sms = [dictionary getBoolForKey:@"sms"];
+        }
+        
+        if ([dictionary isValueNotNilForKey:@"push"] == YES) {
+            model.push = [dictionary getBoolForKey:@"push"];
+        }
+        
+        if ([dictionary isValueNotNilForKey:@"bluetooth"] == YES) {
+            model.bluetooth = [dictionary getBoolForKey:@"bluetooth"];
+        }
+        
+        if ([dictionary isValueNotNilForKey:@"rfid"] == YES) {
+            model.rfid = [dictionary getBoolForKey:@"rfid"];
+        }
+        
+        if ([dictionary isValueNotNilForKey:@"wifi"] == YES) {
+            model.wifi = [dictionary getBoolForKey:@"wifi"];
+        }
         
         return model;
     }

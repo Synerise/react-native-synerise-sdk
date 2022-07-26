@@ -38,7 +38,7 @@ declare class ClientAccountUpdateContext extends BaseModel {
     province?: string;
     zipCode?: string;
     countryCode?: string;
-    agreements?: ClientAgreements;
+    agreements: ClientAgreements;
     attributes?: object;
     constructor(modelObject?: IClientAccountUpdateContext);
     toObject(): object;

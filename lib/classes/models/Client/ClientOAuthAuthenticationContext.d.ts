@@ -7,7 +7,7 @@ interface IClientOAuthAuthenticationContext {
 }
 declare class ClientOAuthAuthenticationContext extends BaseModel {
     authID?: string;
-    agreements?: ClientAgreements;
+    agreements: ClientAgreements;
     attributes?: object;
     constructor(modelObject?: IClientOAuthAuthenticationContext);
     toObject(): object;

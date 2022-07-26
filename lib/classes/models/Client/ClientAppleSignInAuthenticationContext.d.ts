@@ -7,7 +7,7 @@ interface IClientAppleSignInAuthenticationContext {
 }
 declare class ClientAppleSignInAuthenticationContext extends BaseModel {
     authID?: string;
-    agreements?: ClientAgreements;
+    agreements: ClientAgreements;
     attributes?: object;
     constructor(modelObject?: IClientAppleSignInAuthenticationContext);
     toObject(): object;

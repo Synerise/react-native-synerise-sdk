@@ -3,11 +3,13 @@ interface ModelMappableConstructor<M> {
 }
 interface ModelMappable {
     toObject(): object;
+    toObjectIfNotEmpty(): object | undefined;
 }
 declare abstract class BaseModel implements ModelMappable {
     constructor();
     constructor(modelObject: object);
     toObject(): object;
+    toObjectIfNotEmpty(): object | undefined;
 }
 declare type ModelMappingFunction = (modelObject: object) => BaseModel | null;
 declare class ModelMapper {

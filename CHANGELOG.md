@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.10.5] - 2022-07-26
+
+### Fixed
+- Fix issue with `ClientAgreements` model with conversion for native modules communication.
+
+
 ## [0.10.4] - 2022-07-15
 
 ### Fixed

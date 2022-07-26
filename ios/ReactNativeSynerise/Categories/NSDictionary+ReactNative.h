@@ -10,6 +10,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NSDictionary (ReactNative)
 
+- (BOOL)isValueNotNilForKey:(NSString *)key;
+
 - (nullable NSString *)getStringForKey:(NSString *)key;
 - (nullable NSNumber *)getNumberForKey:(NSString *)key;
 - (nullable NSArray *)getArrayForKey:(NSString *)key;

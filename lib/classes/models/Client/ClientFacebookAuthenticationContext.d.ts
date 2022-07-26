@@ -7,7 +7,7 @@ interface IClientFacebookAuthenticationContext {
 }
 declare class ClientFacebookAuthenticationContext extends BaseModel {
     authID?: string;
-    agreements?: ClientAgreements;
+    agreements: ClientAgreements;
     attributes?: object;
     constructor(modelObject?: IClientFacebookAuthenticationContext);
     toObject(): object;
