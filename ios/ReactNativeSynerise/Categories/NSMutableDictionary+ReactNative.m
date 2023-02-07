@@ -45,7 +45,12 @@
 }
 
 - (void)setDate:(NSDate *)date forKey:(NSString *)key {
-    [self setObject:[NSNumber numberWithDouble:[date timeIntervalSince1970]] properClass:NSNumber.class forKey:key];
+    NSNumber *dateAsNumber;
+    if (date != nil) {
+        dateAsNumber = [NSNumber numberWithDouble:[date timeIntervalSince1970]];
+    }
+    
+    [self setObject:dateAsNumber properClass:NSNumber.class forKey:key];
 }
 
 #pragma mark - Private

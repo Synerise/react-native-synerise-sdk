@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.11.0] - 2023-02-07
+
+### Fixed
+- [Android] Fix initialization with custom url.
+
+### Changed
+- Update of native SDK's dependencies.
+- Improvements to stability.
+
+
 ## [0.10.5] - 2022-07-26
 
 ### Fixed

@@ -9,7 +9,7 @@ import com.synerise.sdk.core.types.enums.HostApplicationType;
 public class RNSyneriseInitializer {
 
     public String clientApiKey;
-    public String baseUrl;
+    public String baseUrl = null;
     public Boolean isDebugModeEnabled;
     public Boolean isCrashHandlingEnabled;
     public static volatile boolean isInitialized = false;
@@ -19,7 +19,7 @@ public class RNSyneriseInitializer {
             prepareDefaultSettings();
 
             Synerise.Builder.with(app, clientApiKey, getApplicationName(app))
-                    .baseUrl(null)
+                    .baseUrl(baseUrl)
                     .syneriseDebugMode(isDebugModeEnabled)
                     .crashHandlingEnabled(isCrashHandlingEnabled)
                     .pushRegistrationRequired(RNNotifications.getNativePushListener())

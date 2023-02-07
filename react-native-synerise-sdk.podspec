@@ -1,8 +1,8 @@
 require 'json'
 
-package = JSON.parse(File.read('./package.json'))
+package = JSON.parse(File.read('./../package.json'))
 
-SYNERISE_SDK_FRAMEWORK_VERSION = '3.11.2'
+SYNERISE_SDK_FRAMEWORK_VERSION = '3.12.0'
 
 Pod::Spec.new do |s|
   s.name          = package['name']

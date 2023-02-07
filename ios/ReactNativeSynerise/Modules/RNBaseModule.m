@@ -10,7 +10,7 @@
 
 static NSString * const RNDefaultErrorDomain = @"com.synerise.sdk.react.error";
 static NSInteger const RNDefaultErrorCode = -1;
-static NSString * const RNDefaultErrorMessage = @"";
+static NSString * const RNDefaultErrorMessage = @"An unknown error has occurred";
 
 static NSString * const RNErrorObjectCode = @"code";
 static NSString * const RNErrorObjectMessage = @"message";

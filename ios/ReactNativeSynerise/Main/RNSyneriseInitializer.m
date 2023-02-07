@@ -13,7 +13,7 @@
 #pragma mark - Public
 
 - (void)initializeSynerise {
-    dispatch_sync(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
         [self overwriteDefaultSettings];
         
         [SNRSynerise initializeWithClientApiKey:self.clientApiKey andBaseUrl:self.baseURL];

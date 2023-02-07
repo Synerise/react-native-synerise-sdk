@@ -4,8 +4,8 @@ ext.versions = [
         'minSdk'     : 21,
         'compileSdk' : 31,
         'targetSdk'  : 31,
-        'versionCode': 22,
-        'versionName': "0.10.5"
+        'versionCode': 23,
+        'versionName': "0.11.0"
 ]
 
 buildscript {
@@ -24,7 +24,6 @@ buildscript {
 
 android {
     compileSdkVersion 31
-    buildToolsVersion "28.0.3"
 
     defaultConfig {
         minSdkVersion 21
@@ -46,7 +45,6 @@ android {
 }
 
 repositories {
-    mavenLocal()
     maven {
         // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
         url "$projectDir/../../../node_modules/react-native/android"
@@ -58,6 +56,7 @@ repositories {
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
+    implementation "com.squareup.okhttp3:logging-interceptor:4.9.1"
     api 'com.synerise.sdk:synerise-mobile-sdk:4.6.2'
 }
 

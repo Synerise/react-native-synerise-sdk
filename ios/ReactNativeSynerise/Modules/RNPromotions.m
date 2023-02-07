@@ -247,7 +247,7 @@ RCT_EXPORT_MODULE();
         NSMutableDictionary *dictionary = [@{} mutableCopy];
         
         [dictionary setString:model.message forKey:@"message"];
-        [dictionary setDictionary:[self dictionaryWithAssignVoucherData:model.assignVoucherData] forKey:@"assignVoucherData"];
+        [dictionary setDictionary:[self dictionaryWithAssignVoucherData:model.assignVoucherData] forKey:@"data"];
         
         return dictionary;
     }
@@ -264,7 +264,7 @@ RCT_EXPORT_MODULE();
             [voucherCodesArray addObject:[self dictionaryWithVoucherCodesData:voucherCodesDataModel]];
         }
         
-        [dictionary setArray:voucherCodesArray forKey:@"items"];
+        [dictionary setArray:voucherCodesArray forKey:@"data"];
         
         return dictionary;
     }
