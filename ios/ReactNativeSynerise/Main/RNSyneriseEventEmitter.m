@@ -27,6 +27,11 @@ RCT_EXPORT_MODULE();
         kRNSyneriseWalkthroughLoadingErrorEvent,
         kRNSyneriseWalkthroughPresentedEvent,
         kRNSyneriseWalkthroughHiddenEvent,
+        kRNSyneriseInAppMessagePresentedKey,
+        kRNSyneriseInAppMessageHiddenKey,
+        kRNSyneriseInAppMessageUrlActionKey,
+        kRNSyneriseInAppMessageDeeplinkActionKey,
+        kRNSyneriseInAppMessageCustomActionKey,
         kRNSyneriseClientIsSignedInEvent,
         kRNSyneriseClientIsSignedOutEvent
     ];
@@ -42,6 +47,7 @@ RCT_EXPORT_MODULE();
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseUrlActionEvent object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseDeepLinkActionEvent object:nil];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseBannerPresentedEvent object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseBannerHiddenEvent object:nil];
     
@@ -49,6 +55,12 @@ RCT_EXPORT_MODULE();
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseWalkthroughLoadingErrorEvent object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseWalkthroughPresentedEvent object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseWalkthroughHiddenEvent object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseInAppMessagePresentedKey object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseInAppMessageHiddenKey object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseInAppMessageUrlActionKey object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseInAppMessageDeeplinkActionKey object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseInAppMessageCustomActionKey object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseClientIsSignedInEvent object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseClientIsSignedOutEvent object:nil];

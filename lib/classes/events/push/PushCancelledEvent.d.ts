@@ -1,5 +1,5 @@
-import { Event } from '../Event';
-declare class PushCancelledEvent extends Event {
+import { CustomEvent } from '../CustomEvent';
+declare class PushCancelledEvent extends CustomEvent {
     constructor(label: string, parameters?: object);
 }
 export { PushCancelledEvent };

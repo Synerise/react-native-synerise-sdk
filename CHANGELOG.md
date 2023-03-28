@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.12.0] - 2023-03-27
+
+### Fixed
+- Voucher objects mapping.
+
+### Changed
+- `Token` object structure.
+- Update of native SDK's dependencies.
+- Improvements to stability.
+
+### Added
+- In-app messaging support.
+
+### Removed
+- `Injector.fetchBanners` method.
+- `Injector.getBanners` method.
+- `Injector.showBanner` method.
+
 ## [0.11.0] - 2023-02-07
 
 ### Fixed

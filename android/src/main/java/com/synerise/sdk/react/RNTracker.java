@@ -42,7 +42,7 @@ public class RNTracker extends RNBaseModule {
     //send(event: Event)
     @ReactMethod
     public void send(ReadableMap map) {
-        String type = map.getString("type");
+        String type = "custom";
         String action = null;
         if (map.getType("action") != ReadableType.Null) {
             action = map.getString("action");

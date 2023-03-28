@@ -100,7 +100,6 @@
 			children = (
 				6F17D06023756C4F00D725AE /* ReactNativeSynerise.h */,
 				6FCFFCEE2384347500EBD863 /* Categories */,
-				FFB8DEA227A9405800E70EBB /* Classes */,
 				6F17D06123756C4F00D725AE /* Main */,
 				6F17D06423756C4F00D725AE /* Modules */,
 			);
@@ -154,13 +153,6 @@
 				6FCFFCF0238434A400EBD863 /* NSMutableDictionary+ReactNative.m */,
 			);
 			path = Categories;
-			sourceTree = "<group>";
-		};
-		FFB8DEA227A9405800E70EBB /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

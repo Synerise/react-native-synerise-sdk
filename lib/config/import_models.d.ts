@@ -7,6 +7,7 @@ export { IClientAccountRegisterContext, ClientAccountRegisterContext } from './.
 export { IClientAccountUpdateContext, ClientAccountUpdateContext } from './../classes/models/Client/ClientAccountUpdateContext';
 export { IClientAgreements, ClientAgreements } from './../classes/models/Client/ClientAgreements';
 export { ClientSex, ClientSexFromString, ClientSexToString } from './../classes/models/Client/ClientSex';
+export { ClientSignOutMode, ClientSignOutModeToString } from './../classes/models/Client/ClientSignOutMode';
 export { ClientIdentityProvider } from './../classes/models/Client/ClientIdentityProvider';
 export { ClientSessionEndReason, ClientSessionEndReasonFromString, ClientSessionEndReasonToString } from './../classes/models/Client/ClientSessionEndReason';
 export { IClientConditionalAuthResult, ClientConditionalAuthResult } from '../classes/models/Client/ClientConditionalAuthResult';
@@ -39,3 +40,4 @@ export { DocumentsApiQuery } from './../classes/api_queries/DocumentsApiQuery';
 export { DocumentsApiQueryType } from './../classes/api_queries/DocumentsApiQueryType';
 export { Token } from './../classes/models/Token/Token';
 export { TokenOrigin, TokenOriginFromString, TokenOriginToString } from './../classes/models/Token/TokenOrigin';
+export { InAppMessageData } from './../classes/models/Misc/InAppMessageData';

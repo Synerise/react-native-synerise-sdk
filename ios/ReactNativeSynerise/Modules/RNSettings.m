@@ -23,6 +23,9 @@ static NSString * const RNSettingsNotificationsEnabled = @"NOTIFICATIONS_ENABLED
 static NSString * const RNSettingsNotificationsEncryption = @"NOTIFICATIONS_ENCRYPTION";
 static NSString * const RNSettingsNotificationsDisableInAppAlerts = @"NOTIFICATIONS_DISABLE_IN_APP_ALERTS";
 
+static NSString * const RNSettingsInAppMessagingMaxDefinitionUpdateIntervalLimit = @"IN_APP_MAX_DEFINITION_UPDATE_INTERVAL_LIMIT";
+static NSString * const RNSettingsInAppMessagingRenderingTimeout = @"IN_APP_MESSAGING_RENDERING_TIMEOUT";
+
 static NSString * const RNSettingsInjectorAutomatic = @"INJECTOR_AUTOMATIC";
 
 NS_ASSUME_NONNULL_BEGIN
@@ -69,6 +72,9 @@ RCT_EXPORT_MODULE();
     [self updateSettingsKeyPath:@"notifications.encryption" expectedClass:[NSNumber class] object:dictionary[RNSettingsNotificationsEncryption]];
     [self updateSettingsKeyPath:@"notifications.disableInAppAlerts" expectedClass:[NSNumber class] object:dictionary[RNSettingsNotificationsDisableInAppAlerts]];
     
+    [self updateSettingsKeyPath:@"inAppMessaging.maxDefinitionUpdateIntervalLimit" expectedClass:[NSNumber class] object:dictionary[RNSettingsInAppMessagingMaxDefinitionUpdateIntervalLimit]];
+    [self updateSettingsKeyPath:@"inAppMessaging.renderingTimeout" expectedClass:[NSNumber class] object:dictionary[RNSettingsInAppMessagingRenderingTimeout]];
+    
     [self updateSettingsKeyPath:@"injector.automatic" expectedClass:[NSNumber class] object:dictionary[RNSettingsInjectorAutomatic]];
 }
 
@@ -108,6 +114,9 @@ RCT_EXPORT_MODULE();
     dictionary[RNSettingsNotificationsEncryption] = [NSNumber numberWithBool:SNRSynerise.settings.notifications.encryption];
     dictionary[RNSettingsNotificationsDisableInAppAlerts] = [NSNumber numberWithBool:SNRSynerise.settings.notifications.disableInAppAlerts];
     
+    dictionary[RNSettingsInAppMessagingMaxDefinitionUpdateIntervalLimit] = [NSNumber numberWithDouble:SNRSynerise.settings.inAppMessaging.maxDefinitionUpdateIntervalLimit];
+    dictionary[RNSettingsInAppMessagingRenderingTimeout] = [NSNumber numberWithDouble:SNRSynerise.settings.inAppMessaging.renderingTimeout];
+    
     dictionary[RNSettingsInjectorAutomatic] = [NSNumber numberWithBool:SNRSynerise.settings.injector.automatic];
     
     return dictionary;
@@ -132,6 +141,9 @@ RCT_EXPORT_MODULE();
       RNSettingsNotificationsEnabled: RNSettingsNotificationsEnabled,
       RNSettingsNotificationsEncryption: RNSettingsNotificationsEncryption,
       RNSettingsNotificationsDisableInAppAlerts: RNSettingsNotificationsDisableInAppAlerts,
+      
+      RNSettingsInAppMessagingMaxDefinitionUpdateIntervalLimit: RNSettingsInAppMessagingMaxDefinitionUpdateIntervalLimit,
+      RNSettingsInAppMessagingRenderingTimeout: RNSettingsInAppMessagingRenderingTimeout,
       
       RNSettingsInjectorAutomatic: RNSettingsInjectorAutomatic
   };

@@ -1,5 +1,5 @@
-import { Event } from './../Event';
-declare class VisitedScreenEvent extends Event {
+import { CustomEvent } from './../CustomEvent';
+declare class VisitedScreenEvent extends CustomEvent {
     constructor(label: string, parameters?: object);
 }
 export { VisitedScreenEvent };

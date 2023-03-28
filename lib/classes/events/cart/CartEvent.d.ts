@@ -1,7 +1,7 @@
-import { Event } from './../Event';
+import { CustomEvent } from './../CustomEvent';
 import { UnitPrice } from './UnitPrice';
-declare class CartEvent extends Event {
-    constructor(type: string, label: string, sku: string, finalPrice: UnitPrice, quantity: number, parameters?: object);
+declare class CartEvent extends CustomEvent {
+    constructor(label: string, action: string, sku: string, finalPrice: UnitPrice, quantity: number, parameters?: object);
     setName(name: string): void;
     setCategory(category: string): void;
     setCategories(categories: string[]): void;

@@ -2,7 +2,7 @@ import { BaseModel } from '../BaseModel';
 interface IVoucherCodesData {
     code: string;
     status: string;
-    clientId: string;
+    clientId: number;
     clientUuid?: string;
     poolUuid: string;
     expireIn?: number;
@@ -14,7 +14,7 @@ interface IVoucherCodesData {
 declare class VoucherCodesData extends BaseModel {
     code: string;
     status: string;
-    clientId: string;
+    clientId: number;
     clientUuid?: string;
     poolUuid: string;
     expireIn?: Date;

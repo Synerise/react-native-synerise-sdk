@@ -7,8 +7,9 @@ import { ClientOAuthAuthenticationContext } from '../../classes/models/Client/Cl
 import { ClientFacebookAuthenticationContext } from '../../classes/models/Client/ClientFacebookAuthenticationContext';
 import { ClientAppleSignInAuthenticationContext } from '../../classes/models/Client/ClientAppleSignInAuthenticationContext';
 import { ClientIdentityProvider } from '../../classes/models/Client/ClientIdentityProvider';
-import { ClientSessionEndReason } from '../../classes/models/Client/ClientSessionEndReason';
 import { ClientConditionalAuthResult } from '../../classes/models/Client/ClientConditionalAuthResult';
+import { ClientSessionEndReason } from '../../classes/models/Client/ClientSessionEndReason';
+import { ClientSignOutMode } from '../../classes/models/Client/ClientSignOutMode';
 import { Token } from './../../classes/models/Token/Token';
 import { Error } from './../../classes/types/Error';
 interface IClientStateChangeListener {
@@ -53,6 +54,7 @@ declare class ClientModule extends Module {
     authenticateByAppleSignInIfRegistered(identityToken: string, authID: string, onSuccess: () => void, onError: (error: Error) => void): void;
     isSignedIn(): boolean;
     signOut(): void;
+    signOutWithMode(mode: ClientSignOutMode): void;
     refreshToken(onSuccess: () => void, onError: (error: Error) => void): void;
     retrieveToken(onSuccess: (token: Token) => void, onError: (error: Error) => void): void;
     getUUID(): string;

@@ -1,5 +1,7 @@
 package com.synerise.sdk.react;
 
+import android.util.Log;
+
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactMethod;
@@ -28,6 +30,8 @@ public class RNSettings extends RNBaseModule {
     public static final String RN_SETTINGS_NOTIFICATIONS_ENABLED = "NOTIFICATIONS_ENABLED";
     public static final String RN_SETTINGS_NOTIFICATIONS_ENCRYPTION = "NOTIFICATIONS_ENCRYPTION";
     public static final String RN_SETTINGS_INJECTOR_AUTOMATIC = "INJECTOR_AUTOMATIC";
+    public static final String RN_SETTINGS_IN_APP_MAX_DEFINITION_UPDATE_INTERVAL_LIMIT = "IN_APP_MAX_DEFINITION_UPDATE_INTERVAL_LIMIT";
+    public static final String RN_SETTINGS_IN_APP_MESSAGING_RENDERING_TIMEOUT = "IN_APP_MESSAGING_RENDERING_TIMEOUT";
 
     public RNSettings(ReactApplicationContext reactApplicationContext) {
         super(reactApplicationContext);
@@ -53,6 +57,8 @@ public class RNSettings extends RNBaseModule {
         constants.put(RN_SETTINGS_NOTIFICATIONS_ENABLED, RN_SETTINGS_NOTIFICATIONS_ENABLED);
         constants.put(RN_SETTINGS_NOTIFICATIONS_ENCRYPTION, RN_SETTINGS_NOTIFICATIONS_ENCRYPTION);
         constants.put(RN_SETTINGS_SHOULD_DESTROY_SESSION_ON_API_KEY_CHANGE, RN_SETTINGS_SHOULD_DESTROY_SESSION_ON_API_KEY_CHANGE);
+        constants.put(RN_SETTINGS_IN_APP_MAX_DEFINITION_UPDATE_INTERVAL_LIMIT, RN_SETTINGS_IN_APP_MAX_DEFINITION_UPDATE_INTERVAL_LIMIT);
+        constants.put(RN_SETTINGS_IN_APP_MESSAGING_RENDERING_TIMEOUT, RN_SETTINGS_IN_APP_MESSAGING_RENDERING_TIMEOUT);
         return constants;
     }
 
@@ -123,7 +129,7 @@ public class RNSettings extends RNBaseModule {
                 }
             case RN_SETTINGS_TRACKER_AUTO_FLUSH_TIMEOUT:
                 if (value instanceof Integer) {
-                    Settings.getInstance().tracker.setAutoFlushTimeout((int) value);
+                    Settings.getInstance().tracker.setAutoFlushTimeout(((int) value) * 1000);
                 }
                 break;
             case RN_SETTINGS_TRACKER_MAX_BATCH_SIZE:
@@ -156,6 +162,15 @@ public class RNSettings extends RNBaseModule {
                     Settings.getInstance().sdk.shouldDestroySessionOnApiKeyChange = (Boolean) value;
                 }
                 break;
+            case RN_SETTINGS_IN_APP_MAX_DEFINITION_UPDATE_INTERVAL_LIMIT:
+                if (value instanceof Integer) {
+                    Settings.getInstance().inAppMessaging.setMaxDefinitionUpdateIntervalLimit((int) value);
+                }
+
+            case RN_SETTINGS_IN_APP_MESSAGING_RENDERING_TIMEOUT:
+                if (value instanceof Integer) {
+                    Settings.getInstance().inAppMessaging.renderingTimeout = ((int) value) * 1000;
+                }
         }
     }
 
@@ -166,11 +181,13 @@ public class RNSettings extends RNBaseModule {
         settings.put(RN_SETTINGS_TRACKER_IS_BACKEND_TIME_SYNC_REQUIRED, Synerise.settings.tracker.isBackendTimeSyncRequired);
         settings.put(RN_SETTINGS_TRACKER_MIN_BATCH_SIZE, Synerise.settings.tracker.minBatchSize);
         settings.put(RN_SETTINGS_TRACKER_MAX_BATCH_SIZE, Synerise.settings.tracker.maxBatchSize);
-        settings.put(RN_SETTINGS_TRACKER_AUTO_FLUSH_TIMEOUT, Synerise.settings.tracker.autoFlushTimeout);
+        settings.put(RN_SETTINGS_TRACKER_AUTO_FLUSH_TIMEOUT, Synerise.settings.tracker.autoFlushTimeout / 1000);
         settings.put(RN_SETTINGS_INJECTOR_AUTOMATIC, Synerise.settings.injector.automatic);
         settings.put(RN_SETTINGS_NOTIFICATIONS_ENABLED, Synerise.settings.notifications.enabled);
         settings.put(RN_SETTINGS_NOTIFICATIONS_ENCRYPTION, Synerise.settings.notifications.getEncryption());
         settings.put(RN_SETTINGS_SHOULD_DESTROY_SESSION_ON_API_KEY_CHANGE, Synerise.settings.sdk.shouldDestroySessionOnApiKeyChange);
+        settings.put(RN_SETTINGS_IN_APP_MESSAGING_RENDERING_TIMEOUT, Synerise.settings.inAppMessaging.renderingTimeout / 1000);
+        settings.put(RN_SETTINGS_IN_APP_MAX_DEFINITION_UPDATE_INTERVAL_LIMIT, Synerise.settings.inAppMessaging.getMaxDefinitionUpdateIntervalLimit());
         return settings;
     }
 }

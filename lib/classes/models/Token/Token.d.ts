@@ -2,13 +2,17 @@ import { BaseModel } from './../BaseModel';
 import { TokenOrigin } from './TokenOrigin';
 interface IToken {
     tokenString: string;
-    tokenOrigin: string;
     expirationDate: number;
+    rlm: string;
+    origin: string;
+    customId?: string;
 }
 declare class Token extends BaseModel {
     tokenString: string;
-    tokenOrigin: TokenOrigin;
     expirationDate: Date;
+    rlm: string;
+    origin: TokenOrigin;
+    customId?: string;
     constructor(modelObject: IToken);
 }
 export { Token };

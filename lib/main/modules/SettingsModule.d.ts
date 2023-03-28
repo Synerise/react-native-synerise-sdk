@@ -18,6 +18,10 @@ interface ISettingsOptions {
         encryption?: boolean;
         disableInAppAlerts?: boolean;
     };
+    inAppMessaging?: {
+        maxDefinitionUpdateIntervalLimit?: number;
+        renderingTimeout?: number;
+    };
     injector?: {
         automatic?: boolean;
     };
@@ -41,6 +45,10 @@ declare class SettingsModule extends Module {
         enabled: any;
         encryption: any;
         disableInAppAlerts: any;
+    };
+    inAppMessaging: {
+        maxDefinitionUpdateIntervalLimit: any;
+        renderingTimeout: any;
     };
     injector: {
         automatic: any;

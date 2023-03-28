@@ -11,8 +11,6 @@
 static NSString * const RNClientEventListenerClientIsSignedInKey = @"CLIENT_SIGNED_IN_LISTENER_KEY";
 static NSString * const RNClientEventListenerClientIsSignedOutKey = @"CLIENT_SIGNED_OUT_LISTENER_KEY";
 
-static NSString * const RNClientEventObjectReasonKey = @"reason";
-
 NS_ASSUME_NONNULL_BEGIN
 
 @interface RNClient () <RNSyneriseManagerDelegate, SNRClientStateDelegate>
@@ -50,8 +48,10 @@ RCT_EXPORT_MODULE();
 }
 
 - (void)sendClientIsSignedOutToJS:(SNRClientSessionEndReason)reason {
-    id eventBody = [self dictionaryWithClientSessionEndReason:reason];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseClientIsSignedOutEvent object:nil userInfo:eventBody];
+    NSDictionary *userInfo = @{
+        @"reason": [self stringWithClientSessionEndReason:reason]
+    };
+    [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseClientIsSignedOutEvent object:nil userInfo:userInfo];
 }
 
 #pragma mark - RNSyneriseManagerDelegate
@@ -235,6 +235,20 @@ RCT_EXPORT_MODULE();
     return nil;
 }
 
+- (SNRClientSignOutMode)enumClientSignOutModeWithString:(nullable NSString *)string {
+    if (string != nil && [string isKindOfClass:NSString.class] == YES) {
+        if ([string isEqualToString:@"SIGN_OUT"] == YES) {
+            return SNRClientSignOutModeSignOut;
+        }
+        
+        if ([string isEqualToString:@"SIGN_OUT_WITH_SESSION_DESTROY"] == YES) {
+            return SNRClientSignOutModeSignOutWithSessionDestroy;
+        }
+    }
+    
+    return SNRClientSignOutModeSignOut;
+}
+
 #pragma mark - JS Mapping
 
 - (nullable NSDictionary *)dictionaryWithClientConditionalAuthResult:(nullable SNRClientConditionalAuthResult *)model {
@@ -309,8 +323,11 @@ RCT_EXPORT_MODULE();
         NSMutableDictionary *dictionary = [@{} mutableCopy];
         
         [dictionary setString:model.tokenString forKey:@"tokenString"];
-        [dictionary setString:SNR_TokenOriginToString(model.tokenOrigin) forKey:@"tokenOrigin"];
         [dictionary setDate:model.expirationDate forKey:@"expirationDate"];
+        
+        [dictionary setString:(model.rlm) forKey:@"rlm"];
+        [dictionary setString:SNR_TokenOriginToString(model.origin) forKey:@"origin"];
+        [dictionary setString:model.customId forKey:@"customId"];
     
         return dictionary;
     }
@@ -336,14 +353,6 @@ RCT_EXPORT_MODULE();
     } else {
         return @"NOT_SPECIFIED";
     }
-}
-
-- (NSDictionary *)dictionaryWithClientSessionEndReason:(SNRClientSessionEndReason)reason {
-    NSString *clientSessionEndReasonString = [self stringWithClientSessionEndReason:reason];
-    
-    return @{
-        RNClientEventObjectReasonKey: clientSessionEndReasonString
-    };
 }
 
 #pragma mark - JS Module
@@ -574,6 +583,16 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(isSignedIn)
 RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(signOut)
 {
     [SNRClient signOut];
+    
+    return @YES;
+}
+
+//signOutWithMode(mode: ClientSignOutMode)
+
+RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(signOutWithMode:(NSString *)string)
+{
+    SNRClientSignOutMode mode = [self enumClientSignOutModeWithString:string];
+    [SNRClient signOutWithMode:mode];
     
     return @YES;
 }

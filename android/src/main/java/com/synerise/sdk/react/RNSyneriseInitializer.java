@@ -3,6 +3,7 @@ package com.synerise.sdk.react;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
+
 import com.synerise.sdk.core.Synerise;
 import com.synerise.sdk.core.types.enums.HostApplicationType;
 
@@ -26,6 +27,7 @@ public class RNSyneriseInitializer {
                     .hostApplicationType(HostApplicationType.REACT_NATIVE)
                     .build();
 
+//            Client.registerForPushCallback(RNNotifications.getNativePushListener());
             isInitialized = true;
         }
     }

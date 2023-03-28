@@ -38,5 +38,11 @@ static NSString * const kRNSyneriseWalkthroughLoadingErrorEvent = @"kRNSyneriseW
 static NSString * const kRNSyneriseWalkthroughPresentedEvent = @"kRNSyneriseWalkthroughPresentedEvent";
 static NSString * const kRNSyneriseWalkthroughHiddenEvent = @"kRNSyneriseWalkthroughHiddenEvent";
 
+static NSString * const kRNSyneriseInAppMessagePresentedKey = @"kRNSyneriseInAppMessagePresentedKey";
+static NSString * const kRNSyneriseInAppMessageHiddenKey = @"kRNSyneriseInAppMessageHiddenKey";
+static NSString * const kRNSyneriseInAppMessageUrlActionKey = @"kRNSyneriseInAppMessageUrlActionKey";
+static NSString * const kRNSyneriseInAppMessageDeeplinkActionKey = @"kRNSyneriseInAppMessageDeeplinkActionKey";
+static NSString * const kRNSyneriseInAppMessageCustomActionKey = @"kRNSyneriseInAppMessageCustomActionKey";
+
 static NSString * const kRNSyneriseClientIsSignedInEvent = @"kRNSyneriseClientIsSignedInEvent";
 static NSString * const kRNSyneriseClientIsSignedOutEvent = @"kRNSyneriseClientIsSignedOutEvent";

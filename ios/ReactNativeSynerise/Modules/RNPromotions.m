@@ -295,7 +295,7 @@ RCT_EXPORT_MODULE();
         
         [dictionary setString:model.code forKey:@"code"];
         [dictionary setString:SNR_VoucherCodeStatusToString(model.status) forKey:@"status"];
-        [dictionary setString:model.clientId forKey:@"clientId"];
+        [dictionary setInteger:model.clientId forKey:@"clientId"];
         [dictionary setString:model.clientUuid forKey:@"clientUuid"];
         [dictionary setString:model.poolUuid forKey:@"poolUuid"];
         [dictionary setDate:model.expireIn forKey:@"expireIn"];

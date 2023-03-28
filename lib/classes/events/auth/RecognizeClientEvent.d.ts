@@ -1,5 +1,5 @@
-import { Event } from './../Event';
-declare class RecognizeClientEvent extends Event {
+import { CustomEvent } from './../CustomEvent';
+declare class RecognizeClientEvent extends CustomEvent {
     constructor(parameters?: object);
 }
 export { RecognizeClientEvent };

@@ -8,7 +8,6 @@
 
 #import "RNTracker.h"
 
-static NSString * const RNTrackerEventTypeKey = @"type";
 static NSString * const RNTrackerEventLabelKey = @"label";
 static NSString * const RNTrackerEventActionKey = @"action";
 static NSString * const RNTrackerEventParametersKey = @"parameters";
@@ -42,12 +41,11 @@ RCT_EXPORT_MODULE();
 #pragma mark - SDK Mapping
 
 - (SNRCustomEvent *)eventWithDictionary:(NSDictionary *)dictionary {
-    NSString *type = [dictionary getStringForKey:RNTrackerEventTypeKey];
     NSString *label = [dictionary getStringForKey:RNTrackerEventLabelKey];
     NSString *action = [dictionary getStringForKey:RNTrackerEventActionKey];
     NSDictionary *parameters = [dictionary getDictionaryForKey:RNTrackerEventParametersKey];
     
-    if (type != nil && label != nil) {
+    if (label != nil && action != nil) {
         SNRTrackerParams *params = [SNRTrackerParams makeWithBuilder:^(SNRTrackerParamsBuilder *builder) {
             if (parameters != nil && [parameters count] > 0) {
                 for (NSString *paramKey in parameters) {
@@ -81,7 +79,7 @@ RCT_EXPORT_MODULE();
             }
         }];
         
-        SNRCustomEvent *event = [[SNRCustomEvent alloc] initWithType:type label:label action:action andParams:params];
+        SNRCustomEvent *event = [[SNRCustomEvent alloc] initWithLabel:label action:action andParams:params];
         
         return event;
     }
