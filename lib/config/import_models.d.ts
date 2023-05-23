@@ -24,6 +24,8 @@ export { IPromotionDiscountTypeDetails, PromotionDiscountTypeDetails } from '../
 export { IPromotionDetails, PromotionDetails } from './../classes/models/Promotions/PromotionDetails';
 export { IPromotionDiscountStep, PromotionDiscountStep } from '../classes/models/Promotions/PromotionDiscountStep';
 export { IPromotionDiscountModeDetails, PromotionDiscountModeDetails } from '../classes/models/Promotions/PromotionDiscountModeDetails';
+export { IPromotionImage, PromotionImage } from '../classes/models/Promotions/PromotionImage';
+export { PromotionImageType, PromotionImageTypeFromString, PromotionImageTypeToString } from '../classes/models/Promotions/PromotionImageType';
 export { RecommendationOptions } from './../classes/models/Content/RecommendationOptions';
 export { RecommendationResponse } from './../classes/models/Content/RecommendationResponse';
 export { Recommendation } from './../classes/models/Content/Recommendation';

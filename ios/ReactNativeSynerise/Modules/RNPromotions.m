@@ -162,7 +162,7 @@ RCT_EXPORT_MODULE();
         [dictionary setString:model.name forKey:@"name"];
         [dictionary setString:model.headline forKey:@"headline"];
         [dictionary setString:model.descriptionText forKey:@"descriptionText"];
-        [dictionary setArray:model.images forKey:@"images"];
+        [dictionary setArray:[self arrayWithPromotionImages:model.images] forKey:@"images"];
 
         [dictionary setDate:model.startAt forKey:@"startAt"];
         [dictionary setDate:model.expireAt forKey:@"expireAt"];
@@ -237,6 +237,24 @@ RCT_EXPORT_MODULE();
         [dictionary setNumber:model.usageThreshold forKey:@"usageThreshold"];
         
         return dictionary;
+    }
+
+    return nil;
+}
+
+- (nullable NSArray *)arrayWithPromotionImages:(NSArray<SNRPromotionImage *> *)model {
+    if (model != nil) {
+        NSMutableArray *array = [@[] mutableCopy];
+        
+        for (SNRPromotionImage *promotionImageModel in model) {
+            NSMutableDictionary *dictionary = [@{} mutableCopy];
+            [dictionary setString:promotionImageModel.url forKey:@"url"];
+            [dictionary setString:SNR_PromotionImageTypeToString(promotionImageModel.type) forKey:@"type"];
+            
+            [array addObject:dictionary];
+        }
+        
+        return array;
     }
 
     return nil;

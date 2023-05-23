@@ -13,6 +13,7 @@ export { PushClickedEvent } from '../classes/events/push/PushClickedEvent';
 export { PushViewedEvent } from '../classes/events/push/PushViewedEvent';
 export { RecommendationClickEvent } from './../classes/events/recommendation/RecommendationClickEvent';
 export { RecommendationSeenEvent } from './../classes/events/recommendation/RecommendationSeenEvent';
+export { RecommendationViewEvent } from './../classes/events/recommendation/RecommendationViewEvent';
 export { ProductAddedToFavouritesEvent } from '../classes/events/product/ProductAddedToFavouritesEvent';
 export { AppearedInLocationEvent } from './../classes/events/other/AppearedInLocationEvent';
 export { HitTimerEvent } from './../classes/events/other/HitTimerEvent';

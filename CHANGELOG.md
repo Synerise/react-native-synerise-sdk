@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.13.0] - 2023-05-19
+
+### Fixed
+- [iOS] `PromotionImage` property mapping in `Promotion` object.
+
+### Changed
+- `RecommendationSeenEvent` and `RecommendationClickEvent` have new constructors, same as parent `RecommendationViewEvent` class before.
+- Update of native SDK's dependencies.
+- Improvements to stability.
+
+### Added
+- `RecommendationViewEvent` class.
+
+
 ## [0.12.0] - 2023-03-27
 
 ### Fixed
@@ -19,6 +33,7 @@ All notable changes to this project will be documented in this file.
 - `Injector.fetchBanners` method.
 - `Injector.getBanners` method.
 - `Injector.showBanner` method.
+
 
 ## [0.11.0] - 2023-02-07
 
