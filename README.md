@@ -5,9 +5,7 @@
 
 ## Documentation
 
-Most up-to-date documentation is available at Synerise Help Center:
-- [iOS SDK]( https://help.synerise.com/developers/ios-sdk)
-- [Android SDK]( https://help.synerise.com/developers/android-sdk/)
+Most up-to-date documentation is available at Synerise Help Center: [https://help.synerise.com/developers/mobile-sdk/](https://help.synerise.com/developers/mobile-sdk/)
 
 ## Requirements
 
@@ -101,7 +99,7 @@ If you prefer linking manually, check [React Native - Linking Libraries](http://
 
 ```javascript
 Synerise.Initializer()
-	.withClientApiKey('YOUR_CLIENT_API_KEY')
+	.withClientApiKey('YOUR_PROFILE_API_KEY')
 	.withDebugModeEnabled(true)
 	.withCrashHandlingEnabled(true)
 	.init()
