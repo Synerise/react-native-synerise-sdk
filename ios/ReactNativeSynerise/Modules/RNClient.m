@@ -587,14 +587,17 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(signOut)
     return @YES;
 }
 
-//signOutWithMode(mode: ClientSignOutMode)
+//signOutWithMode(mode: ClientSignOutMode, fromAllDevices: boolean, onSuccess: () => void, onError: (error: Error) => void)
 
-RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(signOutWithMode:(NSString *)string)
+RCT_EXPORT_METHOD(signOutWithMode:(NSString *)modeString fromAllDevices:(nonnull NSNumber *)fromAllDevices response:(RCTResponseSenderBlock)response)
 {
-    SNRClientSignOutMode mode = [self enumClientSignOutModeWithString:string];
-    [SNRClient signOutWithMode:mode];
+    SNRClientSignOutMode mode = [self enumClientSignOutModeWithString:modeString];
     
-    return @YES;
+    [SNRClient signOutWithMode:mode fromAllDevices:[fromAllDevices boolValue] success:^() {
+        [self executeSuccessCallbackResponse:response data:@1];
+    } failure:^(NSError *error) {
+        [self executeFailureCallbackResponse:response error:error];
+    }];
 }
 
 //destroySession()

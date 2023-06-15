@@ -5,5 +5,5 @@ declare enum VoucherCodeStatus {
     Canceled = "CANCELED"
 }
 declare function VoucherCodeStatusFromString(string: string): VoucherCodeStatus;
-declare function VoucherCodeStatusToString(voucherCodeStatus: VoucherCodeStatus): string;
+declare function VoucherCodeStatusToString(status: VoucherCodeStatus): string;
 export { VoucherCodeStatus, VoucherCodeStatusFromString, VoucherCodeStatusToString };

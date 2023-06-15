@@ -6,5 +6,5 @@ declare enum PromotionType {
     Handbill = "HANDBILL"
 }
 declare function PromotionTypeFromString(string: string): PromotionType;
-declare function PromotionTypeToString(promotionType: PromotionType): string;
+declare function PromotionTypeToString(type: PromotionType): string;
 export { PromotionType, PromotionTypeFromString, PromotionTypeToString };

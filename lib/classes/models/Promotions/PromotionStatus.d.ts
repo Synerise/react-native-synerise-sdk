@@ -5,5 +5,5 @@ declare enum PromotionStatus {
     Redeemed = "REDEEMED"
 }
 declare function PromotionStatusFromString(string: string): PromotionStatus;
-declare function PromotionStatusToString(promotionStatus: PromotionStatus): string;
+declare function PromotionStatusToString(status: PromotionStatus): string;
 export { PromotionStatus, PromotionStatusFromString, PromotionStatusToString };

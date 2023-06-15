@@ -5,6 +5,7 @@ import { IPromotionDetails, PromotionDetails } from './PromotionDetails';
 import { PromotionDiscountType } from './../Promotions/PromotionDiscountType';
 import { PromotionDiscountMode } from './../Promotions/PromotionDiscountMode';
 import { IPromotionDiscountModeDetails, PromotionDiscountModeDetails } from './PromotionDiscountModeDetails';
+import { IPromotionImage } from './PromotionImage';
 import { PromotionItemScope } from './../Promotions/PromotionItemScope';
 declare const PromotionSortingKey: {
     ExpireAt: string;
@@ -40,7 +41,7 @@ interface IPromotion {
     name?: string;
     headline?: string;
     descriptionText?: string;
-    images?: Array<object>;
+    images?: Array<IPromotionImage>;
     assignedAt?: number;
     startAt?: number;
     expireAt?: number;

@@ -17,6 +17,7 @@ import com.synerise.sdk.client.model.ClientIdentityProvider;
 import com.synerise.sdk.client.model.listener.OnClientStateChangeListener;
 import com.synerise.sdk.core.listeners.ActionListener;
 import com.synerise.sdk.core.types.enums.ClientSessionEndReason;
+import com.synerise.sdk.core.types.enums.ClientSignOutMode;
 import com.synerise.sdk.react.utils.ArrayUtil;
 import com.synerise.sdk.react.utils.MapUtil;
 import com.synerise.sdk.client.Client;
@@ -47,7 +48,7 @@ import javax.annotation.Nonnull;
 public class RNClient extends RNBaseModule {
 
     private ReactApplicationContext reactApplicationContext;
-    private IApiCall signInCall, signUpCall, confirmCall, activateCall, updateAccountCall, refreshTokenCall;
+    private IApiCall signInCall, signUpCall, confirmCall, activateCall, updateAccountCall, refreshTokenCall, signOutCall;
     private IApiCall passwordResetCall, deleteAccountByFacebookCall, deleteAccountByOAuthCall;
     private IDataApiCall<Token> getTokenCall;
     private IDataApiCall<GetAccountInformation> getAccountCall;
@@ -118,6 +119,33 @@ public class RNClient extends RNBaseModule {
     public boolean signOut() {
         Client.signOut();
         return true;
+    }
+
+    // signOutWithMode()
+    @ReactMethod
+    public void signOutWithMode(String mode, Boolean fromAllDevices, Callback callback) {
+        ClientSignOutMode nativeMode = null;
+        if (mode.equals("SIGN_OUT")) {
+            nativeMode = ClientSignOutMode.SIGN_OUT;
+        }
+
+        if (mode.equals("SIGN_OUT_WITH_SESSION_DESTROY")) {
+            nativeMode = ClientSignOutMode.SIGN_OUT_WITH_SESSION_DESTROY;
+        }
+
+        if (signOutCall != null) signOutCall.cancel();
+        signOutCall = Client.signOut(nativeMode, fromAllDevices);
+        signOutCall.execute(new ActionListener() {
+            @Override
+            public void onAction() {
+                executeSuccessCallbackResponse(callback, null, null);
+            }
+        }, new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
+        });
     }
 
     //destroySession()

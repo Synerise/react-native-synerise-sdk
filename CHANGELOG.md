@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.14.0] - 2023-06-15
+
+### Fixed
+- `Synerise.isInitialized` method checks native and javascript module if it is completely initialized.
+
+### Added
+- We added a new `Client.signOut(mode:fromAllDevices:onSuccess:onError:)` method. It is analogous to Client.signOut(mode:). It is an asynchronous method and notifies the backend that the client is signed out and determines if all other devices should be signed out too. Remember, signOutWithSessionDestroy mode clears the anonymous session and regenerates the client UUID. The `Client.signOut(mode:)` method is removed now.
+- TSDoc code documentation in modules for better syntax promting.
+
+### Changed
+- `Client.deleteAccount(password:onSuccess:onError:)` is deprecated now.
+- `Client.deleteAccountByOAuth(accessToken:onSuccess:onError)` is deprecated now.
+- `Client.deleteAccountByFacebook(facebookToken:onSuccess:onError)` is deprecated now.
+- Update of native SDK's dependencies.
+- Improvements to stability.
+
+
 ## [0.13.0] - 2023-05-19
 
 ### Fixed

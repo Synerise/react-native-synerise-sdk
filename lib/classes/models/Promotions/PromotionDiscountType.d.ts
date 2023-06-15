@@ -8,5 +8,5 @@ declare enum PromotionDiscountType {
     ExactPrice = "EXACT_PRICE"
 }
 declare function PromotionDiscountTypeFromString(string: string): PromotionDiscountType;
-declare function PromotionDiscountTypeToString(promotionDiscountType: PromotionDiscountType): string;
+declare function PromotionDiscountTypeToString(type: PromotionDiscountType): string;
 export { PromotionDiscountType, PromotionDiscountTypeFromString, PromotionDiscountTypeToString };
