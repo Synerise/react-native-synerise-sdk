@@ -169,6 +169,38 @@ RCT_EXPORT_MODULE();
     return nil;
 }
 
+- (nullable SNRClientSimpleAuthenticationData *)modelClientSimpleAuthenticationDataWithDictionary:(nullable NSDictionary *)dictionary {
+    if (dictionary != nil) {
+        SNRClientSimpleAuthenticationData *model = [SNRClientSimpleAuthenticationData new];
+        model.email = [[dictionary getStringForKey:@"email"] lowercaseString];
+        model.phone = [dictionary getStringForKey:@"phone"];
+        model.customId = [dictionary getStringForKey:@"customId"];
+        model.uuid = [dictionary getStringForKey:@"uuid"];
+                                                
+        model.firstName = [dictionary getStringForKey:@"firstName"];
+        model.lastName = [dictionary getStringForKey:@"lastName"];
+        model.displayName = [dictionary getStringForKey:@"displayName"];
+        model.sex = SNR_StringToClientSex([dictionary getStringForKey:@"sex"]);
+        model.birthDate = [dictionary getStringForKey:@"birthDate"];
+        model.avatarUrl = [dictionary getStringForKey:@"avatarUrl"];
+                                                
+        model.company = [dictionary getStringForKey:@"company"];
+        model.address = [dictionary getStringForKey:@"address"];
+        model.city = [dictionary getStringForKey:@"city"];
+        model.province = [dictionary getStringForKey:@"province"];
+        model.zipCode = [dictionary getStringForKey:@"zipCode"];
+        model.countryCode = [dictionary getStringForKey:@"countryCode"];
+        
+        model.agreements = [self modelClientAgreementsWithDictionary:[dictionary getDictionaryForKey:@"agreements"]];
+
+        model.attributes = [dictionary getDictionaryForKey:@"attributes"];
+        
+        return model;
+    }
+    
+    return nil;
+}
+
 - (nullable SNRClientUpdateAccountContext *)modelClientUpdateAccountContextWithDictionary:(nullable NSDictionary *)dictionary {
     if (dictionary != nil) {
         SNRClientUpdateAccountContext *model = [SNRClientUpdateAccountContext new];
@@ -447,8 +479,6 @@ RCT_EXPORT_METHOD(signInConditionally:(NSString *)email password:(NSString *)pas
         } else {
             [self executeDefaultFailureCallbackResponse:response];
         }
-        
-        [self executeSuccessCallbackResponse:response data:@1];
     } failure:^(NSError *error) {
         [self executeFailureCallbackResponse:response error:error];
     }];
@@ -485,8 +515,6 @@ RCT_EXPORT_METHOD(authenticateConditionally:(NSString *)token provider:(NSString
         } else {
             [self executeDefaultFailureCallbackResponse:response];
         }
-        
-        [self executeSuccessCallbackResponse:response data:@1];
     } failure:^(NSError *error) {
         [self executeFailureCallbackResponse:response error:error];
     }];
@@ -571,11 +599,34 @@ RCT_EXPORT_METHOD(authenticateByAppleSignInIfRegistered:(NSString *)identityToke
     }];
 }
 
+//simpleAuthentication(data: ClientSimpleAuthenticationData, authID: string, onSuccess: () => void, onError: (error: Error) => void)
+
+RCT_EXPORT_METHOD(simpleAuthentication:(NSDictionary *)dictionary authID:(NSString *)authID response:(RCTResponseSenderBlock)response)
+{
+    SNRClientSimpleAuthenticationData *clientSimpleAuthenticationData = [self modelClientSimpleAuthenticationDataWithDictionary:dictionary];
+    if (clientSimpleAuthenticationData != nil) {
+        [SNRClient simpleAuthentication:clientSimpleAuthenticationData authID:authID success:^() {
+            [self executeSuccessCallbackResponse:response data:@1];
+        } failure:^(NSError *error) {
+            [self executeFailureCallbackResponse:response error:error];
+        }];
+    } else {
+        [self executeDefaultFailureCallbackResponse:response];
+    }
+}
+
 //isSignedIn()
 
 RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(isSignedIn)
 {
     return [NSNumber numberWithBool:[SNRClient isSignedIn]];
+}
+
+//isSignedInViaSimpleAuthentication()
+
+RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(isSignedInViaSimpleAuthentication)
+{
+    return [NSNumber numberWithBool:[SNRClient isSignedInViaSimpleAuthentication]];
 }
 
 //signOut()

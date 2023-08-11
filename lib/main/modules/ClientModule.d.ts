@@ -6,6 +6,7 @@ import { ClientAuthContext } from '../../classes/models/Client/ClientAuthContext
 import { ClientOAuthAuthenticationContext } from '../../classes/models/Client/ClientOAuthAuthenticationContext';
 import { ClientFacebookAuthenticationContext } from '../../classes/models/Client/ClientFacebookAuthenticationContext';
 import { ClientAppleSignInAuthenticationContext } from '../../classes/models/Client/ClientAppleSignInAuthenticationContext';
+import { ClientSimpleAuthenticationData } from '../../classes/models/Client/ClientSimpleAuthenticationData';
 import { ClientIdentityProvider } from '../../classes/models/Client/ClientIdentityProvider';
 import { ClientConditionalAuthResult } from '../../classes/models/Client/ClientConditionalAuthResult';
 import { ClientSessionEndReason } from '../../classes/models/Client/ClientSessionEndReason';
@@ -177,11 +178,26 @@ declare class ClientModule extends Module {
      */
     authenticateByAppleSignInIfRegistered(identityToken: string, authID: string, onSuccess: () => void, onError: (error: Error) => void): void;
     /**
-     * This method checks if a customer is signed in (their token is authorized).
+     * This method signs in a customer with Simple Authentication.
+     *
+     * @param data Apple `ClientSimpleAuthenticationData` object with client's data information to be modified. Fields that are not provided are not modified.
+     * @param authID Optional identifier of authorization
+     * @param onSuccess Function to be executed when the operation finishes successfully
+     * @param onError Function to be executed when the operation finishes unsuccessfully
+     */
+    simpleAuthentication(data: ClientSimpleAuthenticationData, authID: string, onSuccess: () => void, onError: (error: Error) => void): void;
+    /**
+     * This method checks if a customer is signed in via Synerise, External Provider or OAuth (if client's token is not expired).
      *
      * @returns `true` if the customer is signed in, otherwise returns `false`
      */
     isSignedIn(): boolean;
+    /**
+     * This method checks if a customer is signed in via Simple Authentication (if anonymous's token is not expired and its origin is TokenOrigin.SimpleAuth)
+     *
+     * @returns `true` if the customer is signed in, otherwise returns `false`
+     */
+    isSignedInViaSimpleAuthentication(): boolean;
     /**
      * This method signs out a customer and clears the customer’s JWT token.
      */

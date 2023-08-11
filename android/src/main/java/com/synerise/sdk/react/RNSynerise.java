@@ -75,6 +75,11 @@ public class RNSynerise extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void withRequestValidationSalt(String requestValidationSalt) {
+    initializer.requestValidationSalt = requestValidationSalt;
+  }
+
+  @ReactMethod
   public void initializeSynerise() {
     if (initializer != null) {
       initializer.initialize(app);

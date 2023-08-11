@@ -31,7 +31,7 @@ declare class NotificationsModule extends Module {
      * @param onSuccess Function to be executed when the operation finishes successfully
      * @param onError Function to be executed when the operation finishes unsuccessfully
      */
-    registerForNotifications(registrationToken: string, mobileAgreement: boolean, onSuccess: () => void, onError: (error: Error) => void): void;
+    registerForNotifications(registrationToken: string, mobileAgreement: boolean | null, onSuccess: () => void, onError: (error: Error) => void): void;
     /**
      * This method verifies if a notification was sent by Synerise.
      *

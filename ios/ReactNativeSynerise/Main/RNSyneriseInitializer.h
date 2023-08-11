@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (copy, nonatomic, nullable, readwrite) NSString *clientApiKey;
 @property (copy, nonatomic, nullable, readwrite) NSString *baseURL;
+@property (copy, nonatomic, nullable, readwrite) NSString *requestValidationSalt;
 @property (assign, nonatomic, readwrite) BOOL debugModeEnabled;
 @property (assign, nonatomic, readwrite) BOOL crashHandlingEnabled;
 

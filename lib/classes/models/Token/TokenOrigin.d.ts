@@ -1,8 +1,11 @@
 declare enum TokenOrigin {
     Unknown = "UNKNOWN",
+    Anonymous = "ANONYMOUS",
     Synerise = "SYNERISE",
-    Facebook = "FACEBOOK",
     Oauth = "OAUTH",
+    SimpleAuth = "SIMPLE_AUTH",
+    Facebook = "FACEBOOK",
+    Google = "GOOGLE",
     Apple = "APPLE"
 }
 declare function TokenOriginFromString(string: string): TokenOrigin;

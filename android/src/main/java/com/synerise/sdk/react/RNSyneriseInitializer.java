@@ -11,6 +11,7 @@ public class RNSyneriseInitializer {
 
     public String clientApiKey;
     public String baseUrl = null;
+    public String requestValidationSalt = null;
     public Boolean isDebugModeEnabled;
     public Boolean isCrashHandlingEnabled;
     public static volatile boolean isInitialized = false;
@@ -25,6 +26,7 @@ public class RNSyneriseInitializer {
                     .crashHandlingEnabled(isCrashHandlingEnabled)
                     .pushRegistrationRequired(RNNotifications.getNativePushListener())
                     .hostApplicationType(HostApplicationType.REACT_NATIVE)
+                    .setRequestValidationSalt(requestValidationSalt)
                     .build();
 
 //            Client.registerForPushCallback(RNNotifications.getNativePushListener());

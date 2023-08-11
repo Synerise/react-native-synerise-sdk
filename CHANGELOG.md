@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.15.0] - 2023-08-11
+
+### Added
+- New authentication mechanism - Simple Authentication. It allows identification of customers without implementing more complicated processes such as RaaS, OAuth, or authenticating by third party services, for example Facebook or Apple. Simple Authentication needs only two methods - `Synerise.Client.simpleAuthentication(data:authID:onSuccess:onError:)` to recognize a customer and `Synerise.Client.isSignedInViaSimpleAuthentication()` to check if the customer is signed in and uses the Simple Authentication feature. The `Synerise.Client.signOut()` method and similar methods are a common way to sign out and clear the user context.
+
+### Changed
+- We changed nullability of `mobileAgreements` parameter in a `Synerise.Notifications.registerForPush(registrationToken:success:failure:)` method. It doesn't require the`mobilePushAgreement` parameter (it can be null) and thanks to that, it doesn't update the customer in the database.
+- Update of native SDK's dependencies.
+
+
 ## [0.14.0] - 2023-06-15
 
 ### Fixed

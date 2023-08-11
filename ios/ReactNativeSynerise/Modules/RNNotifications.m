@@ -232,15 +232,23 @@ RCT_EXPORT_MODULE();
   };
 }
 
-//registerForNotifications(registrationToken: String, mobileAgreement: boolean, onSuccess: () => void, onError: (error: Error) => void)
+//registerForNotifications(registrationToken: String, mobileAgreement: boolean | null, onSuccess: () => void, onError: (error: Error) => void)
 
-RCT_EXPORT_METHOD(registerForNotifications:(NSString *)registrationToken mobileAgreement:(nonnull NSNumber *)mobileAgreement response:(RCTResponseSenderBlock)response)
+RCT_EXPORT_METHOD(registerForNotifications:(NSString *)registrationToken withMobileAgreement:(nonnull NSNumber *)withMobileAgreement mobileAgreement:(nonnull NSNumber *)mobileAgreement response:(RCTResponseSenderBlock)response)
 {
-    [SNRClient registerForPush:registrationToken mobilePushAgreement:[mobileAgreement boolValue] success:^(BOOL isSuccess) {
-        [self executeSuccessCallbackResponse:response data:@1];
-    } failure:^(NSError *error) {
-        [self executeFailureCallbackResponse:response error:error];
-    }];
+    if (withMobileAgreement != nil && [withMobileAgreement boolValue] == YES) {
+        [SNRClient registerForPush:registrationToken mobilePushAgreement:[mobileAgreement boolValue] success:^(BOOL isSuccess) {
+            [self executeSuccessCallbackResponse:response data:@1];
+        } failure:^(NSError *error) {
+            [self executeFailureCallbackResponse:response error:error];
+        }];
+    } else {
+        [SNRClient registerForPush:registrationToken success:^(BOOL isSuccess) {
+            [self executeSuccessCallbackResponse:response data:@1];
+        } failure:^(NSError *error) {
+            [self executeFailureCallbackResponse:response error:error];
+        }];
+    }
 }
 
 //isSyneriseNotification(payload: object)

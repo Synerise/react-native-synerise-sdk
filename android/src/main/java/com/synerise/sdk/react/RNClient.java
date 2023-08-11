@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import com.synerise.sdk.client.model.AuthConditions;
 import com.synerise.sdk.client.model.ClientIdentityProvider;
 import com.synerise.sdk.client.model.listener.OnClientStateChangeListener;
+import com.synerise.sdk.client.model.simpleAuth.ClientData;
 import com.synerise.sdk.core.listeners.ActionListener;
 import com.synerise.sdk.core.types.enums.ClientSessionEndReason;
 import com.synerise.sdk.core.types.enums.ClientSignOutMode;
@@ -48,7 +49,7 @@ import javax.annotation.Nonnull;
 public class RNClient extends RNBaseModule {
 
     private ReactApplicationContext reactApplicationContext;
-    private IApiCall signInCall, signUpCall, confirmCall, activateCall, updateAccountCall, refreshTokenCall, signOutCall;
+    private IApiCall signInCall, signUpCall, confirmCall, activateCall, updateAccountCall, refreshTokenCall, signOutCall, simpleAuthCall;
     private IApiCall passwordResetCall, deleteAccountByFacebookCall, deleteAccountByOAuthCall;
     private IDataApiCall<Token> getTokenCall;
     private IDataApiCall<GetAccountInformation> getAccountCall;
@@ -112,6 +113,12 @@ public class RNClient extends RNBaseModule {
     @ReactMethod(isBlockingSynchronousMethod = true)
     public boolean isSignedIn() {
         return Client.isSignedIn();
+    }
+
+    //isSignedInViaSimpleAuthentication()
+    @ReactMethod(isBlockingSynchronousMethod = true)
+    public boolean isSignedInViaSimpleAuthentication() {
+        return Client.isSignedInViaSimpleAuthentication();
     }
 
     //signOut()
@@ -354,6 +361,48 @@ public class RNClient extends RNBaseModule {
     public void authenticateByFacebookIfRegistered(String facebookToken, String authID, Callback callback) {
         IApiCall authenticateByFacebookIfRegisteredCall = Client.authenticateByFacebookIfRegistered(facebookToken, authID);
         authenticateByFacebookIfRegisteredCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
+        });
+    }
+
+    //simpleAuthentication(data: ClientSimpleAuthenticationData, authID: string, onSuccess: () => void, onError: (error: Error) => void)
+    @ReactMethod
+    public void simpleAuthentication(ReadableMap map, String authId, Callback callback) {
+        ClientData clientData = new ClientData();
+        clientData.setEmail(map.hasKey("email") ? map.getString("email") : null);
+        clientData.setPhoneNumber(map.hasKey("phone") ? map.getString("phone") : null);
+        clientData.setCustomId(map.hasKey("customId") ? map.getString("customId") : null);
+        clientData.setUuid(map.hasKey("uuid") ? map.getString("uuid") : null);
+        clientData.setFirstName(map.hasKey("firstName") ? map.getString("firstName") : null);
+        clientData.setLastName(map.hasKey("lastName") ? map.getString("lastName") : null);
+        clientData.setDisplayName(map.hasKey("displayName") ? map.getString("displayName") : null);
+        if (map.hasKey("sex")) {
+            clientData.setSex(Sex.getSex(map.getString("sex")));
+        }
+        clientData.setBirthDate(map.hasKey("birthDate") ? map.getString("birthDate") : null);
+        clientData.setAvatarUrl(map.hasKey("avatarUrl") ? map.getString("avatarUrl") : null);
+        clientData.setCompany(map.hasKey("company") ? map.getString("company") : null);
+        clientData.setAddress(map.hasKey("address") ? map.getString("address") : null);
+        clientData.setCity(map.hasKey("city") ? map.getString("city") : null);
+        clientData.setProvince(map.hasKey("province") ? map.getString("province") : null);
+        clientData.setZipCode(map.hasKey("zipCode") ? map.getString("zipCode") : null);
+        clientData.setCountryCode(map.hasKey("countryCode") ? map.getString("countryCode") : null);
+
+        if (map.hasKey("attributes")) {
+            Attributes attributes = attributesMapper(map.getMap("attributes").toHashMap());
+            clientData.setAttributes(attributes);
+        }
+        if (map.hasKey("agreements")) {
+            Agreements agreements = agreementsMapper(map.getMap("agreements"));
+            clientData.setAgreements(agreements);
+        }
+
+        if (simpleAuthCall != null) simpleAuthCall.cancel();
+        simpleAuthCall = Client.simpleAuthentication(clientData, authId);
+        simpleAuthCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
             @Override
             public void onDataAction(ApiError apiError) {
                 executeFailureCallbackResponse(callback, null, apiError);

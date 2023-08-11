@@ -14,6 +14,7 @@ declare class SyneriseInitializer {
     static invokeOnErrorCallback(errorObject: IError): void;
     withClientApiKey(clientApiKey: string): this;
     withBaseUrl(baseUrl: string): this;
+    withRequestValidationSalt(requestValidationSalt: string): this;
     withDebugModeEnabled(debugModeEnabled: boolean): this;
     withCrashHandlingEnabled(crashHandlingEnabled: boolean): this;
     withSettings(settings: ISettingsOptions): this;

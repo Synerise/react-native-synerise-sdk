@@ -123,6 +123,9 @@ RCT_EXPORT_METHOD(withBaseUrl:(NSString *)baseUrl) {
     self.initializer.baseURL = baseUrl;
 }
 
+RCT_EXPORT_METHOD(withRequestValidationSalt:(NSString *)requestValidationSalt) {
+    self.initializer.requestValidationSalt = requestValidationSalt;
+}
 RCT_EXPORT_METHOD(withDebugModeEnabled:(BOOL)debugModeEnabled) {
     self.initializer.debugModeEnabled = debugModeEnabled;
 }

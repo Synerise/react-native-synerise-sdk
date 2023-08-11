@@ -17,6 +17,11 @@
         [self overwriteDefaultSettings];
         
         [SNRSynerise initializeWithClientApiKey:self.clientApiKey andBaseUrl:self.baseURL];
+        
+        if (self.requestValidationSalt != nil) {
+            [SNRSynerise setRequestValidationSalt:self.requestValidationSalt];
+        }
+        
         [SNRSynerise setDebugModeEnabled:self.debugModeEnabled];
         [SNRSynerise setCrashHandlingEnabled:self.crashHandlingEnabled];
         [SNRSynerise setHostApplicationType:SNRHostApplicationTypeReactNative];

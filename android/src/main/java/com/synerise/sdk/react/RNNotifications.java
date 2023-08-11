@@ -139,8 +139,13 @@ public class RNNotifications extends RNBaseModule {
 
     //registerForNotifications(token: String, onSuccess: () => void, onError: (error: Error) => void)
     @ReactMethod
-    public void registerForNotifications(String registrationToken, boolean mobileAgreement, Callback callback) {
-        registerForNotificationCall = Client.registerForPush(registrationToken, mobileAgreement);
+    public void registerForNotifications(String registrationToken, boolean isMobileAgreementAvailable, boolean mobileAgreement, Callback callback) {
+        if (isMobileAgreementAvailable) {
+            registerForNotificationCall = Client.registerForPush(registrationToken, mobileAgreement);
+        } else {
+            registerForNotificationCall = Client.registerForPush(registrationToken);
+        }
+
         registerForNotificationCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
             @Override
             public void onDataAction(ApiError apiError) {
