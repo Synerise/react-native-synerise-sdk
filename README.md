@@ -1,13 +1,12 @@
-# Synerise React Native SDK (react-native-synerise-sdk)
+# Synerise React Native SDK (react-native-synerise-sdk) - User Documentation
 
 ![Platform](https://img.shields.io/badge/platform-ios%20%7C%20android-lightgrey)
 [![npm](https://img.shields.io/npm/v/react-native-synerise-sdk.svg?colorB=blue&)](https://www.npmjs.com/package/react-native-synerise-sdk)
+[![Documentation](https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat-square)](https://help.synerise.com/developers/mobile-sdk)
 
 ## Documentation
 
-Most up-to-date documentation is available at Synerise Help Center:
-- [iOS SDK]( https://help.synerise.com/developers/ios-sdk)
-- [Android SDK]( https://help.synerise.com/developers/android-sdk/)
+Most up-to-date documentation is available at [Synerise Help Center - iOS SDK](https://help.synerise.com/developers/mobile-sdk).
 
 ## Requirements
 
@@ -15,7 +14,7 @@ Most up-to-date documentation is available at Synerise Help Center:
 
 * Xcode 14 and iOS SDK 16
 * iOS 9.0+ target deployment
-* Valid architectures: armv7, armv7s, arm64 devices and i386, x86_64 simulators
+* Valid architectures: arm64 devices and arm64, x86_64 simulators
 
 ### Android
 
