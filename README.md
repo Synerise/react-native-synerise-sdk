@@ -1,12 +1,15 @@
 # Synerise React Native SDK (react-native-synerise-sdk) (0.15.0)
 
 [![Platform](https://img.shields.io/badge/platform-ios%20%7C%20android-orange.svg)](https://github.com/synerise/react-native-synerise-sdk)
-[![Languages](https://img.shields.io/badge/language-TypeScript%20%7C%20Java%20%7C%20Objective--C-orange.svg)](https://github.com/synerise/ios-sdk)
+[![Languages](https://img.shields.io/badge/language-TypeScript%20%7C%20Java%20%7C%20Objective--C-orange.svg)](https://github.com/synerise/react-native-synerise-sdk)
 [![npm](https://img.shields.io/npm/v/react-native-synerise-sdk-green.svg)](https://www.npmjs.com/package/react-native-synerise-sdk)
 [![Synerise](https://img.shields.io/badge/www-synerise-green.svg)](https://synerise.com)
-[![Documentation](https://img.shields.io/badge/docs-latest-green.svg)](https://help.synerise.com/)
+[![Documentation](https://img.shields.io/badge/docs-latest-brightgreen.svg)](https://help.synerise.com/)
 
 ---
+
+## About
+Synerise SDK wrapper for React Native for Synerise platform (http://www.synerise.com).
 
 ## Documentation
 Most up-to-date documentation is available at [Synerise Help Center - iOS SDK](https://help.synerise.com/developers/mobile-sdk).
@@ -14,14 +17,16 @@ Most up-to-date documentation is available at [Synerise Help Center - iOS SDK](h
 ## Requirements
 * Access to workspace
 * A Profile API Key
+* Development environment configured - [React Native - Setting up the development environment](https://reactnative.dev/docs/environment-setup)
+
+### Android
+* Minimum Android SDK version - 21
+* Supported targetSDKVersion - 33
 
 ### iOS
 * Xcode 15 and iOS SDK 17
 * iOS 9.0+ minimum deployment target
 * Valid architectures: arm64 devices and arm64, x86_64 simulators
-
-### Android
-* Minimum Android SDK version - 19
 
 ## Installation
 
