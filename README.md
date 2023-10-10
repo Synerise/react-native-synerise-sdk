@@ -1,23 +1,26 @@
-# Synerise React Native SDK (react-native-synerise-sdk) - User Documentation
+# Synerise React Native SDK (react-native-synerise-sdk) (0.15.0)
 
-![Platform](https://img.shields.io/badge/platform-ios%20%7C%20android-lightgrey)
-[![npm](https://img.shields.io/npm/v/react-native-synerise-sdk.svg?colorB=blue&)](https://www.npmjs.com/package/react-native-synerise-sdk)
-[![Documentation](https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat-square)](https://help.synerise.com/developers/mobile-sdk)
+[![Platform](https://img.shields.io/badge/platform-ios%20%7C%20android-orange.svg)
+[![Languages](https://img.shields.io/badge/language-TypeScript%20%7C%20Objective--C%20%7C%20Swift-orange.svg)](https://github.com/synerise/ios-sdk)
+[![npm](https://img.shields.io/npm/v/react-native-synerise-sdk-green.svg)](https://www.npmjs.com/package/react-native-synerise-sdk)
+[![Synerise](https://img.shields.io/badge/www-synerise-green.svg)](https://synerise.com)
+[![Documentation](https://img.shields.io/badge/docs-latest-green.svg)](https://help.synerise.com/)
+
+---
 
 ## Documentation
-
 Most up-to-date documentation is available at [Synerise Help Center - iOS SDK](https://help.synerise.com/developers/mobile-sdk).
 
 ## Requirements
+* Access to workspace
+* A Profile API Key
 
 ### iOS
-
-* Xcode 14 and iOS SDK 16
-* iOS 9.0+ target deployment
+* Xcode 15 and iOS SDK 17
+* iOS 9.0+ minimum deployment target
 * Valid architectures: arm64 devices and arm64, x86_64 simulators
 
 ### Android
-
 * Minimum Android SDK version - 19
 
 ## Installation
@@ -81,7 +84,7 @@ If you prefer linking manually, check [React Native - Linking Libraries](http://
 
 ### Android
 
-1. Add `implementation 'com.synerise.sdk.react:react-native-synerise-sdk:0.9.13'` as a dependency in your app's build.gradle file.
+1. Add `implementation 'com.synerise.sdk.react:react-native-synerise-sdk:0.15.0'` as a dependency in your app's build.gradle file.
 
 2. Add `RNSyneriseSdkPackage` to your list your packages in application's main class as shown below:
 
@@ -101,13 +104,8 @@ If you prefer linking manually, check [React Native - Linking Libraries](http://
 ```javascript
 Synerise.Initializer()
 	.withClientApiKey('YOUR_PROFILE_API_KEY')
-	.withDebugModeEnabled(true)
-	.withCrashHandlingEnabled(true)
 	.init()
 ```
 
 ## Author
 Synerise, developer@synerise.com. If you need support please feel free to contact us.
-
-
-
