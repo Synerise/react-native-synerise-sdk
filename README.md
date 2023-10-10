@@ -12,7 +12,7 @@
 [Synerise](http://www.synerise.com) SDK wrapper for React Native.
 
 ## Documentation
-Most up-to-date documentation is available at [Synerise Help Center - iOS SDK](https://help.synerise.com/developers/mobile-sdk).
+Most up-to-date documentation is available at [Synerise Help Center - Mobile SDK](https://help.synerise.com/developers/mobile-sdk).
 
 ## Requirements
 * Access to workspace
