@@ -9,7 +9,7 @@
 ---
 
 ## About
-Synerise SDK wrapper for React Native for Synerise platform (http://www.synerise.com).
+[Synerise](http://www.synerise.com) SDK wrapper for React Native.
 
 ## Documentation
 Most up-to-date documentation is available at [Synerise Help Center - iOS SDK](https://help.synerise.com/developers/mobile-sdk).
