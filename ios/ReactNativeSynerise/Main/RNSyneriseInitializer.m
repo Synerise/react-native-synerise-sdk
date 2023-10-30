@@ -8,6 +8,8 @@
 
 #import "RNSyneriseInitializer.h"
 
+NSString * const SNRSyneriseSDKPluginVersion = @"0.16.0";
+
 @implementation RNSyneriseInitializer
 
 #pragma mark - Public
@@ -25,6 +27,7 @@
         [SNRSynerise setDebugModeEnabled:self.debugModeEnabled];
         [SNRSynerise setCrashHandlingEnabled:self.crashHandlingEnabled];
         [SNRSynerise setHostApplicationType:SNRHostApplicationTypeReactNative];
+        [SNRSynerise setHostApplicationSDKPluginVersion:SNRSyneriseSDKPluginVersion];
     });
 }
 

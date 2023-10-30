@@ -4,7 +4,7 @@ declare class UnitPrice {
     constructor(amount: number, currency: string);
     toObject(): {
         amount: number;
-        currency: String;
+        currency: string;
     };
 }
 export { UnitPrice };

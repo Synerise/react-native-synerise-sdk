@@ -16,7 +16,7 @@ declare class ContentModule extends Module {
      * @param onError Function to be executed when the operation finishes unsuccessfully
      *
      */
-    getDocument(slug: string, onSuccess: (document: Object) => void, onError: (error: Error) => void): void;
+    getDocument(slug: string, onSuccess: (document: object) => void, onError: (error: Error) => void): void;
     /**
      * This method gets documents that are defined for parameters provided in the query object.
      *
@@ -25,7 +25,7 @@ declare class ContentModule extends Module {
      * @param onError Function to be executed when the operation finishes unsuccessfully
      *
      */
-    getDocuments(apiQuery: DocumentsApiQuery, onSuccess: (documents: Array<Object>) => void, onError: (error: Error) => void): void;
+    getDocuments(apiQuery: DocumentsApiQuery, onSuccess: (documents: Array<object>) => void, onError: (error: Error) => void): void;
     /**
      * This method gets recommendations that are defined for the options provided.
      *

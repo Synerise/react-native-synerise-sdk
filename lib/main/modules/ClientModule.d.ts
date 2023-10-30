@@ -303,7 +303,7 @@ declare class ClientModule extends Module {
      * @param onSuccess Function to be executed when the operation finishes successfully
      * @param onError Function to be executed when the operation finishes unsuccessfully
      */
-    confirmEmailChange(token: string, newsletterAgreement: Boolean, onSuccess: () => void, onError: (error: Error) => void): void;
+    confirmEmailChange(token: string, newsletterAgreement: boolean, onSuccess: () => void, onError: (error: Error) => void): void;
     /**
      * Requests a customer’s phone update. A confirmation code is sent to the phone number.
      *
@@ -321,7 +321,7 @@ declare class ClientModule extends Module {
      * @param onSuccess Function to be executed when the operation finishes successfully
      * @param onError Function to be executed when the operation finishes unsuccessfully
      */
-    confirmPhoneUpdate(phone: string, confirmationCode: string, smsAgreement: Boolean, onSuccess: () => void, onError: (error: Error) => void): void;
+    confirmPhoneUpdate(phone: string, confirmationCode: string, smsAgreement: boolean, onSuccess: () => void, onError: (error: Error) => void): void;
     /**
      * This method deletes a customer’s account.
      *

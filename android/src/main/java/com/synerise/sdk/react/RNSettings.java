@@ -32,6 +32,7 @@ public class RNSettings extends RNBaseModule {
     public static final String RN_SETTINGS_INJECTOR_AUTOMATIC = "INJECTOR_AUTOMATIC";
     public static final String RN_SETTINGS_IN_APP_MAX_DEFINITION_UPDATE_INTERVAL_LIMIT = "IN_APP_MAX_DEFINITION_UPDATE_INTERVAL_LIMIT";
     public static final String RN_SETTINGS_IN_APP_MESSAGING_RENDERING_TIMEOUT = "IN_APP_MESSAGING_RENDERING_TIMEOUT";
+    public static final String RN_SETTINGS_IN_APP_MESSAGING_SHOULD_SEND_IN_APP_CAPPING_EVENT = "IN_APP_MESSAGING_SHOULD_SEND_IN_APP_CAPPING_EVENT";
 
     public RNSettings(ReactApplicationContext reactApplicationContext) {
         super(reactApplicationContext);
@@ -59,6 +60,7 @@ public class RNSettings extends RNBaseModule {
         constants.put(RN_SETTINGS_SHOULD_DESTROY_SESSION_ON_API_KEY_CHANGE, RN_SETTINGS_SHOULD_DESTROY_SESSION_ON_API_KEY_CHANGE);
         constants.put(RN_SETTINGS_IN_APP_MAX_DEFINITION_UPDATE_INTERVAL_LIMIT, RN_SETTINGS_IN_APP_MAX_DEFINITION_UPDATE_INTERVAL_LIMIT);
         constants.put(RN_SETTINGS_IN_APP_MESSAGING_RENDERING_TIMEOUT, RN_SETTINGS_IN_APP_MESSAGING_RENDERING_TIMEOUT);
+        constants.put(RN_SETTINGS_IN_APP_MESSAGING_SHOULD_SEND_IN_APP_CAPPING_EVENT, RN_SETTINGS_IN_APP_MESSAGING_SHOULD_SEND_IN_APP_CAPPING_EVENT);
         return constants;
     }
 
@@ -171,6 +173,11 @@ public class RNSettings extends RNBaseModule {
                 if (value instanceof Integer) {
                     Settings.getInstance().inAppMessaging.renderingTimeout = ((int) value) * 1000;
                 }
+            
+            case RN_SETTINGS_IN_APP_MESSAGING_SHOULD_SEND_IN_APP_CAPPING_EVENT:
+                if (value instanceof Boolean) {
+                    Settings.getInstance().inAppMessaging.shouldSendInAppCappingEvent = (Boolean) value;
+                }
         }
     }
 
@@ -188,6 +195,7 @@ public class RNSettings extends RNBaseModule {
         settings.put(RN_SETTINGS_SHOULD_DESTROY_SESSION_ON_API_KEY_CHANGE, Synerise.settings.sdk.shouldDestroySessionOnApiKeyChange);
         settings.put(RN_SETTINGS_IN_APP_MESSAGING_RENDERING_TIMEOUT, Synerise.settings.inAppMessaging.renderingTimeout / 1000);
         settings.put(RN_SETTINGS_IN_APP_MAX_DEFINITION_UPDATE_INTERVAL_LIMIT, Synerise.settings.inAppMessaging.getMaxDefinitionUpdateIntervalLimit());
+        settings.put(RN_SETTINGS_IN_APP_MESSAGING_SHOULD_SEND_IN_APP_CAPPING_EVENT, Synerise.settings.inAppMessaging.shouldSendInAppCappingEvent);
         return settings;
     }
 }

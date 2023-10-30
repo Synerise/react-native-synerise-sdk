@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.16.0] - 2023-10-30
+
+### Added
+- `Synerise.Settings.inAppMessaging.shouldSendInAppCappingEvent` option in settings to enable or disable sending inApp.capping event by the SDK.
+
+### Changed
+- Update of native SDK's dependencies.
+- Improvements to stability.
+
 ## [0.15.0] - 2023-08-11
 
 ### Added

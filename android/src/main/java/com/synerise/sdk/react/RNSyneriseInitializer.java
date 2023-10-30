@@ -16,6 +16,8 @@ public class RNSyneriseInitializer {
     public Boolean isCrashHandlingEnabled;
     public static volatile boolean isInitialized = false;
 
+    public static final String SDK_PLUGIN_VERSION = "0.16.0";
+
     public void initialize(Application app) {
         if (isInitialized == false) {
             prepareDefaultSettings();
@@ -25,8 +27,9 @@ public class RNSyneriseInitializer {
                     .syneriseDebugMode(isDebugModeEnabled)
                     .crashHandlingEnabled(isCrashHandlingEnabled)
                     .pushRegistrationRequired(RNNotifications.getNativePushListener())
-                    .hostApplicationType(HostApplicationType.REACT_NATIVE)
                     .setRequestValidationSalt(requestValidationSalt)
+                    .hostApplicationType(HostApplicationType.REACT_NATIVE)
+                    .hostApplicationSDKPluginVersion(SDK_PLUGIN_VERSION)
                     .build();
 
 //            Client.registerForPushCallback(RNNotifications.getNativePushListener());

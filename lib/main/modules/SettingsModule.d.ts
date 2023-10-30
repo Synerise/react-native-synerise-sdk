@@ -21,6 +21,7 @@ interface ISettingsOptions {
     inAppMessaging?: {
         maxDefinitionUpdateIntervalLimit?: number;
         renderingTimeout?: number;
+        shouldSendInAppCappingEvent?: boolean;
     };
     injector?: {
         automatic?: boolean;
@@ -49,6 +50,7 @@ declare class SettingsModule extends Module {
     inAppMessaging: {
         maxDefinitionUpdateIntervalLimit: any;
         renderingTimeout: any;
+        shouldSendInAppCappingEvent: any;
     };
     injector: {
         automatic: any;

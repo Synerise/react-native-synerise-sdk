@@ -25,6 +25,7 @@ static NSString * const RNSettingsNotificationsDisableInAppAlerts = @"NOTIFICATI
 
 static NSString * const RNSettingsInAppMessagingMaxDefinitionUpdateIntervalLimit = @"IN_APP_MAX_DEFINITION_UPDATE_INTERVAL_LIMIT";
 static NSString * const RNSettingsInAppMessagingRenderingTimeout = @"IN_APP_MESSAGING_RENDERING_TIMEOUT";
+static NSString * const RNSettingsInAppMessagingShouldSendInAppCappingEvent = @"IN_APP_MESSAGING_SHOULD_SEND_IN_APP_CAPPING_EVENT";
 
 static NSString * const RNSettingsInjectorAutomatic = @"INJECTOR_AUTOMATIC";
 
@@ -74,7 +75,8 @@ RCT_EXPORT_MODULE();
     
     [self updateSettingsKeyPath:@"inAppMessaging.maxDefinitionUpdateIntervalLimit" expectedClass:[NSNumber class] object:dictionary[RNSettingsInAppMessagingMaxDefinitionUpdateIntervalLimit]];
     [self updateSettingsKeyPath:@"inAppMessaging.renderingTimeout" expectedClass:[NSNumber class] object:dictionary[RNSettingsInAppMessagingRenderingTimeout]];
-    
+    [self updateSettingsKeyPath:@"inAppMessaging.shouldSendInAppCappingEvent" expectedClass:[NSNumber class] object:dictionary[RNSettingsInAppMessagingShouldSendInAppCappingEvent]];
+
     [self updateSettingsKeyPath:@"injector.automatic" expectedClass:[NSNumber class] object:dictionary[RNSettingsInjectorAutomatic]];
 }
 
@@ -116,7 +118,8 @@ RCT_EXPORT_MODULE();
     
     dictionary[RNSettingsInAppMessagingMaxDefinitionUpdateIntervalLimit] = [NSNumber numberWithDouble:SNRSynerise.settings.inAppMessaging.maxDefinitionUpdateIntervalLimit];
     dictionary[RNSettingsInAppMessagingRenderingTimeout] = [NSNumber numberWithDouble:SNRSynerise.settings.inAppMessaging.renderingTimeout];
-    
+    dictionary[RNSettingsInAppMessagingShouldSendInAppCappingEvent] = [NSNumber numberWithDouble:SNRSynerise.settings.inAppMessaging.shouldSendInAppCappingEvent];
+
     dictionary[RNSettingsInjectorAutomatic] = [NSNumber numberWithBool:SNRSynerise.settings.injector.automatic];
     
     return dictionary;
@@ -144,7 +147,8 @@ RCT_EXPORT_MODULE();
       
       RNSettingsInAppMessagingMaxDefinitionUpdateIntervalLimit: RNSettingsInAppMessagingMaxDefinitionUpdateIntervalLimit,
       RNSettingsInAppMessagingRenderingTimeout: RNSettingsInAppMessagingRenderingTimeout,
-      
+      RNSettingsInAppMessagingShouldSendInAppCappingEvent: RNSettingsInAppMessagingShouldSendInAppCappingEvent,
+
       RNSettingsInjectorAutomatic: RNSettingsInjectorAutomatic
   };
 }
