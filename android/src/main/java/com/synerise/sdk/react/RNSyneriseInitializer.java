@@ -16,7 +16,7 @@ public class RNSyneriseInitializer {
     public Boolean isCrashHandlingEnabled;
     public static volatile boolean isInitialized = false;
 
-    public static final String SDK_PLUGIN_VERSION = "0.16.0";
+    public static final String SDK_PLUGIN_VERSION = "0.17.0";
 
     public void initialize(Application app) {
         if (isInitialized == false) {

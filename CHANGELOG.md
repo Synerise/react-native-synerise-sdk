@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.17.0] - 2023-12-05
+
+### Fixed
+- [iOS] Issue with location of some SDK files in the Documents directory. The old location caused the SDK files to be visible in the shared documents directory if the host application file sharing was enabled.
+- [iOS] Potential issue with native notification buttons when Simple Push campaign contained Rich Media (Single Media) or had a custom notification category identifier.
+
+### Added
+- We added a new `Synerise.Content.generateDocument(slug:onSuccess:onError:)` method. It's analogous to `Synerise.Content.getDocument(slug:onSuccess:onError:)`. The old method is deprecated. The new method generates the document that is defined for the provided slug.
+- We added a new `Synerise.Content.getRecommendationsV2(options:onSuccess:onError:)` method. It's analogous to `Synerise.Content.getRecommendations(options:onSuccess:onError:)`. The old method is deprecated. The new method gets recommendations that are defined for the options provided.
+- We added a new `Synerise.Content.generateScreenView(feedSlug:onSuccess:onError:)` method. It's analogous to `Synerise.Content.getScreenView(onSuccess:onError:)`. The old method is deprecated. The new method generates a customer's highest-priority screen view campaign that is defined for the provided slug.
+- We added models correlating with new methods: `ScreenView`, `Document`.
+
+### Changed
+- `Synerise.Content.getDocument(slug:onSuccess:onError:)` is deprecated now.
+- `Synerise.Content.getDocuments(apiQuery:onSuccess:onError:)` is deprecated now.
+- `Synerise.Content.getRecommendations(options:onSuccess:onError:)` is deprecated now.
+- `Synerise.Content.getScreenView(onSuccess:onError:)` is deprecated now.
+- Update of native SDK's dependencies.
+
+
 ## [0.16.0] - 2023-10-30
 
 ### Added

@@ -33,11 +33,14 @@ export { VoucherCodesResponse } from './../classes/models/Vouchers/VoucherCodesR
 export { AssignVoucherData } from './../classes/models/Vouchers/AssignVoucherData';
 export { VoucherCodesData } from './../classes/models/Vouchers/VoucherCodesData';
 export { VoucherCodeStatus } from './../classes/models/Vouchers/VoucherCodeStatus';
+export { Document } from './../classes/models/Content/Document';
 export { RecommendationOptions } from './../classes/models/Content/RecommendationOptions';
 export { RecommendationResponse } from './../classes/models/Content/RecommendationResponse';
 export { Recommendation } from './../classes/models/Content/Recommendation';
 export { ScreenViewAudience } from './../classes/models/Content/ScreenViewAudience';
 export { ScreenViewResponse } from './../classes/models/Content/ScreenViewResponse';
+export { ScreenView } from './../classes/models/Content/ScreenView';
+export { ScreenViewAudienceInfo } from '../classes/models/Content/ScreenViewAudienceInfo';
 export { BaseApiQuery, IApiQuerySorting, ApiQuerySortingOrder } from './../classes/api_queries/BaseApiQuery';
 export { PromotionsApiQuery } from './../classes/api_queries/PromotionsApiQuery';
 export { DocumentsApiQuery } from './../classes/api_queries/DocumentsApiQuery';
