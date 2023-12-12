@@ -5,7 +5,7 @@
 [![Languages](https://img.shields.io/badge/language-TypeScript%20%7C%20Java%20%7C%20Objective--C-orange.svg)](https://github.com/synerise/react-native-synerise-sdk)
 [![npm](https://img.shields.io/npm/v/react-native-synerise-sdk.svg)](https://www.npmjs.com/package/react-native-synerise-sdk)
 [![Synerise](https://img.shields.io/badge/www-synerise-green.svg)](https://synerise.com)
-[![Documentation](https://img.shields.io/badge/docs-latest-brightgreen.svg)](https://hub.synerise.com)
+[![Documentation](https://img.shields.io/badge/docs-mobile%20sdk-brightgreen.svg)](https://hub.synerise.com/developers/mobile-sdk/)
 
 ---
 
