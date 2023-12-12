@@ -1,18 +1,19 @@
 # Synerise React Native SDK (react-native-synerise-sdk) (0.17.0)
 
-[![Platform](https://img.shields.io/badge/platform-ios%20%7C%20android-orange.svg)](https://github.com/synerise/react-native-synerise-sdk)
+[![Platform](https://img.shields.io/badge/platform-iOS-orange.svg)](https://github.com/synerise/ios-sdk)
+[![Platform](https://img.shields.io/badge/platform-Android-orange.svg)](https://github.com/synerise/android-sdk)
 [![Languages](https://img.shields.io/badge/language-TypeScript%20%7C%20Java%20%7C%20Objective--C-orange.svg)](https://github.com/synerise/react-native-synerise-sdk)
 [![npm](https://img.shields.io/npm/v/react-native-synerise-sdk.svg)](https://www.npmjs.com/package/react-native-synerise-sdk)
 [![Synerise](https://img.shields.io/badge/www-synerise-green.svg)](https://synerise.com)
-[![Documentation](https://img.shields.io/badge/docs-latest-brightgreen.svg)](https://help.synerise.com/)
+[![Documentation](https://img.shields.io/badge/docs-latest-brightgreen.svg)](https://hub.synerise.com)
 
 ---
 
 ## About
-[Synerise](http://www.synerise.com) SDK wrapper for React Native.
+[Synerise](https://www.synerise.com) SDK wrapper for React Native.
 
 ## Documentation
-Most up-to-date documentation is available at [Synerise Help Center - Mobile SDK](https://help.synerise.com/developers/mobile-sdk).
+Most up-to-date documentation is available at [Developer Guide - Mobile SDK](https://hub.synerise.com/developers/mobile-sdk).
 
 ## Requirements
 * Access to workspace
@@ -105,6 +106,11 @@ If you prefer linking manually, check [React Native - Linking Libraries](http://
 	```
 
 ## Initialization:
+
+First of all, you need to initialize Synerise React Native SDK and provide `Profile API Key`.
+  
+To get `Profile API Key`, please sign in to your Synerise account and visit [https://app.synerise.com/settings/apikeys](https://app.synerise.com/settings/apikeys).
+Then, generate new `API Key` for `Profile` audience.
 
 ```javascript
 Synerise.Initializer()
