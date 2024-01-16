@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.8.0] - 2024-01-16
+
+IMPORTANT: 
+Due to changes in the handling of actions for URLs and deep links in Synerise campaigns, we strongly recommend comparing your configuration with the SDK documentation. Review the changes from the previous SDK version integrated into your application here: 
+https://hub.synerise.com//developers/mobile-sdk/campaigns/action-handling/
+
+### Changed
+- Changes in handling actions from campaigns (read important note above).
+- Update of native SDK's dependencies.
+
+
 ## [0.17.0] - 2023-12-05
 
 ### Fixed

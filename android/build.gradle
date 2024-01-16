@@ -4,8 +4,8 @@ ext.versions = [
         'minSdk'     : 21,
         'compileSdk' : 33,
         'targetSdk'  : 33,
-        'versionCode': 31,
-        'versionName': "0.17.0"
+        'versionCode': 32,
+        'versionName': "0.18.0"
 ]
 
 buildscript {
@@ -57,7 +57,7 @@ repositories {
 dependencies {
     implementation 'com.facebook.react:react-native:+'
     implementation "com.squareup.okhttp3:logging-interceptor:4.9.1"
-    api 'com.synerise.sdk:synerise-mobile-sdk:5.12.0'
+    api 'com.synerise.sdk:synerise-mobile-sdk:5.13.2'
 }
 
 //apply from: 'publish.gradle'

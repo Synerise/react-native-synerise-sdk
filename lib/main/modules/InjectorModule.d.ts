@@ -1,9 +1,10 @@
 import { BaseModule as Module } from './BaseModule';
 import { InAppMessageData } from './../../classes/models/Misc/InAppMessageData';
 import { Error } from './../../classes/types/Error';
+import { SyneriseSource } from '../../classes/models/Misc/SyneriseSource';
 interface IInjectorListener {
-    onOpenUrl(url: string): void;
-    onDeepLink(deepLink: string): void;
+    onOpenUrl(url: string, source: SyneriseSource): void;
+    onDeepLink(deepLink: string, source: SyneriseSource): void;
 }
 interface IInjectorBannerListener {
     onPresent?(): void;
@@ -105,5 +106,7 @@ declare class InjectorModule extends Module {
      * @returns `true` if the loaded walkthrough is unique, otherwise returns `false`
      */
     isLoadedWalkthroughUnique(): boolean;
+    handleOpenUrlBySDK(url: string): void;
+    handleDeepLinkBySDK(deepLink: string): void;
 }
 export { InjectorModule, IInjectorListener };

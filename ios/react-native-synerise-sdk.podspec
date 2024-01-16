@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.version       = package['version']
   s.summary       = package['description']
   s.homepage      = "https://synerise.com"
-  s.license       = "MIT"
+  s.license       = { :type => "Apache License 2.0", :file => "LICENSE" }
   s.author        = { "Synerise" => "developer@synerise.com" }
   s.platform      = :ios, "11.0"
   s.source        = { :git => "https://github.com/Synerise/react-native-synerise-sdk", :tag => s.version.to_s }

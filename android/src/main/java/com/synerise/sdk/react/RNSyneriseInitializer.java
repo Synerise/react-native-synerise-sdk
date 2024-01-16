@@ -3,6 +3,7 @@ package com.synerise.sdk.react;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
+import android.util.Log;
 
 import com.synerise.sdk.core.Synerise;
 import com.synerise.sdk.core.types.enums.HostApplicationType;
@@ -16,12 +17,12 @@ public class RNSyneriseInitializer {
     public Boolean isCrashHandlingEnabled;
     public static volatile boolean isInitialized = false;
 
-    public static final String SDK_PLUGIN_VERSION = "0.17.0";
+    public static final String SDK_PLUGIN_VERSION = "0.18.0";
 
     public void initialize(Application app) {
         if (isInitialized == false) {
             prepareDefaultSettings();
-
+            RNInjector.initializeActionInjectorListener();
             Synerise.Builder.with(app, clientApiKey, getApplicationName(app))
                     .baseUrl(baseUrl)
                     .syneriseDebugMode(isDebugModeEnabled)
@@ -31,7 +32,6 @@ public class RNSyneriseInitializer {
                     .hostApplicationType(HostApplicationType.REACT_NATIVE)
                     .hostApplicationSDKPluginVersion(SDK_PLUGIN_VERSION)
                     .build();
-
 //            Client.registerForPushCallback(RNNotifications.getNativePushListener());
             isInitialized = true;
         }

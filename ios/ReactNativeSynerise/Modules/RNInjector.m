@@ -62,26 +62,28 @@ RCT_EXPORT_MODULE();
          
 #pragma mark - Public
 
-- (void)executeURLAction:(NSURL *)URL {
-    [self sendURLActionToJS:URL];
+- (void)executeURLAction:(NSURL *)URL activity:(SNRSyneriseActivity)activity {
+    [self sendURLActionToJS:URL activity:activity];
 }
 
-- (void)executeDeepLinkAction:(NSString *)deepLink {
-    [self sendDeepLinkActionToJS:deepLink];
+- (void)executeDeepLinkAction:(NSString *)deepLink activity:(SNRSyneriseActivity)activity {
+    [self sendDeepLinkActionToJS:deepLink activity:activity];
 }
 
 #pragma mark - Private
 
-- (void)sendURLActionToJS:(NSURL *)URL {
+- (void)sendURLActionToJS:(NSURL *)URL activity:(SNRSyneriseActivity)activity {
     NSDictionary *userInfo = @{
-        @"url": [URL absoluteString]
+        @"url": [URL absoluteString],
+        @"source": [self stringWithSyneriseActivity:activity]
     };
     [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseUrlActionEvent object:nil userInfo:userInfo];
 }
 
-- (void)sendDeepLinkActionToJS:(NSString *)deepLink {
+- (void)sendDeepLinkActionToJS:(NSString *)deepLink activity:(SNRSyneriseActivity)activity {
     NSDictionary *userInfo = @{
-        @"deepLink": deepLink
+        @"deepLink": deepLink,
+        @"source": [self stringWithSyneriseActivity:activity]
     };
     [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseDeepLinkActionEvent object:nil userInfo:userInfo];
 }
@@ -234,6 +236,20 @@ RCT_EXPORT_MODULE();
 
 #pragma mark - JS Mapping
 
+- (NSString *)stringWithSyneriseActivity:(SNRSyneriseActivity)activity {
+    if (activity == SNRSyneriseActivitySimplePush) {
+        return @"SIMPLE_PUSH";
+    } else if (activity == SNRSyneriseActivityBanner) {
+        return @"BANNER";
+    } else if (activity == SNRSyneriseActivityWalkthrough) {
+        return @"WALKTHROUGH";
+    } else if (activity == SNRSyneriseActivityInAppMessage) {
+        return @"IN_APP_MESSAGE";
+    } else {
+        return @"NOT_SPECIFIED";
+    }
+}
+
 - (nullable NSDictionary *)dictionaryWithInAppMessageData:(nullable SNRInAppMessageData *)model {
     if (model != nil) {
         NSMutableDictionary *dictionary = [@{} mutableCopy];
@@ -273,11 +289,38 @@ RCT_EXPORT_MODULE();
   };
 }
 
-//setBannerShouldPresentFlag(flag: boolean)
+//handleOpenUrlBySDK(url: string)
 
-RCT_EXPORT_METHOD(setBannerShouldPresentFlag:(nonnull NSNumber *)flag)
+RCT_EXPORT_METHOD(handleOpenUrlBySDK:(nonnull NSString *)urlString)
 {
-    _bannerShouldPresentFlag = [flag boolValue];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSURL *URL = [NSURL URLWithString:urlString];
+        if ([[UIApplication sharedApplication] canOpenURL:URL]) {
+            if (@available(iOS 10, *)) {
+                [[UIApplication sharedApplication] openURL:URL options:@{} completionHandler:nil];
+            } else {
+                [[UIApplication sharedApplication] openURL:URL];
+            }
+        }
+    });
+}
+
+//handleDeepLinkBySDK(deepLink: string)
+
+RCT_EXPORT_METHOD(handleDeepLinkBySDK:(nonnull NSString *)deepLink)
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSURL *deepLinkURL = [NSURL URLWithString:deepLink];
+        if ([[UIApplication sharedApplication] canOpenURL:deepLinkURL]) {
+            if (@available(iOS 10, *)) {
+                [[UIApplication sharedApplication] openURL:deepLinkURL options:@{} completionHandler:^(BOOL success) {
+                    
+                }];
+            } else {
+                [[UIApplication sharedApplication] openURL:deepLinkURL];
+            }
+        }
+    });
 }
 
 //getWalkthrough()

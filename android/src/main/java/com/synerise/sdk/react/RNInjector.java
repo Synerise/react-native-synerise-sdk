@@ -1,5 +1,6 @@
 package com.synerise.sdk.react;
 
+import android.os.Handler;
 import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
@@ -10,7 +11,9 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.google.gson.Gson;
+import com.synerise.sdk.core.Synerise;
 import com.synerise.sdk.core.listeners.DataActionListener;
+import com.synerise.sdk.core.utils.SystemUtils;
 import com.synerise.sdk.error.ApiError;
 import com.synerise.sdk.injector.Injector;
 import com.synerise.sdk.injector.callback.InjectorSource;
@@ -42,6 +45,7 @@ public class RNInjector extends RNBaseModule {
     private static final String DEEP_LINK_KEY = "DEEPLINK_ACTION_LISTENER_KEY";
     private static final String OPEN_URL_VALUE = "openUrl";
     private static final String DEEP_LINK = "deepLink";
+    private static final String SOURCE = "source";
     private static final String DEEP_LINK_VALUE = "deepLink";
     private static final String BANNER_PRESENTED_KEY = "BANNER_PRESENTED_LISTENER_KEY";
     private static final String BANNER_HIDDEN_KEY = "BANNER_HIDDEN_LISTENER_KEY";
@@ -98,6 +102,16 @@ public class RNInjector extends RNBaseModule {
         shouldBannerPresentFlag = flag;
     }
 
+    @ReactMethod
+    public void handleOpenUrlBySDK(String url) {
+        SystemUtils.openURL(Synerise.getApplicationContext(), url);
+    }
+
+    @ReactMethod
+    public void handleDeepLinkBySDK(String deepLink) {
+        SystemUtils.openDeepLink(Synerise.getApplicationContext(), deepLink);
+    }
+
     @Nullable
     @Override
     public Map<String, Object> getConstants() {
@@ -126,37 +140,52 @@ public class RNInjector extends RNBaseModule {
 
     protected static void initializeInjector() {
         initializeInAppListener();
-        initializeActionInjectorListener();
         initializeBannerListener();
         initializeWalkthroughListener();
     }
 
-    private static void onActionOpenUrl(String url) {
-        WritableMap data = Arguments.createMap();
-        data.putString(URL, url);
-        sendEventToJs(OPEN_URL_VALUE, data, reactApplicationContext);
-    }
-
-    private static void onActionDeepLink(String deepLink) {
-        WritableMap data = Arguments.createMap();
-        data.putString(DEEP_LINK, deepLink);
-        sendEventToJs(DEEP_LINK_VALUE, data, reactApplicationContext);
-    }
-
-    private static void initializeActionInjectorListener() {
+    protected static void initializeActionInjectorListener() {
         InjectorActionHandler.setOnInjectorListener(new OnInjectorListener() {
             @Override
             public boolean onOpenUrl(InjectorSource injectorSource, String url) {
-                onActionOpenUrl(url);
+                Handler handler = new android.os.Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        onActionOpenUrl(url, injectorSource.name());
+                    }
+                }, 300);
+
                 return injectorSource != InjectorSource.WALKTHROUGH;
             }
 
             @Override
             public boolean onDeepLink(InjectorSource injectorSource, String deepLink) {
-                onActionDeepLink(deepLink);
+                Handler handler = new android.os.Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        onActionDeepLink(deepLink, injectorSource.name());
+                    }
+                }, 300);
+
                 return injectorSource != InjectorSource.WALKTHROUGH;
             }
         });
+    }
+
+    private static void onActionOpenUrl(String url, String source) {
+        WritableMap data = Arguments.createMap();
+        data.putString(URL, url);
+        data.putString(SOURCE, source);
+        sendEventToJs(OPEN_URL_VALUE, data, reactApplicationContext);
+    }
+
+    private static void onActionDeepLink(String deepLink, String source) {
+        WritableMap data = Arguments.createMap();
+        data.putString(DEEP_LINK, deepLink);
+        data.putString(SOURCE, source);
+        sendEventToJs(DEEP_LINK_VALUE, data, reactApplicationContext);
     }
 
     private static void initializeInAppListener() {

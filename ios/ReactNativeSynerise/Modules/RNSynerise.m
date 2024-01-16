@@ -74,22 +74,14 @@ RCT_EXPORT_MODULE();
 }
 
 - (void)SNR_handledActionWithURL:(NSURL *)url activity:(SNRSyneriseActivity)activity completionHandler:(SNRSyneriseActivityCompletionHandler)completionHandler {
-    if (activity == SNRSyneriseActivityInAppMessage) {
-        return;
-    }
-    
-    completionHandler(SNRSyneriseActivityActionHide, ^{
-        [[RNSyneriseManager sharedInstance].injector executeURLAction:url];
+    completionHandler(SNRSyneriseActivityActionNone, ^{
+        [[RNSyneriseManager sharedInstance].injector executeURLAction:url activity:activity];
     });
 }
 
 - (void)SNR_handledActionWithDeepLink:(NSString *)deepLink activity:(SNRSyneriseActivity)activity completionHandler:(SNRSyneriseActivityCompletionHandler)completionHandler {
-    if (activity == SNRSyneriseActivityInAppMessage) {
-        return;
-    }
-    
-    completionHandler(SNRSyneriseActivityActionHide, ^{
-        [[RNSyneriseManager sharedInstance].injector executeDeepLinkAction:deepLink];
+    completionHandler(SNRSyneriseActivityActionNone, ^{
+        [[RNSyneriseManager sharedInstance].injector executeDeepLinkAction:deepLink activity:activity];
     });
 }
 
