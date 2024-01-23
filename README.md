@@ -118,5 +118,8 @@ Synerise.Initializer()
 	.init()
 ```
 
+## Changelog
+Changelog can be found [here](./CHANGELOG.md).
+
 ## Author
 Synerise, developer@synerise.com. If you need support please feel free to contact us.
