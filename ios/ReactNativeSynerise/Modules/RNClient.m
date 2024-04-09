@@ -357,8 +357,9 @@ RCT_EXPORT_MODULE();
         [dictionary setString:model.tokenString forKey:@"tokenString"];
         [dictionary setDate:model.expirationDate forKey:@"expirationDate"];
         
-        [dictionary setString:(model.rlm) forKey:@"rlm"];
+        [dictionary setString:model.rlm forKey:@"rlm"];
         [dictionary setString:SNR_TokenOriginToString(model.origin) forKey:@"origin"];
+        [dictionary setString:model.clientId forKey:@"clientId"];
         [dictionary setString:model.customId forKey:@"customId"];
     
         return dictionary;

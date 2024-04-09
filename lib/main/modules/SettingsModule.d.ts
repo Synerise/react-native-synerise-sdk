@@ -1,4 +1,6 @@
 import { BaseModule as Module } from './BaseModule';
+declare const LocalizableStringKeyOK = "LocalizableStringKeyOK";
+declare const LocalizableStringKeyCancel = "LocalizableStringKeyCancel";
 interface ISettingsOptions {
     sdk?: {
         enabled?: boolean;
@@ -6,6 +8,7 @@ interface ISettingsOptions {
         keychainGroupIdentifier?: string;
         minTokenRefreshInterval?: number;
         shouldDestroySessionOnApiKeyChange?: boolean;
+        localizable?: object;
     };
     tracker?: {
         isBackendTimeSyncRequired?: boolean;
@@ -19,6 +22,7 @@ interface ISettingsOptions {
         disableInAppAlerts?: boolean;
     };
     inAppMessaging?: {
+        checkGlobalControlGroupsOnDefinitionsFetch?: boolean;
         maxDefinitionUpdateIntervalLimit?: number;
         renderingTimeout?: number;
         shouldSendInAppCappingEvent?: boolean;
@@ -35,6 +39,7 @@ declare class SettingsModule extends Module {
         keychainGroupIdentifier: any;
         minTokenRefreshInterval: any;
         shouldDestroySessionOnApiKeyChange: any;
+        localizable: any;
     };
     tracker: {
         isBackendTimeSyncRequired: any;
@@ -48,6 +53,7 @@ declare class SettingsModule extends Module {
         disableInAppAlerts: any;
     };
     inAppMessaging: {
+        checkGlobalControlGroupsOnDefinitionsFetch: any;
         maxDefinitionUpdateIntervalLimit: any;
         renderingTimeout: any;
         shouldSendInAppCappingEvent: any;
@@ -60,4 +66,4 @@ declare class SettingsModule extends Module {
     isAlwaysActive(): boolean;
     set(settingsOptions: ISettingsOptions): void;
 }
-export { ISettingsOptions, SettingsModule };
+export { ISettingsOptions, SettingsModule, LocalizableStringKeyOK, LocalizableStringKeyCancel };

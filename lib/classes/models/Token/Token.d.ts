@@ -5,6 +5,7 @@ interface IToken {
     expirationDate: number;
     rlm: string;
     origin: string;
+    clientId?: string;
     customId?: string;
 }
 declare class Token extends BaseModel {
@@ -12,6 +13,7 @@ declare class Token extends BaseModel {
     expirationDate: Date;
     rlm: string;
     origin: TokenOrigin;
+    clientId?: string;
     customId?: string;
     constructor(modelObject: IToken);
 }

@@ -25,6 +25,7 @@ import com.synerise.sdk.react.utils.MapUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -38,7 +39,7 @@ import static com.synerise.sdk.injector.SynerisePushKeys.MESSAGE_TYPE;
 public class RNNotifications extends RNBaseModule {
 
     private static ReactApplicationContext reactApplicationContext;
-    private static ArrayList<Map<String, String>> dataToSend = new ArrayList<>();
+    private static List<Map<String, String>> dataToSend = new ArrayList<>();
     private static ArrayList<String> tokensToSend = new ArrayList<>();
     private static OnRegisterPushListener pushListener = OnRegisterPushListener.NULL;
     protected static OnRegisterForPushListener registerNativeForPushListener;
@@ -217,12 +218,17 @@ public class RNNotifications extends RNBaseModule {
     }
 
     private static void sendHeldNotifications() {
-        Iterator<Map<String, String>> i = dataToSend.iterator();
-        while (i.hasNext()) {
-            Map<String, String> payload = i.next();
-            sendNotificationsToJS(payload);
-            i.remove();
-        }
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                for (Iterator<Map<String, String>> iterator = dataToSend.iterator(); iterator.hasNext(); ) {
+                    Map<String, String> payload = iterator.next();
+                    sendNotificationsToJS(payload);
+                    iterator.remove();
+                }
+            }
+        });
     }
 
     private static void sendTokenToJS(String registrationToken) {

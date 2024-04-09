@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.19.0] - 2024-03-29
+
+### Fixed
+- [Android] Deeplink action when clicking on push notification will directly open in app instead of prompt between app/browser. We set packageName to intent.
+- [Android] Updated proguard rules for  joda.time, retrofit and gson.
+- [iOS] Some potential issues with notification processing in `NotificationServiceExtension`.
+- [iOS] Issue with non-scrolling in-app messages.
+
+### Added
+- Global Control Group support for in-app messages. From now on, you can use this feature in in-app messaging communication. This lets you take your marketing efforts to the next level and provides a solid foundation for accurate measurement of campaign effectiveness. Read more at https://hub.synerise.com/docs/settings/configuration/global-control-group/.
+- [iOS] `Synerise.settings.sdk.localizable` option in settings to let you localize some strings displayed by the SDK.
+
+### Changed
+- Improved mechanism for checking capping in in-app messages. The number of views no longer resets when the account's UUID changes.
+- The delegate method `snr_registerForPushNotificationsIsNeeded()` is invoked when the SDK is initialized completely.
+- When the `Client.registerForPush(registrationToken:mobilePushAgreement:success:failure:)` method fails, it invokes the `snr_registerForPushNotificationsIsNeeded()` delegate method after a short delay.
+- `clientId` property in the `Token` model.
+- Update of native SDK's dependencies.
+
+
 ## [0.18.0] - 2024-01-16
 
 IMPORTANT: 
@@ -16,7 +36,6 @@ https://hub.synerise.com//developers/mobile-sdk/campaigns/action-handling/
 ## [0.17.0] - 2023-12-05
 
 ### Fixed
-- [iOS] Potential issues with Simple Authentication requests.
 - [iOS] Issue with location of some SDK files in the Documents directory. The old location caused the SDK files to be visible in the shared documents directory if the host application file sharing was enabled.
 - [iOS] Potential issue with native notification buttons when Simple Push campaign contained Rich Media (Single Media) or had a custom notification category identifier.
 

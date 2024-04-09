@@ -490,6 +490,8 @@ public class RNClient extends RNBaseModule {
                 //tokenMap.putString("rlm", token.getTokenRLM().getRlm());
                 tokenMap.putString("tokenOrigin", token.getOrigin().getOrigin());
                 tokenMap.putDouble("expirationDate", token.getExpirationUnixTime());
+                tokenMap.putString("clientId", token.getClientId());
+                tokenMap.putString("customId", token.getCustomId());
 
                 executeSuccessCallbackResponse(callback, tokenMap, null);
             }

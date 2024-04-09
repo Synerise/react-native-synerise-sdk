@@ -1,2 +1,3 @@
 declare const Constants: {};
-export { Constants };
+import { LocalizableStringKeyOK, LocalizableStringKeyCancel } from './../main/modules/SettingsModule';
+export { Constants, LocalizableStringKeyOK, LocalizableStringKeyCancel };

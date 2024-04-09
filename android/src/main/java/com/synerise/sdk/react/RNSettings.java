@@ -30,6 +30,7 @@ public class RNSettings extends RNBaseModule {
     public static final String RN_SETTINGS_NOTIFICATIONS_ENABLED = "NOTIFICATIONS_ENABLED";
     public static final String RN_SETTINGS_NOTIFICATIONS_ENCRYPTION = "NOTIFICATIONS_ENCRYPTION";
     public static final String RN_SETTINGS_INJECTOR_AUTOMATIC = "INJECTOR_AUTOMATIC";
+    public static final String RN_SETTINGS_IN_APP_CHECK_GLOBAL_CONTROL_GROUPS_ON_DEFINITIONS_FETCH = "IN_APP_CHECK_GLOBAL_CONTROL_GROUPS_ON_DEFINITIONS_FETCH";
     public static final String RN_SETTINGS_IN_APP_MAX_DEFINITION_UPDATE_INTERVAL_LIMIT = "IN_APP_MAX_DEFINITION_UPDATE_INTERVAL_LIMIT";
     public static final String RN_SETTINGS_IN_APP_MESSAGING_RENDERING_TIMEOUT = "IN_APP_MESSAGING_RENDERING_TIMEOUT";
     public static final String RN_SETTINGS_IN_APP_MESSAGING_SHOULD_SEND_IN_APP_CAPPING_EVENT = "IN_APP_MESSAGING_SHOULD_SEND_IN_APP_CAPPING_EVENT";
@@ -58,6 +59,7 @@ public class RNSettings extends RNBaseModule {
         constants.put(RN_SETTINGS_NOTIFICATIONS_ENABLED, RN_SETTINGS_NOTIFICATIONS_ENABLED);
         constants.put(RN_SETTINGS_NOTIFICATIONS_ENCRYPTION, RN_SETTINGS_NOTIFICATIONS_ENCRYPTION);
         constants.put(RN_SETTINGS_SHOULD_DESTROY_SESSION_ON_API_KEY_CHANGE, RN_SETTINGS_SHOULD_DESTROY_SESSION_ON_API_KEY_CHANGE);
+        constants.put(RN_SETTINGS_IN_APP_CHECK_GLOBAL_CONTROL_GROUPS_ON_DEFINITIONS_FETCH, RN_SETTINGS_IN_APP_CHECK_GLOBAL_CONTROL_GROUPS_ON_DEFINITIONS_FETCH);
         constants.put(RN_SETTINGS_IN_APP_MAX_DEFINITION_UPDATE_INTERVAL_LIMIT, RN_SETTINGS_IN_APP_MAX_DEFINITION_UPDATE_INTERVAL_LIMIT);
         constants.put(RN_SETTINGS_IN_APP_MESSAGING_RENDERING_TIMEOUT, RN_SETTINGS_IN_APP_MESSAGING_RENDERING_TIMEOUT);
         constants.put(RN_SETTINGS_IN_APP_MESSAGING_SHOULD_SEND_IN_APP_CAPPING_EVENT, RN_SETTINGS_IN_APP_MESSAGING_SHOULD_SEND_IN_APP_CAPPING_EVENT);
@@ -164,6 +166,10 @@ public class RNSettings extends RNBaseModule {
                     Settings.getInstance().sdk.shouldDestroySessionOnApiKeyChange = (Boolean) value;
                 }
                 break;
+            case RN_SETTINGS_IN_APP_CHECK_GLOBAL_CONTROL_GROUPS_ON_DEFINITIONS_FETCH:
+                if (value instanceof Boolean) {
+                    Settings.getInstance().inAppMessaging.checkGlobalControlGroupsOnDefinitionsFetch = (Boolean) value;
+                }
             case RN_SETTINGS_IN_APP_MAX_DEFINITION_UPDATE_INTERVAL_LIMIT:
                 if (value instanceof Integer) {
                     Settings.getInstance().inAppMessaging.setMaxDefinitionUpdateIntervalLimit((int) value);
@@ -193,6 +199,7 @@ public class RNSettings extends RNBaseModule {
         settings.put(RN_SETTINGS_NOTIFICATIONS_ENABLED, Synerise.settings.notifications.enabled);
         settings.put(RN_SETTINGS_NOTIFICATIONS_ENCRYPTION, Synerise.settings.notifications.getEncryption());
         settings.put(RN_SETTINGS_SHOULD_DESTROY_SESSION_ON_API_KEY_CHANGE, Synerise.settings.sdk.shouldDestroySessionOnApiKeyChange);
+        settings.put(RN_SETTINGS_IN_APP_CHECK_GLOBAL_CONTROL_GROUPS_ON_DEFINITIONS_FETCH, Synerise.settings.inAppMessaging.checkGlobalControlGroupsOnDefinitionsFetch);
         settings.put(RN_SETTINGS_IN_APP_MESSAGING_RENDERING_TIMEOUT, Synerise.settings.inAppMessaging.renderingTimeout / 1000);
         settings.put(RN_SETTINGS_IN_APP_MAX_DEFINITION_UPDATE_INTERVAL_LIMIT, Synerise.settings.inAppMessaging.getMaxDefinitionUpdateIntervalLimit());
         settings.put(RN_SETTINGS_IN_APP_MESSAGING_SHOULD_SEND_IN_APP_CAPPING_EVENT, Synerise.settings.inAppMessaging.shouldSendInAppCappingEvent);

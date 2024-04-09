@@ -13,6 +13,7 @@ static NSString * const RNSettingsSDKAppGroupIdentifier = @"SDK_APP_GROUP_IDENTI
 static NSString * const RNSettingsSDKKeychainGroupIdentifier = @"SDK_KEYCHAIN_GROUP_IDENTIFIER";
 static NSString * const RNSettingsSDKMinTokenRefreshInterval = @"SDK_MIN_TOKEN_REFRESH_INTERVAL";
 static NSString * const RNSettingsSDKShouldDestroySessionOnApiKeyChange = @"SDK_SHOULD_DESTROY_SESSION_ON_API_KEY_CHANGE";
+static NSString * const RNSettingsSDKLocalizable = @"SDK_LOCALIZABLE";
 
 static NSString * const RNSettingsTrackerIsBackendTimeSyncRequired = @"TRACKER_IS_BACKEND_TIME_SYNC_REQUIRED";
 static NSString * const RNSettingsTrackerMinBatchSize = @"TRACKER_MIN_BATCH_SIZE";
@@ -23,6 +24,7 @@ static NSString * const RNSettingsNotificationsEnabled = @"NOTIFICATIONS_ENABLED
 static NSString * const RNSettingsNotificationsEncryption = @"NOTIFICATIONS_ENCRYPTION";
 static NSString * const RNSettingsNotificationsDisableInAppAlerts = @"NOTIFICATIONS_DISABLE_IN_APP_ALERTS";
 
+static NSString * const RNSettingsInAppMessagingCheckGlobalControlGroupsOnDefinitionsFetch = @"IN_APP_CHECK_GLOBAL_CONTROL_GROUPS_ON_DEFINITIONS_FETCH";
 static NSString * const RNSettingsInAppMessagingMaxDefinitionUpdateIntervalLimit = @"IN_APP_MAX_DEFINITION_UPDATE_INTERVAL_LIMIT";
 static NSString * const RNSettingsInAppMessagingRenderingTimeout = @"IN_APP_MESSAGING_RENDERING_TIMEOUT";
 static NSString * const RNSettingsInAppMessagingShouldSendInAppCappingEvent = @"IN_APP_MESSAGING_SHOULD_SEND_IN_APP_CAPPING_EVENT";
@@ -63,7 +65,8 @@ RCT_EXPORT_MODULE();
     [self updateSettingsKeyPath:@"sdk.keychainGroupIdentifier" expectedClass:[NSString class] object:dictionary[RNSettingsSDKKeychainGroupIdentifier]];
     [self updateSettingsKeyPath:@"sdk.minTokenRefreshInterval" expectedClass:[NSNumber class] object:dictionary[RNSettingsSDKMinTokenRefreshInterval]];
     [self updateSettingsKeyPath:@"sdk.shouldDestroySessionOnApiKeyChange" expectedClass:[NSNumber class] object:dictionary[RNSettingsSDKShouldDestroySessionOnApiKeyChange]];
-    
+    [self updateSettingsKeyPath:@"sdk.localizable" expectedClass:[NSDictionary class] object:[self normalizeSDKLocalizableDictionary:dictionary[RNSettingsSDKLocalizable]]];
+
     [self updateSettingsKeyPath:@"tracker.isBackendTimeSyncRequired" expectedClass:[NSNumber class] object:dictionary[RNSettingsTrackerIsBackendTimeSyncRequired]];
     [self updateSettingsKeyPath:@"tracker.minBatchSize" expectedClass:[NSNumber class] object:dictionary[RNSettingsTrackerMinBatchSize]];
     [self updateSettingsKeyPath:@"tracker.maxBatchSize" expectedClass:[NSNumber class] object:dictionary[RNSettingsTrackerMaxBatchSize]];
@@ -73,6 +76,7 @@ RCT_EXPORT_MODULE();
     [self updateSettingsKeyPath:@"notifications.encryption" expectedClass:[NSNumber class] object:dictionary[RNSettingsNotificationsEncryption]];
     [self updateSettingsKeyPath:@"notifications.disableInAppAlerts" expectedClass:[NSNumber class] object:dictionary[RNSettingsNotificationsDisableInAppAlerts]];
     
+    [self updateSettingsKeyPath:@"inAppMessaging.checkGlobalControlGroupsOnDefinitionsFetch" expectedClass:[NSNumber class] object:dictionary[RNSettingsInAppMessagingCheckGlobalControlGroupsOnDefinitionsFetch]];
     [self updateSettingsKeyPath:@"inAppMessaging.maxDefinitionUpdateIntervalLimit" expectedClass:[NSNumber class] object:dictionary[RNSettingsInAppMessagingMaxDefinitionUpdateIntervalLimit]];
     [self updateSettingsKeyPath:@"inAppMessaging.renderingTimeout" expectedClass:[NSNumber class] object:dictionary[RNSettingsInAppMessagingRenderingTimeout]];
     [self updateSettingsKeyPath:@"inAppMessaging.shouldSendInAppCappingEvent" expectedClass:[NSNumber class] object:dictionary[RNSettingsInAppMessagingShouldSendInAppCappingEvent]];
@@ -96,6 +100,33 @@ RCT_EXPORT_MODULE();
     @finally {}
 }
 
+- (NSDictionary *)normalizeSDKLocalizableDictionary:(nullable NSDictionary *)dictionary {
+    if ([dictionary isKindOfClass:NSNull.class] == YES || dictionary == nil) {
+        return nil;
+    }
+
+    static NSString *JSLocalizableKeyOK = @"LocalizableStringKeyOK";
+    static NSString *JSLocalizableKeyCancel = @"LocalizableStringKeyCancel";
+
+    NSMutableDictionary *newDictionary = [@{} mutableCopy];
+
+    NSString *localizableKeyOK = dictionary[JSLocalizableKeyOK];
+    if (localizableKeyOK != nil) {
+        newDictionary[SNR_LOCALIZABLE_STRING_KEY_OK] = localizableKeyOK;
+    }
+
+    NSString *localizableKeyCancel = dictionary[JSLocalizableKeyCancel];
+    if (localizableKeyCancel != nil) {
+        newDictionary[SNR_LOCALIZABLE_STRING_KEY_CANCEL] = localizableKeyCancel;
+    }
+
+    if ([newDictionary count] == 0 ){
+        return nil;
+    }
+
+    return [[NSDictionary alloc] initWithDictionary:newDictionary];
+}
+
 #pragma mark - JS Mapping
 
 - (NSDictionary *)settingsDictionary {
@@ -106,7 +137,8 @@ RCT_EXPORT_MODULE();
     dictionary[RNSettingsSDKKeychainGroupIdentifier] = SNRSynerise.settings.sdk.keychainGroupIdentifier ?: [NSNull null];
     dictionary[RNSettingsSDKMinTokenRefreshInterval] = [NSNumber numberWithDouble:SNRSynerise.settings.sdk.minTokenRefreshInterval];
     dictionary[RNSettingsSDKShouldDestroySessionOnApiKeyChange] = [NSNumber numberWithDouble:SNRSynerise.settings.sdk.shouldDestroySessionOnApiKeyChange];
-    
+    dictionary[RNSettingsSDKLocalizable] = SNRSynerise.settings.sdk.localizable ?: [NSNull null];
+
     dictionary[RNSettingsTrackerIsBackendTimeSyncRequired] = [NSNumber numberWithBool:SNRSynerise.settings.tracker.isBackendTimeSyncRequired];
     dictionary[RNSettingsTrackerMinBatchSize] = [NSNumber numberWithInteger:SNRSynerise.settings.tracker.minBatchSize];
     dictionary[RNSettingsTrackerMaxBatchSize] = [NSNumber numberWithInteger:SNRSynerise.settings.tracker.maxBatchSize];
@@ -116,9 +148,10 @@ RCT_EXPORT_MODULE();
     dictionary[RNSettingsNotificationsEncryption] = [NSNumber numberWithBool:SNRSynerise.settings.notifications.encryption];
     dictionary[RNSettingsNotificationsDisableInAppAlerts] = [NSNumber numberWithBool:SNRSynerise.settings.notifications.disableInAppAlerts];
     
+    dictionary[RNSettingsInAppMessagingCheckGlobalControlGroupsOnDefinitionsFetch] = [NSNumber numberWithBool:SNRSynerise.settings.inAppMessaging.checkGlobalControlGroupsOnDefinitionsFetch];
     dictionary[RNSettingsInAppMessagingMaxDefinitionUpdateIntervalLimit] = [NSNumber numberWithDouble:SNRSynerise.settings.inAppMessaging.maxDefinitionUpdateIntervalLimit];
     dictionary[RNSettingsInAppMessagingRenderingTimeout] = [NSNumber numberWithDouble:SNRSynerise.settings.inAppMessaging.renderingTimeout];
-    dictionary[RNSettingsInAppMessagingShouldSendInAppCappingEvent] = [NSNumber numberWithDouble:SNRSynerise.settings.inAppMessaging.shouldSendInAppCappingEvent];
+    dictionary[RNSettingsInAppMessagingShouldSendInAppCappingEvent] = [NSNumber numberWithBool:SNRSynerise.settings.inAppMessaging.shouldSendInAppCappingEvent];
 
     dictionary[RNSettingsInjectorAutomatic] = [NSNumber numberWithBool:SNRSynerise.settings.injector.automatic];
     
@@ -135,7 +168,8 @@ RCT_EXPORT_MODULE();
       RNSettingsSDKKeychainGroupIdentifier: RNSettingsSDKKeychainGroupIdentifier,
       RNSettingsSDKMinTokenRefreshInterval: RNSettingsSDKMinTokenRefreshInterval,
       RNSettingsSDKShouldDestroySessionOnApiKeyChange: RNSettingsSDKShouldDestroySessionOnApiKeyChange,
-          
+      RNSettingsSDKLocalizable: RNSettingsSDKLocalizable,
+
       RNSettingsTrackerIsBackendTimeSyncRequired: RNSettingsTrackerIsBackendTimeSyncRequired,
       RNSettingsTrackerMinBatchSize: RNSettingsTrackerMinBatchSize,
       RNSettingsTrackerMaxBatchSize: RNSettingsTrackerMaxBatchSize,
@@ -145,6 +179,7 @@ RCT_EXPORT_MODULE();
       RNSettingsNotificationsEncryption: RNSettingsNotificationsEncryption,
       RNSettingsNotificationsDisableInAppAlerts: RNSettingsNotificationsDisableInAppAlerts,
       
+      RNSettingsInAppMessagingCheckGlobalControlGroupsOnDefinitionsFetch: RNSettingsInAppMessagingCheckGlobalControlGroupsOnDefinitionsFetch,
       RNSettingsInAppMessagingMaxDefinitionUpdateIntervalLimit: RNSettingsInAppMessagingMaxDefinitionUpdateIntervalLimit,
       RNSettingsInAppMessagingRenderingTimeout: RNSettingsInAppMessagingRenderingTimeout,
       RNSettingsInAppMessagingShouldSendInAppCappingEvent: RNSettingsInAppMessagingShouldSendInAppCappingEvent,
