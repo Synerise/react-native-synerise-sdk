@@ -1,19 +1,25 @@
 package com.synerise.sdk.react;
 
+
 import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.ReadableType;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.synerise.sdk.core.Synerise;
 import com.synerise.sdk.core.settings.Settings;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -27,6 +33,7 @@ public class RNSettings extends RNBaseModule {
     public static final String RN_SETTINGS_TRACKER_MIN_BATCH_SIZE = "TRACKER_MIN_BATCH_SIZE";
     public static final String RN_SETTINGS_TRACKER_MAX_BATCH_SIZE = "TRACKER_MAX_BATCH_SIZE";
     public static final String RN_SETTINGS_TRACKER_AUTO_FLUSH_TIMEOUT = "TRACKER_AUTO_FLUSH_TIMEOUT";
+    public static final String RN_SETTINGS_TRACKER_EVENTS_TRIGGERING_FLUSH = "TRACKER_EVENTS_TRIGGERING_FLUSH";
     public static final String RN_SETTINGS_NOTIFICATIONS_ENABLED = "NOTIFICATIONS_ENABLED";
     public static final String RN_SETTINGS_NOTIFICATIONS_ENCRYPTION = "NOTIFICATIONS_ENCRYPTION";
     public static final String RN_SETTINGS_INJECTOR_AUTOMATIC = "INJECTOR_AUTOMATIC";
@@ -55,6 +62,7 @@ public class RNSettings extends RNBaseModule {
         constants.put(RN_SETTINGS_TRACKER_MIN_BATCH_SIZE, RN_SETTINGS_TRACKER_MIN_BATCH_SIZE);
         constants.put(RN_SETTINGS_TRACKER_MAX_BATCH_SIZE, RN_SETTINGS_TRACKER_MAX_BATCH_SIZE);
         constants.put(RN_SETTINGS_TRACKER_AUTO_FLUSH_TIMEOUT, RN_SETTINGS_TRACKER_AUTO_FLUSH_TIMEOUT);
+        constants.put(RN_SETTINGS_TRACKER_EVENTS_TRIGGERING_FLUSH, RN_SETTINGS_TRACKER_EVENTS_TRIGGERING_FLUSH);
         constants.put(RN_SETTINGS_INJECTOR_AUTOMATIC, RN_SETTINGS_INJECTOR_AUTOMATIC);
         constants.put(RN_SETTINGS_NOTIFICATIONS_ENABLED, RN_SETTINGS_NOTIFICATIONS_ENABLED);
         constants.put(RN_SETTINGS_NOTIFICATIONS_ENCRYPTION, RN_SETTINGS_NOTIFICATIONS_ENCRYPTION);
@@ -77,6 +85,16 @@ public class RNSettings extends RNBaseModule {
         if (settings.get(key) instanceof Integer) {
             setting.putInt(key, (int) settings.get(key));
         }
+        if (settings.get(key) instanceof List) {
+            List<String> eventsTriggeringFlush = (List<String>) settings.get(key);
+            WritableArray writableArray = Arguments.createArray();
+
+            for (int i = 0; i < Objects.requireNonNull(eventsTriggeringFlush).size(); i++) {
+                writableArray.pushString(eventsTriggeringFlush.get(i));
+            }
+
+            setting.putArray(key, (WritableArray) writableArray);
+        }
         return setting;
     }
 
@@ -92,6 +110,9 @@ public class RNSettings extends RNBaseModule {
             case Number:
                 matchSetting(key, settingMap.getInt("value"));
                 break;
+            case Array:
+                matchSetting(key, settingMap.getArray("value"));
+                break;
         }
     }
 
@@ -103,13 +124,15 @@ public class RNSettings extends RNBaseModule {
         while (iterator.hasNextKey()) {
             String key = iterator.nextKey();
             ReadableType type = newSettings.getType(key);
-
             switch (type) {
                 case Boolean:
                    matchSetting(key, newSettings.getBoolean(key));
                     break;
                 case Number:
                    matchSetting(key, newSettings.getInt(key));
+                    break;
+                case Array:
+                    matchSetting(key, newSettings.getArray(key));
                     break;
             }
         }
@@ -134,6 +157,15 @@ public class RNSettings extends RNBaseModule {
             case RN_SETTINGS_TRACKER_AUTO_FLUSH_TIMEOUT:
                 if (value instanceof Integer) {
                     Settings.getInstance().tracker.setAutoFlushTimeout(((int) value) * 1000);
+                }
+                break;
+            case RN_SETTINGS_TRACKER_EVENTS_TRIGGERING_FLUSH:
+                if (value instanceof ReadableArray) {
+                    List<String> eventsFromRN = new ArrayList<>();
+                    for (int i = 0; i< ((ReadableArray) value).size(); i++) {
+                        eventsFromRN.add(((ReadableArray) value).getString(i));
+                    }
+                    Settings.getInstance().tracker.eventsTriggeringFlush = eventsFromRN;
                 }
                 break;
             case RN_SETTINGS_TRACKER_MAX_BATCH_SIZE:
@@ -195,6 +227,7 @@ public class RNSettings extends RNBaseModule {
         settings.put(RN_SETTINGS_TRACKER_MIN_BATCH_SIZE, Synerise.settings.tracker.minBatchSize);
         settings.put(RN_SETTINGS_TRACKER_MAX_BATCH_SIZE, Synerise.settings.tracker.maxBatchSize);
         settings.put(RN_SETTINGS_TRACKER_AUTO_FLUSH_TIMEOUT, Synerise.settings.tracker.autoFlushTimeout / 1000);
+        settings.put(RN_SETTINGS_TRACKER_EVENTS_TRIGGERING_FLUSH, Synerise.settings.tracker.eventsTriggeringFlush);
         settings.put(RN_SETTINGS_INJECTOR_AUTOMATIC, Synerise.settings.injector.automatic);
         settings.put(RN_SETTINGS_NOTIFICATIONS_ENABLED, Synerise.settings.notifications.enabled);
         settings.put(RN_SETTINGS_NOTIFICATIONS_ENCRYPTION, Synerise.settings.notifications.getEncryption());

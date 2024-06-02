@@ -19,6 +19,7 @@ static NSString * const RNSettingsTrackerIsBackendTimeSyncRequired = @"TRACKER_I
 static NSString * const RNSettingsTrackerMinBatchSize = @"TRACKER_MIN_BATCH_SIZE";
 static NSString * const RNSettingsTrackerMaxBatchSize = @"TRACKER_MAX_BATCH_SIZE";
 static NSString * const RNSettingsTrackerAutoFlushTimeout = @"TRACKER_AUTO_FLUSH_TIMEOUT";
+static NSString * const RNSettingsTrackerEventsTriggeringFlush = @"TRACKER_EVENTS_TRIGGERING_FLUSH";
 
 static NSString * const RNSettingsNotificationsEnabled = @"NOTIFICATIONS_ENABLED";
 static NSString * const RNSettingsNotificationsEncryption = @"NOTIFICATIONS_ENCRYPTION";
@@ -71,7 +72,8 @@ RCT_EXPORT_MODULE();
     [self updateSettingsKeyPath:@"tracker.minBatchSize" expectedClass:[NSNumber class] object:dictionary[RNSettingsTrackerMinBatchSize]];
     [self updateSettingsKeyPath:@"tracker.maxBatchSize" expectedClass:[NSNumber class] object:dictionary[RNSettingsTrackerMaxBatchSize]];
     [self updateSettingsKeyPath:@"tracker.autoFlushTimeout" expectedClass:[NSNumber class] object:dictionary[RNSettingsTrackerAutoFlushTimeout]];
-    
+    [self updateSettingsKeyPath:@"tracker.eventsTriggeringFlush" expectedClass:[NSArray class] object:dictionary[RNSettingsTrackerEventsTriggeringFlush]];
+
     [self updateSettingsKeyPath:@"notifications.enabled" expectedClass:[NSNumber class] object:dictionary[RNSettingsNotificationsEnabled]];
     [self updateSettingsKeyPath:@"notifications.encryption" expectedClass:[NSNumber class] object:dictionary[RNSettingsNotificationsEncryption]];
     [self updateSettingsKeyPath:@"notifications.disableInAppAlerts" expectedClass:[NSNumber class] object:dictionary[RNSettingsNotificationsDisableInAppAlerts]];
@@ -143,6 +145,7 @@ RCT_EXPORT_MODULE();
     dictionary[RNSettingsTrackerMinBatchSize] = [NSNumber numberWithInteger:SNRSynerise.settings.tracker.minBatchSize];
     dictionary[RNSettingsTrackerMaxBatchSize] = [NSNumber numberWithInteger:SNRSynerise.settings.tracker.maxBatchSize];
     dictionary[RNSettingsTrackerAutoFlushTimeout] = [NSNumber numberWithDouble:SNRSynerise.settings.tracker.autoFlushTimeout];
+    dictionary[RNSettingsTrackerEventsTriggeringFlush] = SNRSynerise.settings.tracker.eventsTriggeringFlush ?: [NSNull null];
 
     dictionary[RNSettingsNotificationsEnabled] = [NSNumber numberWithBool:SNRSynerise.settings.notifications.enabled];
     dictionary[RNSettingsNotificationsEncryption] = [NSNumber numberWithBool:SNRSynerise.settings.notifications.encryption];
@@ -174,6 +177,7 @@ RCT_EXPORT_MODULE();
       RNSettingsTrackerMinBatchSize: RNSettingsTrackerMinBatchSize,
       RNSettingsTrackerMaxBatchSize: RNSettingsTrackerMaxBatchSize,
       RNSettingsTrackerAutoFlushTimeout: RNSettingsTrackerAutoFlushTimeout,
+      RNSettingsTrackerEventsTriggeringFlush: RNSettingsTrackerEventsTriggeringFlush,
 
       RNSettingsNotificationsEnabled: RNSettingsNotificationsEnabled,
       RNSettingsNotificationsEncryption: RNSettingsNotificationsEncryption,

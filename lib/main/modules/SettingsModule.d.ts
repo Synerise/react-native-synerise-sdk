@@ -15,6 +15,7 @@ interface ISettingsOptions {
         minBatchSize?: number;
         maxBatchSize?: number;
         autoFlushTimeout?: number;
+        eventsTriggeringFlush?: Array<string>;
     };
     notifications?: {
         enabled?: boolean;
@@ -46,6 +47,7 @@ declare class SettingsModule extends Module {
         minBatchSize: any;
         maxBatchSize: any;
         autoFlushTimeout: any;
+        eventsTriggeringFlush: any;
     };
     notifications: {
         enabled: any;
