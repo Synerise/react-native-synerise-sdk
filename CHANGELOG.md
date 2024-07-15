@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.22.0] - 2024-07-16
+
+IMPORTANT: 
+The SDK version 0.21.0 has been omitted for technical reasons.
+
+### Added
+- We added a`testDelivery` and `journeyId` parameters to tracked notification events (`push.view`, `push.click`, and so on). It describes if the notification was sent as a test notification from a campaign.
+- We added a new `Synerise.content.generateDocumentWithApiQuery(apiQuery, onSuccess, onError)` method. It is analogous to `Synerise.content.generateDocument(slug:onSuccess:onError:)`, but can contain more context parameters provided in a query object.
+- We added a new `Content.generateScreenViewWithApiQuery(apiQuery, onSuccess, onError)` method. It is analogous to `Synerise.content.generateScreenView(feedSlug:onSuccess:onError:)`, but can contain more context parameters provided in a query object.
+- Anchors from Drag & Drop Builder in the In-App editor are interpreted as URL or as deeplink depending on the value.
+
+### Changed
+- We added validation of reserved parameters in events. Now, if a parameter is forbidden, it is removed from the parameters and a log is printed.
+- Stability improvements.
+- Update of native SDK's dependencies.
+
 ## [0.20.0] - 2024-06-02
 
 ### Fixed

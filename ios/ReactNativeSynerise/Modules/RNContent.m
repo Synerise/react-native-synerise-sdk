@@ -36,6 +36,35 @@ RCT_EXPORT_MODULE();
 
 #pragma mark - SDK Mapping
 
+- (SNRDocumentApiQuery *)modelDocumentApiQueryWithDictionary:(NSDictionary *)dictionary {
+    if (dictionary != nil) {
+        NSString *slug = [dictionary getStringForKey:@"slug"];
+        if (slug != nil) {
+            SNRDocumentApiQuery *model = [[SNRDocumentApiQuery alloc] initWithSlug:slug];
+            model.productId = [dictionary getStringForKey:@"productId"];
+            model.itemsIds = [dictionary getArrayForKey:@"itemsIds"];
+            model.itemsExcluded = [dictionary getArrayForKey:@"itemsExcluded"];
+
+            model.additionalFilters = [dictionary getStringForKey:@"additionalFilters"];
+            if (dictionary[@"filtersJoiner"] != nil) {
+                model.filtersJoiner =  ([self modelFiltersJoiner:[dictionary getStringForKey:@"filtersJoiner"]]);
+            }
+            
+            model.additionalElasticFilters = [dictionary getStringForKey:@"additionalElasticFilters"];
+            if (dictionary[@"elasticFiltersJoiner"] != nil) {
+                model.elasticFiltersJoiner = ([self modelFiltersJoiner:[dictionary getStringForKey:@"elasticFiltersJoiner"]]);
+            }
+            
+            model.displayAttribute = [dictionary getArrayForKey:@"displayAttribute"];
+            model.includeContextItems = [dictionary getBoolForKey:@"includeContextItems"];
+            
+            return model;
+        }
+    }
+    
+    return nil;
+}
+
 - (SNRDocumentsApiQuery *)modelDocumentsApiQueryWithDictionary:(NSDictionary *)dictionary {
     if (dictionary != nil) {
         SNRDocumentsApiQueryType type = SNRDocumentsApiQueryTypeBySchema;
@@ -54,14 +83,58 @@ RCT_EXPORT_MODULE();
 }
 
 - (SNRRecommendationOptions *)modelRecommendationOptionsWithDictionary:(NSDictionary *)dictionary {
-    NSString *slug = [dictionary getStringForKey:@"slug"];
-    SNRRecommendationOptions *model = [[SNRRecommendationOptions alloc] initWithSlug:slug];
-    
     if (dictionary != nil) {
-        model.productID = [dictionary getStringForKey:@"productID"];
+        NSString *slug = [dictionary getStringForKey:@"slug"];
+        if (slug != nil) {
+            SNRRecommendationOptions *model = [[SNRRecommendationOptions alloc] initWithSlug:slug];
+            model.productID = [dictionary getStringForKey:@"productID"];
+            model.productIDs = [dictionary getArrayForKey:@"itemsIds"];
+            model.itemsExcluded = [dictionary getArrayForKey:@"itemsExcluded"];
+            
+            model.additionalFilters = [dictionary getStringForKey:@"additionalFilters"];
+            if (dictionary[@"filtersJoiner"] != nil) {
+                model.filtersJoiner =  ([self modelFiltersJoiner:[dictionary getStringForKey:@"filtersJoiner"]]);
+            }
+            
+            model.additionalElasticFilters = [dictionary getStringForKey:@"additionalElasticFilters"];
+            if (dictionary[@"elasticFiltersJoiner"] != nil) {
+                model.elasticFiltersJoiner = ([self modelFiltersJoiner:[dictionary getStringForKey:@"elasticFiltersJoiner"]]);
+            }
+            
+            model.displayAttribute = [dictionary getArrayForKey:@"displayAttribute"];
+            model.includeContextItems = [dictionary getBoolForKey:@"includeContextItems"];
+            
+            return model;
+        }
     }
     
-    return model;
+    return nil;
+}
+
+- (SNRScreenViewApiQuery *)modelScreenViewApiQueryWithDictionary:(NSDictionary *)dictionary {
+    if (dictionary != nil) {
+        NSString *feedSlug = [dictionary getStringForKey:@"feedSlug"];
+        if (feedSlug != nil) {
+            SNRScreenViewApiQuery *model = [[SNRScreenViewApiQuery alloc] initWithFeedSlug:feedSlug productID:nil];
+            model.productID = [dictionary getStringForKey:@"productId"];
+            
+            return model;
+        }
+    }
+    
+    return nil;
+}
+
+- (SNRRecommendationFiltersJoinerRule)modelFiltersJoiner:(NSString *)string {
+    if ([string isEqualToString:@"AND"]) {
+        return SNRRecommendationFiltersJoinerRuleAnd;
+    } else if ([string isEqualToString:@"OR"]) {
+        return SNRRecommendationFiltersJoinerRuleOr;
+    } else if ([string isEqualToString:@"REPLACE"]) {
+        return SNRRecommendationFiltersJoinerRuleReplace;
+    } else {
+        return -1;
+    }
 }
 
 #pragma mark - JS Mapping
@@ -225,6 +298,25 @@ RCT_EXPORT_METHOD(generateDocument:(NSString *)slug response:(RCTResponseSenderB
     }];
 }
 
+//generateDocumentWithApiQuery(apiQuery: DocumentApiQuery, onSuccess: (document: Document) => void, onError: (error: Error) => void)
+
+RCT_EXPORT_METHOD(generateDocumentWithApiQuery:(NSDictionary *)dictionary response:(RCTResponseSenderBlock)response)
+{
+    SNRDocumentApiQuery *documentApiQuery = [self modelDocumentApiQueryWithDictionary:dictionary];
+    if (documentApiQuery != nil) {
+        [SNRContent generateDocumentWithApiQuery:documentApiQuery success:^(SNRDocument *document) {
+            NSDictionary *documentDictionary = [self dictionaryWithDocument:document];
+            if (documentDictionary != nil) {
+                [self executeSuccessCallbackResponse:response data:documentDictionary];
+            } else {
+                [self executeDefaultFailureCallbackResponse:response];
+            }
+        } failure:^(NSError *error) {
+            [self executeFailureCallbackResponse:response error:error];
+        }];
+    }
+}
+
 //getDocuments(documentsApiQuery: DocumentsApiQuery, onSuccess: (documentResponse: Object) => void, onError: (error: Error) => void)
 
 RCT_EXPORT_METHOD(getDocuments:(NSDictionary *)dictionary response:(RCTResponseSenderBlock)response)
@@ -323,6 +415,29 @@ RCT_EXPORT_METHOD(generateScreenView:(NSString *)feedSlug response:(RCTResponseS
     } failure:^(NSError *error) {
         [self executeFailureCallbackResponse:response error:error];
     }];
+}
+
+//generateScreenViewWithApiQuery(apiQuery: ScreenViewApiQuery, onSuccess: (screenView: ScreenView) => void, onError: (error: Error) => void)
+
+RCT_EXPORT_METHOD(generateScreenViewWithApiQuery:(NSDictionary *)dictionary response:(RCTResponseSenderBlock)response)
+{
+    SNRScreenViewApiQuery *screenViewApiQuery = [self modelScreenViewApiQueryWithDictionary:dictionary];
+    if (screenViewApiQuery != nil) {
+        [SNRContent generateScreenViewWithApiQuery:screenViewApiQuery success:^(SNRScreenView *screenView) {
+            if (screenView != nil) {
+                NSDictionary *screenViewDictionary = [self dictionaryWithScreenView:screenView];
+                if (screenViewDictionary != nil) {
+                    [self executeSuccessCallbackResponse:response data:screenViewDictionary];
+                } else {
+                    [self executeDefaultFailureCallbackResponse:response];
+                }
+            } else {
+                [self executeDefaultFailureCallbackResponse:response];
+            }
+        } failure:^(NSError *error) {
+            [self executeFailureCallbackResponse:response error:error];
+        }];
+    }
 }
 
 @end

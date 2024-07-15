@@ -1,6 +1,6 @@
-# Synerise React Native SDK (react-native-synerise-sdk) (0.20.0)
+# Synerise React Native SDK (react-native-synerise-sdk) (0.21.0)
 
-[![Platform](https://img.shields.io/badge/platform-iOS-orange.svg)](https://github.com/synerise/synerise-ios-sdk)
+[![Platform](https://img.shields.io/badge/platform-iOS-orange.svg)](https://github.com/synerise/ios-sdk)
 [![Platform](https://img.shields.io/badge/platform-Android-orange.svg)](https://github.com/synerise/android-sdk)
 [![Languages](https://img.shields.io/badge/language-TypeScript%20%7C%20Java%20%7C%20Objective--C-orange.svg)](https://github.com/synerise/react-native-synerise-sdk)
 [![npm](https://img.shields.io/npm/v/react-native-synerise-sdk.svg)](https://www.npmjs.com/package/react-native-synerise-sdk)

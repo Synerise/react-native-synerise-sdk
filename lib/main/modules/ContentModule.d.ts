@@ -1,11 +1,13 @@
 import { BaseModule as Module } from './BaseModule';
+import { DocumentApiQuery } from '../../classes/api_queries/DocumentApiQuery';
 import { DocumentsApiQuery } from '../../classes/api_queries/DocumentsApiQuery';
 import { RecommendationOptions } from '../../classes/models/Content/RecommendationOptions';
 import { RecommendationResponse } from '../../classes/models/Content/RecommendationResponse';
-import { Error } from '../..';
+import { ScreenViewApiQuery } from '../../classes/api_queries/ScreenViewApiQuery';
 import { ScreenViewResponse } from '../../config/import_models';
 import { ScreenView } from '../../classes/models/Content/ScreenView';
 import { Document } from '../../classes/models/Content/Document';
+import { Error } from '../..';
 declare class ContentModule extends Module {
     private static _instance;
     static instance(): ContentModule;
@@ -29,6 +31,15 @@ declare class ContentModule extends Module {
      *
      */
     generateDocument(slug: string, onSuccess: (document: Document) => void, onError: (error: Error) => void): void;
+    /**
+     * This method generates the document that is defined for parameters provided in the query object.
+     *
+     * @param apiQuery `DocumentApiQuery` object responsible for storing all query parameters.
+     * @param onSuccess Function to be executed when the operation finishes successfully
+     * @param onError Function to be executed when the operation finishes unsuccessfully
+     *
+     */
+    generateDocumentWithApiQuery(apiQuery: DocumentApiQuery, onSuccess: (document: Document) => void, onError: (error: Error) => void): void;
     /**
      * This method gets documents that are defined for parameters provided in the query object.
      *
@@ -67,12 +78,22 @@ declare class ContentModule extends Module {
      */
     getScreenView(onSuccess: (screenViewResponse: ScreenViewResponse) => void, onError: (error: Error) => void): void;
     /**
-     * This method generates customer's highest-priority screen view campaign.
+     * This method generates customer's highest-priority screen view campaign that is defined for the provided slug.
      *
+     * @param feedSlug Identifies a specific screen view.
      * @param onSuccess Function to be executed when the operation finishes successfully
      * @param onError Function to be executed when the operation finishes unsuccessfully
      *
      */
     generateScreenView(feedSlug: string, onSuccess: (screenView: ScreenView) => void, onError: (error: Error) => void): void;
+    /**
+     * This method generates customer's highest-priority screen view campaign that is defined for parameters provided in the query object.
+     *
+     * @param apiQuery `ScreenViewApiQuery` object responsible for storing all query parameters.
+     * @param onSuccess Function to be executed when the operation finishes successfully
+     * @param onError Function to be executed when the operation finishes unsuccessfully
+     *
+     */
+    generateScreenViewWithApiQuery(apiQuery: ScreenViewApiQuery, onSuccess: (screenView: ScreenView) => void, onError: (error: Error) => void): void;
 }
 export { ContentModule };
