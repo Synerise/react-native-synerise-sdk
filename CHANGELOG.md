@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.23.0] - 2024-08-05
+
+### Fixed
+- [iOS] Potential issue with slow SDK initialization.
+- [iOS] Potential issues with Simple Authentication requests.
+
+### Added
+- We added new parameters to the push.click event: `clickSource`, `actionType`, `url` and `actionButtonTitle`.
+
+### Changed
+- Update of native SDK's dependencies.
+
+
 ## [0.22.0] - 2024-07-16
 
 IMPORTANT: 

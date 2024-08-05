@@ -143,12 +143,20 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(isSyneriseInitialized) {
     return [NSNumber numberWithBool:isInitialized];
 }
 
-RCT_EXPORT_METHOD(changeClientApiKey:(NSString *)clientApiKey) {
+RCT_EXPORT_METHOD(changeClientApiKey:(NSString *)clientApiKey config:(NSDictionary *)initializationConfigDictionary) {
     if (clientApiKey == nil) {
         return;
     }
     
-    [SNRSynerise changeClientApiKey:clientApiKey];
+    SNRInitializationConfig *initializationConfig = [SNRInitializationConfig new];
+    if (initializationConfigDictionary != nil) {
+        NSString *requestValidationSalt = [initializationConfigDictionary getStringForKey:@"requestValidationSalt"];
+        if (requestValidationSalt != nil) {
+            initializationConfig.requestValidationSalt = requestValidationSalt;
+        }
+    }
+
+    [SNRSynerise changeClientApiKey:clientApiKey config:initializationConfig];
 }
 
 @end

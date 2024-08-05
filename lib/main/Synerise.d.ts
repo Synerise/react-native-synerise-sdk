@@ -5,6 +5,7 @@ import { NotificationsModule as Notifications } from './modules/NotificationsMod
 import { InjectorModule as Injector } from './modules/InjectorModule';
 import { PromotionsModule as Promotions } from './modules/PromotionsModule';
 import { ContentModule as Content } from './modules/ContentModule';
+import { InitializationConfig } from './../classes/models/Misc/InitializationConfig';
 import { IError, Error } from './../classes/types/Error';
 declare class SyneriseInitializer {
     private settings?;
@@ -28,7 +29,7 @@ declare class Synerise {
     static isInitialized(): Boolean;
     static onReady(callback: () => void): void;
     static onError(callback: (error: Error) => void): void;
-    static changeClientApiKey(clientApiKey: string): void;
+    static changeClientApiKey(clientApiKey: string, config?: InitializationConfig | undefined): void;
     static get Settings(): Settings;
     static get Client(): Client;
     static get Tracker(): Tracker;

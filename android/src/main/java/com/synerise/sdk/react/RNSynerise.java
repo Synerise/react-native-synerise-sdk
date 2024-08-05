@@ -1,6 +1,7 @@
 package com.synerise.sdk.react;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -8,9 +9,11 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.synerise.sdk.client.Client;
+import com.synerise.sdk.core.types.model.InitializationConfig;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -94,8 +97,14 @@ public class RNSynerise extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void changeClientApiKey(String apiKey) {
-    Client.changeApiKey(apiKey);
+  public void changeClientApiKey(String apiKey, ReadableMap initializationConfigMap) {
+    if (initializationConfigMap != null) {
+      InitializationConfig initializationConfig = new InitializationConfig();
+      initializationConfig.setSalt(initializationConfigMap.hasKey("requestValidationSalt") ? initializationConfigMap.getString("requestValidationSalt") : null);
+      Client.changeApiKey(apiKey, initializationConfig);
+    } else {
+      Client.changeApiKey(apiKey);
+    }
   }
 
   @ReactMethod(isBlockingSynchronousMethod = true)
