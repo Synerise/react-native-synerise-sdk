@@ -47,5 +47,6 @@ export { DocumentsApiQuery } from './../classes/api_queries/DocumentsApiQuery';
 export { DocumentsApiQueryType } from './../classes/api_queries/DocumentsApiQueryType';
 export { Token } from './../classes/models/Token/Token';
 export { TokenOrigin, TokenOriginFromString, TokenOriginToString } from './../classes/models/Token/TokenOrigin';
+export { InitializationConfig } from './../classes/models/Misc/InitializationConfig';
 export { SyneriseSource } from './../classes/models/Misc/SyneriseSource';
 export { InAppMessageData } from './../classes/models/Misc/InAppMessageData';
