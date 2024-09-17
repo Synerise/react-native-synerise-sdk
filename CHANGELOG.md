@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.23.1] - 2024-09-16
+
+### Fixed
+- [Android] Null pointer exception while launching callback from push notification in some cases.
+
+
 ## [0.23.0] - 2024-08-05
 
 ### Fixed
