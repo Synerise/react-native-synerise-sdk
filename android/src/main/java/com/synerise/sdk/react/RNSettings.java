@@ -39,6 +39,7 @@ public class RNSettings extends RNBaseModule {
     public static final String RN_SETTINGS_INJECTOR_AUTOMATIC = "INJECTOR_AUTOMATIC";
     public static final String RN_SETTINGS_IN_APP_CHECK_GLOBAL_CONTROL_GROUPS_ON_DEFINITIONS_FETCH = "IN_APP_CHECK_GLOBAL_CONTROL_GROUPS_ON_DEFINITIONS_FETCH";
     public static final String RN_SETTINGS_IN_APP_MAX_DEFINITION_UPDATE_INTERVAL_LIMIT = "IN_APP_MAX_DEFINITION_UPDATE_INTERVAL_LIMIT";
+    public static final String RN_SETTINGS_IN_APP_MESSAGING_CONTENT_BASE_URL = "IN_APP_MESSAGING_CONTENT_BASE_URL";
     public static final String RN_SETTINGS_IN_APP_MESSAGING_RENDERING_TIMEOUT = "IN_APP_MESSAGING_RENDERING_TIMEOUT";
     public static final String RN_SETTINGS_IN_APP_MESSAGING_SHOULD_SEND_IN_APP_CAPPING_EVENT = "IN_APP_MESSAGING_SHOULD_SEND_IN_APP_CAPPING_EVENT";
 
@@ -69,6 +70,7 @@ public class RNSettings extends RNBaseModule {
         constants.put(RN_SETTINGS_SHOULD_DESTROY_SESSION_ON_API_KEY_CHANGE, RN_SETTINGS_SHOULD_DESTROY_SESSION_ON_API_KEY_CHANGE);
         constants.put(RN_SETTINGS_IN_APP_CHECK_GLOBAL_CONTROL_GROUPS_ON_DEFINITIONS_FETCH, RN_SETTINGS_IN_APP_CHECK_GLOBAL_CONTROL_GROUPS_ON_DEFINITIONS_FETCH);
         constants.put(RN_SETTINGS_IN_APP_MAX_DEFINITION_UPDATE_INTERVAL_LIMIT, RN_SETTINGS_IN_APP_MAX_DEFINITION_UPDATE_INTERVAL_LIMIT);
+        constants.put(RN_SETTINGS_IN_APP_MESSAGING_CONTENT_BASE_URL, RN_SETTINGS_IN_APP_MESSAGING_CONTENT_BASE_URL);
         constants.put(RN_SETTINGS_IN_APP_MESSAGING_RENDERING_TIMEOUT, RN_SETTINGS_IN_APP_MESSAGING_RENDERING_TIMEOUT);
         constants.put(RN_SETTINGS_IN_APP_MESSAGING_SHOULD_SEND_IN_APP_CAPPING_EVENT, RN_SETTINGS_IN_APP_MESSAGING_SHOULD_SEND_IN_APP_CAPPING_EVENT);
         return constants;
@@ -84,6 +86,9 @@ public class RNSettings extends RNBaseModule {
         }
         if (settings.get(key) instanceof Integer) {
             setting.putInt(key, (int) settings.get(key));
+        }
+        if (settings.get(key) instanceof String) {
+            setting.putString(key, (String) settings.get(key));
         }
         if (settings.get(key) instanceof List) {
             List<String> eventsTriggeringFlush = (List<String>) settings.get(key);
@@ -110,6 +115,9 @@ public class RNSettings extends RNBaseModule {
             case Number:
                 matchSetting(key, settingMap.getInt("value"));
                 break;
+            case String:
+                matchSetting(key, settingMap.getString("value"));
+                break;
             case Array:
                 matchSetting(key, settingMap.getArray("value"));
                 break;
@@ -130,6 +138,9 @@ public class RNSettings extends RNBaseModule {
                     break;
                 case Number:
                    matchSetting(key, newSettings.getInt(key));
+                    break;
+                case String:
+                   matchSetting(key, newSettings.getString(key));
                     break;
                 case Array:
                     matchSetting(key, newSettings.getArray(key));
@@ -206,7 +217,10 @@ public class RNSettings extends RNBaseModule {
                 if (value instanceof Integer) {
                     Settings.getInstance().inAppMessaging.setMaxDefinitionUpdateIntervalLimit((int) value);
                 }
-
+            case RN_SETTINGS_IN_APP_MESSAGING_CONTENT_BASE_URL:
+                if (value instanceof String) {
+                    Settings.getInstance().inAppMessaging.setContentBaseUrl((String) value);
+                }
             case RN_SETTINGS_IN_APP_MESSAGING_RENDERING_TIMEOUT:
                 if (value instanceof Integer) {
                     Settings.getInstance().inAppMessaging.renderingTimeout = ((int) value) * 1000;
@@ -233,6 +247,7 @@ public class RNSettings extends RNBaseModule {
         settings.put(RN_SETTINGS_NOTIFICATIONS_ENCRYPTION, Synerise.settings.notifications.getEncryption());
         settings.put(RN_SETTINGS_SHOULD_DESTROY_SESSION_ON_API_KEY_CHANGE, Synerise.settings.sdk.shouldDestroySessionOnApiKeyChange);
         settings.put(RN_SETTINGS_IN_APP_CHECK_GLOBAL_CONTROL_GROUPS_ON_DEFINITIONS_FETCH, Synerise.settings.inAppMessaging.checkGlobalControlGroupsOnDefinitionsFetch);
+        settings.put(RN_SETTINGS_IN_APP_MESSAGING_CONTENT_BASE_URL, Synerise.settings.inAppMessaging.getContentBaseUrl());
         settings.put(RN_SETTINGS_IN_APP_MESSAGING_RENDERING_TIMEOUT, Synerise.settings.inAppMessaging.renderingTimeout / 1000);
         settings.put(RN_SETTINGS_IN_APP_MAX_DEFINITION_UPDATE_INTERVAL_LIMIT, Synerise.settings.inAppMessaging.getMaxDefinitionUpdateIntervalLimit());
         settings.put(RN_SETTINGS_IN_APP_MESSAGING_SHOULD_SEND_IN_APP_CAPPING_EVENT, Synerise.settings.inAppMessaging.shouldSendInAppCappingEvent);

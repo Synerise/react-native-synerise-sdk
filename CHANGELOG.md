@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.24.0] - 2024-10-07
+
+### Fixed
+- [iOS] Some potential issues with possible database corruption.
+- [Android] Notification callback issue when app was in foreground.
+
+### Added
+- `Synerise.Settings.inAppMessaging.contentBaseUrl` option in settings to let you set the base URL to use for all relative URLs in an in-app message's creation.
+- `Synerise.Client.updateAccountBasicInformation(context, onSuccess, onError)` method. The new method updates anonymous users.
+- `ClientAccountUpdateBasicInformationContext` model correlated with the new `Synerise.Client.updateAccountBasicInformation(context, onSuccess, onError)` method.
+
+### Changed
+- [Android] Fresco library is now updated to 3.2.0.
+- Optimization of the In-app messaging module (variants are no longer assigned once more when the profile's UUID changes).
+- Improvements to stability.
+
+
 ## [0.23.1] - 2024-09-16
 
 ### Fixed
@@ -43,7 +60,7 @@ The SDK version 0.21.0 has been omitted for technical reasons.
 - [iOS] Some potential issues with retrieving system push consent by the SDK. The SDK set the constent to false when the general consent for the application was enabled, but at least one of the following options was disabled: alerts, sounds, badges.
 
 ### Added
-- `Synerise.settings.tracker.eventsTriggeringFlush` option in settings to let you set the list of event actions which will trigger instant sending of all events in the queue. The default array contains only push event's actions.
+- `Synerise.Settings.tracker.eventsTriggeringFlush` option in settings to let you set the list of event actions which will trigger instant sending of all events in the queue. The default array contains only push event's actions.
 
 ### Changed
 - All events connected with push campaigns will flush the queue and send events immediately.
@@ -62,7 +79,7 @@ The SDK version 0.21.0 has been omitted for technical reasons.
 
 ### Added
 - Global Control Group support for in-app messages. From now on, you can use this feature in in-app messaging communication. This lets you take your marketing efforts to the next level and provides a solid foundation for accurate measurement of campaign effectiveness. Read more at https://hub.synerise.com/docs/settings/configuration/global-control-group/.
-- [iOS] `Synerise.settings.sdk.localizable` option in settings to let you localize some strings displayed by the SDK.
+- [iOS] `Synerise.Settings.sdk.localizable` option in settings to let you localize some strings displayed by the SDK.
 
 ### Changed
 - Improved mechanism for checking capping in in-app messages. The number of views no longer resets when the account's UUID changes.
@@ -278,14 +295,14 @@ https://hub.synerise.com//developers/mobile-sdk/campaigns/action-handling/
 ### Added
 
 - Information about device root is moved to AppStarted event.
-- New option to set whether events should be sent when server time synchronization has failed - `Synerise.settings.tracker.isBackendTimeSyncRequired`.
+- New option to set whether events should be sent when server time synchronization has failed - `Synerise.Settings.tracker.isBackendTimeSyncRequired`.
 - `Client.deleteAccountByIdentityProvider` method.
 
 ## [0.9.14] - 2020-10-15
 
 ### Added
 
-- Support for encrypted notifications (enabled by `Synerise.settings.notifications.encryption`). [1]
+- Support for encrypted notifications (enabled by `Synerise.Settings.notifications.encryption`). [1]
 
 [1] Please read full documentation:
 iOS: https://help.synerise.com/developers/ios-sdk/configure-notifications/#configuring-notification-encryption
@@ -308,7 +325,7 @@ Android: https://help.synerise.com/developers/android-sdk/configure-notification
 - `Synerise.Injector.authenticateByOAuthIfRegistered` method.
 - `Synerise.Injector.deleteAccountByOAuth` method.
 - `Synerise.Injector.deleteAccountByAppleSignIn` method.
-- `Synerise.settings.sdk.sdk.shouldDestroySessionOnApiKeyChange` option in settings.
+- `Synerise.Settings.sdk.shouldDestroySessionOnApiKeyChange` option in settings.
 
 ## [0.9.11] - 2020-05-18
 
@@ -336,7 +353,7 @@ Android: https://help.synerise.com/developers/android-sdk/configure-notification
 
 ### Fixed
 
-- `Synerise.settings` module issues.
+- `Synerise.Settings` module issues.
 
 ## [0.9.7] - 2020-03-02
 
@@ -345,7 +362,7 @@ Android: https://help.synerise.com/developers/android-sdk/configure-notification
 - OAuth/Facebook authentication.
 - Walkthrough campaign.
 - Walkthrough listener in `Synerise.Injector` module.
-- `Synerise.settings.injector.automatic` option in settings.
+- `Synerise.Settings.injector.automatic` option in settings.
 - Vouchers methods in `Synerise.Promotions` module.
 - `Synerise.changeClientApiKey` method.
 

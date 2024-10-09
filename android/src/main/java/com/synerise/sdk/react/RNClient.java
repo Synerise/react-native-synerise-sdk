@@ -24,6 +24,7 @@ import com.synerise.sdk.react.utils.MapUtil;
 import com.synerise.sdk.client.Client;
 import com.synerise.sdk.client.model.GetAccountInformation;
 import com.synerise.sdk.client.model.UpdateAccountInformation;
+import com.synerise.sdk.client.model.UpdateAccountBasicInformation;
 import com.synerise.sdk.client.model.client.Agreements;
 import com.synerise.sdk.client.model.client.Attributes;
 import com.synerise.sdk.client.model.client.RegisterClient;
@@ -556,7 +557,6 @@ public class RNClient extends RNBaseModule {
                 accountMap.putBoolean("anonymous", getAccountInformation.getAnonymous());
                 accountMap.putMap("agreements", agreements);
                 accountMap.putMap("attributes", MapUtil.stringMapToWritableMap(getAccountInformation.getAttributes()));
-                accountMap.putArray("tags", ArrayUtil.toWritableArray(getAccountInformation.getTags()));
                 if (getAccountInformation.getLastActivityDate() != null) {
                     accountMap.putDouble("lastActivityDate", getAccountInformation.getLastActivityDate().getTime());
                 }
@@ -564,6 +564,46 @@ public class RNClient extends RNBaseModule {
                 executeSuccessCallbackResponse(callback, accountMap, null);
             }
         }, new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
+        });
+    }
+
+    //updateAccountBasicInformation(context: ClientAccountUpdateBasicInformationContext, onSuccess: () => void, onError: (error: Error) => void)
+    @ReactMethod
+    public void updateAccountBasicInformation(ReadableMap map, Callback callback) {
+        UpdateAccountBasicInformation updateAccountBasicInformation = new UpdateAccountBasicInformation();
+        updateAccountBasicInformation.setFirstName(map.hasKey("firstName") ? map.getString("firstName") : null);
+        updateAccountBasicInformation.setLastName(map.hasKey("lastName") ? map.getString("lastName") : null);
+        updateAccountBasicInformation.setDisplayName(map.hasKey("displayName") ? map.getString("displayName") : null);
+        if (map.hasKey("sex")) {
+            updateAccountBasicInformation.setSex(Sex.getSex(map.getString("sex")));
+        }
+        updateAccountBasicInformation.setPhoneNumber(map.hasKey("phone") ? map.getString("phone") : null);
+        updateAccountBasicInformation.setBirthDate(map.hasKey("birthDate") ? map.getString("birthDate") : null);
+        updateAccountBasicInformation.setAvatarUrl(map.hasKey("avatarUrl") ? map.getString("avatarUrl") : null);
+        updateAccountBasicInformation.setCompany(map.hasKey("company") ? map.getString("company") : null);
+        updateAccountBasicInformation.setAddress(map.hasKey("address") ? map.getString("address") : null);
+        updateAccountBasicInformation.setCity(map.hasKey("city") ? map.getString("city") : null);
+        updateAccountBasicInformation.setProvince(map.hasKey("province") ? map.getString("province") : null);
+        updateAccountBasicInformation.setZipCode(map.hasKey("zipCode") ? map.getString("zipCode") : null);
+        updateAccountBasicInformation.setCountryCode(map.hasKey("countryCode") ? map.getString("countryCode") : null);
+
+        if (map.hasKey("attributes")) {
+            Attributes attributes = attributesMapper(map.getMap("attributes").toHashMap());
+            updateAccountBasicInformation.setAttributes(attributes);
+        }
+
+        if (map.hasKey("agreements")) {
+            Agreements agreements = agreementsMapper(map.getMap("agreements"));
+            updateAccountBasicInformation.setAgreements(agreements);
+        }
+
+        if (updateAccountCall != null) updateAccountCall.cancel();
+        updateAccountCall = Client.updateAccountBasicInformation(updateAccountBasicInformation);
+        updateAccountCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
             @Override
             public void onDataAction(ApiError apiError) {
                 executeFailureCallbackResponse(callback, null, apiError);
