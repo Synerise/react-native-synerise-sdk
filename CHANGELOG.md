@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.24.0] - 2024-10-07
+## [0.24.0] - 2024-10-09
 
 ### Fixed
 - [iOS] Some potential issues with possible database corruption.
