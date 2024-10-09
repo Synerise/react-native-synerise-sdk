@@ -1,5 +1,6 @@
 import { BaseModule as Module } from './BaseModule';
 import { ClientAccountRegisterContext } from './../../classes/models/Client/ClientAccountRegisterContext';
+import { ClientAccountUpdateBasicInformationContext } from './../../classes/models/Client/ClientAccountUpdateBasicInformationContext';
 import { ClientAccountUpdateContext } from './../../classes/models/Client/ClientAccountUpdateContext';
 import { ClientAccountInformation } from './../../classes/models/Client/ClientAccountInformation';
 import { ClientAuthContext } from '../../classes/models/Client/ClientAuthContext';
@@ -250,6 +251,14 @@ declare class ClientModule extends Module {
      * @param onError Function to be executed when the operation finishes unsuccessfully
      */
     getAccount(onSuccess: (clientAccountInformation: ClientAccountInformation) => void, onError: (error: Error) => void): void;
+    /**
+     * This method updates a customer’s account basic information.
+     *
+     * @param context Object with customer’s first name, phone, and other optional data
+     * @param onSuccess Function to be executed when the operation finishes successfully
+     * @param onError Function to be executed when the operation finishes unsuccessfully
+     */
+    updateAccountBasicInformation(context: ClientAccountUpdateBasicInformationContext, onSuccess: () => void, onError: (error: Error) => void): void;
     /**
      * This method updates a customer’s account information.
      *

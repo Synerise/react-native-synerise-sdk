@@ -27,6 +27,7 @@ static NSString * const RNSettingsNotificationsDisableInAppAlerts = @"NOTIFICATI
 
 static NSString * const RNSettingsInAppMessagingCheckGlobalControlGroupsOnDefinitionsFetch = @"IN_APP_CHECK_GLOBAL_CONTROL_GROUPS_ON_DEFINITIONS_FETCH";
 static NSString * const RNSettingsInAppMessagingMaxDefinitionUpdateIntervalLimit = @"IN_APP_MAX_DEFINITION_UPDATE_INTERVAL_LIMIT";
+static NSString * const RNSettingsInAppMessagingContentBaseUrl = @"IN_APP_MESSAGING_CONTENT_BASE_URL";
 static NSString * const RNSettingsInAppMessagingRenderingTimeout = @"IN_APP_MESSAGING_RENDERING_TIMEOUT";
 static NSString * const RNSettingsInAppMessagingShouldSendInAppCappingEvent = @"IN_APP_MESSAGING_SHOULD_SEND_IN_APP_CAPPING_EVENT";
 
@@ -80,6 +81,7 @@ RCT_EXPORT_MODULE();
     
     [self updateSettingsKeyPath:@"inAppMessaging.checkGlobalControlGroupsOnDefinitionsFetch" expectedClass:[NSNumber class] object:dictionary[RNSettingsInAppMessagingCheckGlobalControlGroupsOnDefinitionsFetch]];
     [self updateSettingsKeyPath:@"inAppMessaging.maxDefinitionUpdateIntervalLimit" expectedClass:[NSNumber class] object:dictionary[RNSettingsInAppMessagingMaxDefinitionUpdateIntervalLimit]];
+    [self updateSettingsKeyPath:@"inAppMessaging.contentBaseUrl" expectedClass:[NSString class] object:dictionary[RNSettingsInAppMessagingContentBaseUrl]];
     [self updateSettingsKeyPath:@"inAppMessaging.renderingTimeout" expectedClass:[NSNumber class] object:dictionary[RNSettingsInAppMessagingRenderingTimeout]];
     [self updateSettingsKeyPath:@"inAppMessaging.shouldSendInAppCappingEvent" expectedClass:[NSNumber class] object:dictionary[RNSettingsInAppMessagingShouldSendInAppCappingEvent]];
 
@@ -114,12 +116,12 @@ RCT_EXPORT_MODULE();
 
     NSString *localizableKeyOK = dictionary[JSLocalizableKeyOK];
     if (localizableKeyOK != nil) {
-        newDictionary[SNR_LOCALIZABLE_STRING_KEY_OK] = localizableKeyOK;
+        newDictionary[_SNR_Constants.LOCALIZABLE_STRING_KEY_OK] = localizableKeyOK;
     }
 
     NSString *localizableKeyCancel = dictionary[JSLocalizableKeyCancel];
     if (localizableKeyCancel != nil) {
-        newDictionary[SNR_LOCALIZABLE_STRING_KEY_CANCEL] = localizableKeyCancel;
+        newDictionary[_SNR_Constants.LOCALIZABLE_STRING_KEY_CANCEL] = localizableKeyCancel;
     }
 
     if ([newDictionary count] == 0 ){
@@ -153,6 +155,7 @@ RCT_EXPORT_MODULE();
     
     dictionary[RNSettingsInAppMessagingCheckGlobalControlGroupsOnDefinitionsFetch] = [NSNumber numberWithBool:SNRSynerise.settings.inAppMessaging.checkGlobalControlGroupsOnDefinitionsFetch];
     dictionary[RNSettingsInAppMessagingMaxDefinitionUpdateIntervalLimit] = [NSNumber numberWithDouble:SNRSynerise.settings.inAppMessaging.maxDefinitionUpdateIntervalLimit];
+    dictionary[RNSettingsInAppMessagingContentBaseUrl] = SNRSynerise.settings.inAppMessaging.contentBaseUrl ?: [NSNull null];
     dictionary[RNSettingsInAppMessagingRenderingTimeout] = [NSNumber numberWithDouble:SNRSynerise.settings.inAppMessaging.renderingTimeout];
     dictionary[RNSettingsInAppMessagingShouldSendInAppCappingEvent] = [NSNumber numberWithBool:SNRSynerise.settings.inAppMessaging.shouldSendInAppCappingEvent];
 
@@ -185,6 +188,7 @@ RCT_EXPORT_MODULE();
       
       RNSettingsInAppMessagingCheckGlobalControlGroupsOnDefinitionsFetch: RNSettingsInAppMessagingCheckGlobalControlGroupsOnDefinitionsFetch,
       RNSettingsInAppMessagingMaxDefinitionUpdateIntervalLimit: RNSettingsInAppMessagingMaxDefinitionUpdateIntervalLimit,
+      RNSettingsInAppMessagingContentBaseUrl: RNSettingsInAppMessagingContentBaseUrl,
       RNSettingsInAppMessagingRenderingTimeout: RNSettingsInAppMessagingRenderingTimeout,
       RNSettingsInAppMessagingShouldSendInAppCappingEvent: RNSettingsInAppMessagingShouldSendInAppCappingEvent,
 

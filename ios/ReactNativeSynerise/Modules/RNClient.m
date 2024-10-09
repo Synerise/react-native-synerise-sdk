@@ -201,6 +201,34 @@ RCT_EXPORT_MODULE();
     return nil;
 }
 
+- (nullable SNRClientUpdateAccountBasicInformationContext *)modelClientUpdateAccountBasicInformationContextWithDictionary:(nullable NSDictionary *)dictionary {
+    if (dictionary != nil) {
+        SNRClientUpdateAccountBasicInformationContext *model = [SNRClientUpdateAccountContext new];
+        model.firstName = [dictionary getStringForKey:@"firstName"];
+        model.lastName = [dictionary getStringForKey:@"lastName"];
+        model.displayName = [dictionary getStringForKey:@"displayName"];
+        model.sex = SNR_StringToClientSex([dictionary getStringForKey:@"sex"]);
+        model.phone = [dictionary getStringForKey:@"phone"];
+        model.birthDate = [dictionary getStringForKey:@"birthDate"];
+        model.avatarUrl = [dictionary getStringForKey:@"avatarUrl"];
+                                                
+        model.company = [dictionary getStringForKey:@"company"];
+        model.address = [dictionary getStringForKey:@"address"];
+        model.city = [dictionary getStringForKey:@"city"];
+        model.province = [dictionary getStringForKey:@"province"];
+        model.zipCode = [dictionary getStringForKey:@"zipCode"];
+        model.countryCode = [dictionary getStringForKey:@"countryCode"];
+        
+        model.agreements = [self modelClientAgreementsWithDictionary:[dictionary getDictionaryForKey:@"agreements"]];
+
+        model.attributes = [dictionary getDictionaryForKey:@"attributes"];
+        
+        return model;
+    }
+    
+    return nil;
+}
+
 - (nullable SNRClientUpdateAccountContext *)modelClientUpdateAccountContextWithDictionary:(nullable NSDictionary *)dictionary {
     if (dictionary != nil) {
         SNRClientUpdateAccountContext *model = [SNRClientUpdateAccountContext new];
@@ -723,13 +751,29 @@ RCT_REMAP_METHOD(getAccount, getAccountWithResponse:(RCTResponseSenderBlock)resp
     }];
 }
 
+//updateAccountBasicInformation(context: ClientAccountUpdateBasicInformationContext, onSuccess: () => void, onError: (error: Error) => void)
+
+RCT_EXPORT_METHOD(updateAccountBasicInformation:(NSDictionary *)dictionary response:(RCTResponseSenderBlock)response)
+{
+    SNRClientUpdateAccountBasicInformationContext *context = [self modelClientUpdateAccountBasicInformationContextWithDictionary:dictionary];
+    if (context != nil) {
+        [SNRClient updateAccountBasicInformation:context success:^(BOOL isSuccess) {
+            [self executeSuccessCallbackResponse:response data:@1];
+        } failure:^(NSError *error) {
+            [self executeFailureCallbackResponse:response error:error];
+        }];
+    } else {
+        [self executeDefaultFailureCallbackResponse:response];
+    }
+}
+
 //updateAccount(context: ClientAccountUpdateContext, onSuccess: () => void, onError: (error: Error) => void)
 
 RCT_EXPORT_METHOD(updateAccount:(NSDictionary *)dictionary response:(RCTResponseSenderBlock)response)
 {
-    SNRClientUpdateAccountContext *clientUpdateAccountContext = [self modelClientUpdateAccountContextWithDictionary:dictionary];
-    if (clientUpdateAccountContext != nil) {
-        [SNRClient updateAccount:clientUpdateAccountContext success:^(BOOL isSuccess) {
+    SNRClientUpdateAccountContext *context = [self modelClientUpdateAccountContextWithDictionary:dictionary];
+    if (context != nil) {
+        [SNRClient updateAccount:context success:^(BOOL isSuccess) {
             [self executeSuccessCallbackResponse:response data:@1];
         } failure:^(NSError *error) {
             [self executeFailureCallbackResponse:response error:error];

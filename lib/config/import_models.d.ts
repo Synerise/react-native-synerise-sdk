@@ -5,6 +5,7 @@ export { IClientAppleSignInAuthenticationContext, ClientAppleSignInAuthenticatio
 export { IClientSimpleAuthenticationData, ClientSimpleAuthenticationData } from './../classes/models/Client/ClientSimpleAuthenticationData';
 export { ClientAccountInformation } from './../classes/models/Client/ClientAccountInformation';
 export { IClientAccountRegisterContext, ClientAccountRegisterContext } from './../classes/models/Client/ClientAccountRegisterContext';
+export { IClientAccountUpdateBasicInformationContext, ClientAccountUpdateBasicInformationContext } from './../classes/models/Client/ClientAccountUpdateBasicInformationContext';
 export { IClientAccountUpdateContext, ClientAccountUpdateContext } from './../classes/models/Client/ClientAccountUpdateContext';
 export { IClientAgreements, ClientAgreements } from './../classes/models/Client/ClientAgreements';
 export { ClientSex, ClientSexFromString, ClientSexToString } from './../classes/models/Client/ClientSex';

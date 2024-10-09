@@ -25,6 +25,7 @@ interface ISettingsOptions {
     inAppMessaging?: {
         checkGlobalControlGroupsOnDefinitionsFetch?: boolean;
         maxDefinitionUpdateIntervalLimit?: number;
+        contentBaseUrl?: string;
         renderingTimeout?: number;
         shouldSendInAppCappingEvent?: boolean;
     };
@@ -57,6 +58,7 @@ declare class SettingsModule extends Module {
     inAppMessaging: {
         checkGlobalControlGroupsOnDefinitionsFetch: any;
         maxDefinitionUpdateIntervalLimit: any;
+        contentBaseUrl: any;
         renderingTimeout: any;
         shouldSendInAppCappingEvent: any;
     };
