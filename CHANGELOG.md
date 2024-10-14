@@ -2,7 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.24.0] - 2024-10-09
+## [0.24.1] - 2024-10-14
+
+### Fixed
+- [Android] workManager npe - for android api lower than 24
+
+### Changed
+- Update of native SDK's dependencies.
+
+
+## [0.24.0] - 2024-10-07
 
 ### Fixed
 - [iOS] Some potential issues with possible database corruption.
