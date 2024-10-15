@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.24.2] - 2024-10-15
+
+### Fixed
+- [iOS] Optimization of the registration for push notifications process. The cache for that request was erroneously removed in version 4.23.0 of the native SDK.
+
+
 ## [0.24.1] - 2024-10-14
 
 ### Fixed
