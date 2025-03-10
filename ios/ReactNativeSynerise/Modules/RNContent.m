@@ -65,23 +65,6 @@ RCT_EXPORT_MODULE();
     return nil;
 }
 
-- (SNRDocumentsApiQuery *)modelDocumentsApiQueryWithDictionary:(NSDictionary *)dictionary {
-    if (dictionary != nil) {
-        SNRDocumentsApiQueryType type = SNRDocumentsApiQueryTypeBySchema;
-        NSString *typeValue = [dictionary getStringForKey:@"typeValue"];
-        
-        if (typeValue != nil) {
-            SNRDocumentsApiQuery *model = [[SNRDocumentsApiQuery alloc] initWithType:type typeValue:typeValue];
-            
-            model.version = [dictionary getStringForKey:@"version"];
-            
-            return model;
-        }
-    }
-    
-    return nil;
-}
-
 - (SNRRecommendationOptions *)modelRecommendationOptionsWithDictionary:(NSDictionary *)dictionary {
     if (dictionary != nil) {
         NSString *slug = [dictionary getStringForKey:@"slug"];
@@ -143,7 +126,7 @@ RCT_EXPORT_MODULE();
     if (model != nil) {
         NSMutableDictionary *dictionary = [@{} mutableCopy];
         
-        [dictionary setString:model.identifier forKey:@"uuid"];
+        [dictionary setString:model.uuid forKey:@"uuid"];
         [dictionary setString:model.slug forKey:@"slug"];
         [dictionary setString:model.schema forKey:@"schema"];
         [dictionary setDictionary:model.content forKey:@"content"];
@@ -188,34 +171,6 @@ RCT_EXPORT_MODULE();
     return nil;
 }
 
-- (nullable NSDictionary *)dictionaryWithScreenViewResponse:(SNRScreenViewResponse *)model {
-    if (model != nil) {
-        NSMutableDictionary *dictionary = [@{} mutableCopy];
-        
-        [dictionary setDictionary:[self dictionaryWithScreenViewAudience:model.audience] forKey:@"audience"];
-        
-        [dictionary setString:model.identifier forKey:@"identifier"];
-        [dictionary setString:model.hashString forKey:@"hashString"];
-        [dictionary setString:model.path forKey:@"path"];
-        [dictionary setString:model.name forKey:@"name"];
-        [dictionary setInteger:model.priority.integerValue forKey:@"priority"];
-        [dictionary setString:model.descriptionText forKey:@"descriptionText"];
-        
-        [dictionary setGenericObject:model.data forKey:@"data"];
-        
-        [dictionary setString:model.version forKey:@"version"];
-        [dictionary setString:model.parentVersion forKey:@"parentVersion"];
-        
-        [dictionary setDate:model.createdAt forKey:@"createdAt"];
-        [dictionary setDate:model.updatedAt forKey:@"updatedAt"];
-        [dictionary setDate:model.deletedAt forKey:@"deletedAt"];
-        
-        return dictionary;
-    }
-    
-    return nil;
-}
-
 - (nullable NSDictionary *)dictionaryWithScreenView:(SNRScreenView *)model {
     if (model != nil) {
         NSMutableDictionary *dictionary = [@{} mutableCopy];
@@ -238,19 +193,6 @@ RCT_EXPORT_MODULE();
     return nil;
 }
 
-- (nullable NSDictionary *)dictionaryWithScreenViewAudience:(SNRScreenViewAudience *)model {
-    if (model != nil) {
-        NSMutableDictionary *dictionary = [@{} mutableCopy];
-        
-        [dictionary setArray:model.IDs forKey:@"IDs"];
-        [dictionary setString:model.query forKey:@"query"];
-        
-        return dictionary;
-    }
-    
-    return nil;
-}
-
 - (nullable NSDictionary *)dictionaryWithScreenViewAudienceInfo:(SNRScreenViewAudienceInfo *)model {
     if (model != nil) {
         NSMutableDictionary *dictionary = [@{} mutableCopy];
@@ -266,21 +208,6 @@ RCT_EXPORT_MODULE();
 }
 
 #pragma mark - JS Module
-
-//getDocument(slug: String, onSuccess: (documentResponse: Object) => void, onError: (error: Error) => void)
-
-RCT_EXPORT_METHOD(getDocument:(NSString *)slug response:(RCTResponseSenderBlock)response)
-{
-    [SNRContent getDocument:slug success:^(NSDictionary *document) {
-        if (document != nil) {
-            [self executeSuccessCallbackResponse:response data:document];
-        } else {
-            [self executeDefaultFailureCallbackResponse:response];
-        }
-    } failure:^(NSError *error) {
-        [self executeFailureCallbackResponse:response error:error];
-    }];
-}
 
 //generateDocument(slug: string, onSuccess: (document: Document) => void, onError: (error: Error) => void)
 
@@ -317,47 +244,6 @@ RCT_EXPORT_METHOD(generateDocumentWithApiQuery:(NSDictionary *)dictionary respon
     }
 }
 
-//getDocuments(documentsApiQuery: DocumentsApiQuery, onSuccess: (documentResponse: Object) => void, onError: (error: Error) => void)
-
-RCT_EXPORT_METHOD(getDocuments:(NSDictionary *)dictionary response:(RCTResponseSenderBlock)response)
-{
-    SNRDocumentsApiQuery *documentsApiQuery = [self modelDocumentsApiQueryWithDictionary:dictionary];
-    if (documentsApiQuery != nil) {
-        [SNRContent getDocumentsWithApiQuery:documentsApiQuery success:^(NSArray *documents) {
-            if (documents != nil) {
-                [self executeSuccessCallbackResponse:response data:documents];
-            } else {
-                [self executeDefaultFailureCallbackResponse:response];
-            }
-        } failure:^(NSError *error) {
-            [self executeFailureCallbackResponse:response error:error];
-        }];
-    }
-}
-
-//getRecommendations(options: RecommendationOptions, onSuccess: (recommendationResponse: RecommendationResponse) => void, onError: (error: Error) => void)
-
-RCT_EXPORT_METHOD(getRecommendations:(NSDictionary *)dictionary response:(RCTResponseSenderBlock)response)
-{
-    SNRRecommendationOptions *recommendationOptions = [self modelRecommendationOptionsWithDictionary:dictionary];
-    if (recommendationOptions != nil) {
-        [SNRContent getRecommendations:recommendationOptions success:^(SNRRecommendationResponse *recommendationResponse) {
-            if (recommendationResponse != nil) {
-                NSDictionary *recommendationResponseDictionary = [self dictionaryWithRecommendationResponse:recommendationResponse];
-                if (recommendationResponseDictionary != nil) {
-                    [self executeSuccessCallbackResponse:response data:recommendationResponseDictionary];
-                } else {
-                    [self executeDefaultFailureCallbackResponse:response];
-                }
-            } else {
-                [self executeDefaultFailureCallbackResponse:response];
-            }
-        } failure:^(NSError *error) {
-            [self executeFailureCallbackResponse:response error:error];
-        }];
-    }
-}
-
 //getRecommendationsV2(options: RecommendationOptions, onSuccess: (recommendationResponse: RecommendationResponse)
 
 RCT_EXPORT_METHOD(getRecommendationsV2:(NSDictionary *)dictionary response:(RCTResponseSenderBlock)response)
@@ -379,24 +265,6 @@ RCT_EXPORT_METHOD(getRecommendationsV2:(NSDictionary *)dictionary response:(RCTR
             [self executeFailureCallbackResponse:response error:error];
         }];
     }
-}
-
-//getScreenView(onSuccess: (screenViewResponse: ScreenViewResponse) => void, onError: (error: Error) => void)
-
-RCT_REMAP_METHOD(getScreenView, getScreenViewWithResponse:(RCTResponseSenderBlock)response)
-{
-    [SNRContent getScreenViewWithSuccess:^(SNRScreenViewResponse *screenViewResponse) {
-        if (screenViewResponse != nil) {
-            NSDictionary *screenViewResponseDictionary = [self dictionaryWithScreenViewResponse:screenViewResponse];
-            if (screenViewResponseDictionary != nil) {
-                [self executeSuccessCallbackResponse:response data:screenViewResponseDictionary];
-            } else {
-                [self executeDefaultFailureCallbackResponse:response];
-            }
-        }
-    } failure:^(NSError *error) {
-        [self executeFailureCallbackResponse:response error:error];
-    }];
 }
 
 //generateScreenView(feedSlug: string, onSuccess: (screenView: ScreenView) => void, onError: (error: Error) => void)

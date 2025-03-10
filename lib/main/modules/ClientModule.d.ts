@@ -4,9 +4,6 @@ import { ClientAccountUpdateBasicInformationContext } from './../../classes/mode
 import { ClientAccountUpdateContext } from './../../classes/models/Client/ClientAccountUpdateContext';
 import { ClientAccountInformation } from './../../classes/models/Client/ClientAccountInformation';
 import { ClientAuthContext } from '../../classes/models/Client/ClientAuthContext';
-import { ClientOAuthAuthenticationContext } from '../../classes/models/Client/ClientOAuthAuthenticationContext';
-import { ClientFacebookAuthenticationContext } from '../../classes/models/Client/ClientFacebookAuthenticationContext';
-import { ClientAppleSignInAuthenticationContext } from '../../classes/models/Client/ClientAppleSignInAuthenticationContext';
 import { ClientSimpleAuthenticationData } from '../../classes/models/Client/ClientSimpleAuthenticationData';
 import { ClientIdentityProvider } from '../../classes/models/Client/ClientIdentityProvider';
 import { ClientConditionalAuthResult } from '../../classes/models/Client/ClientConditionalAuthResult';
@@ -43,21 +40,21 @@ declare class ClientModule extends Module {
      */
     registerAccount(context: ClientAccountRegisterContext, onSuccess: () => void, onError: (error: Error) => void): void;
     /**
-     * This method confirms a customer account with the confirmation token.
-     *
-     * @param token Customer’s token provided by email
-     * @param onSuccess Function to be executed when the operation finishes successfully
-     * @param onError Function to be executed when the operation finishes unsuccessfully
-     */
-    confirmAccount(token: string, onSuccess: () => void, onError: (error: Error) => void): void;
-    /**
      * This method activates a customer with email.
      *
      * @param email Customer’s email
      * @param onSuccess Function to be executed when the operation finishes successfully
      * @param onError Function to be executed when the operation finishes unsuccessfully
      */
-    activateAccount(email: string, onSuccess: () => void, onError: (error: Error) => void): void;
+    requestAccountActivation(email: string, onSuccess: () => void, onError: (error: Error) => void): void;
+    /**
+     * This method confirms a customer account with the confirmation token.
+     *
+     * @param token Customer’s token provided by email
+     * @param onSuccess Function to be executed when the operation finishes successfully
+     * @param onError Function to be executed when the operation finishes unsuccessfully
+     */
+    confirmAccountActivation(token: string, onSuccess: () => void, onError: (error: Error) => void): void;
     /**
      * This method requests a customer’s account registration process with the PIN code.
      *
@@ -112,72 +109,6 @@ declare class ClientModule extends Module {
      * @param onError Function to be executed when the operation finishes unsuccessfully
      */
     authenticateConditionally(token: string, provider: ClientIdentityProvider, context: ClientAuthContext, onSuccess: (authResult: ClientConditionalAuthResult) => void, onError: (error: Error) => void): void;
-    /**
-     * This method authenticates a customer with OAuth.
-     *
-     * @param accessToken OAuth Access Token
-     * @param context `ClientOAuthAuthenticationContext` object with agreements and optional attributes
-     * @param onSuccess Function to be executed when the operation finishes successfully
-     * @param onError Function to be executed when the operation finishes unsuccessfully
-     *
-     * @deprecated Use the new `Client.authenticate(token:provider:context:onSuccess:onError)` method with `OAuth` provider instead.
-     */
-    authenticateByOAuth(accessToken: string, context: ClientOAuthAuthenticationContext, onSuccess: () => void, onError: (error: Error) => void): void;
-    /**
-     * This method authenticates a customer with OAuth.
-     *
-     * @param accessToken OAuth Access Token
-     * @param authID Optional identifier of authorization
-     * @param onSuccess Function to be executed when the operation finishes successfully
-     * @param onError Function to be executed when the operation finishes unsuccessfully
-     *
-     * @deprecated Use the new `Client.authenticateConditionally(token:provider:context:onSuccess:onError)` method with `OAuth` provider instead.
-     */
-    authenticateByOAuthIfRegistered(accessToken: string, authID: string | null, onSuccess: () => void, onError: (error: Error) => void): void;
-    /**
-     * This method authenticates a customer with OAuth.
-     *
-     * @param facebookToken Facebook Access Token
-     * @param context `ClientFacebookAuthenticationContext` object with agreements and optional attributes
-     * @param onSuccess Function to be executed when the operation finishes successfully
-     * @param onError Function to be executed when the operation finishes unsuccessfully
-     *
-     * @deprecated Use the new `Client.authenticate(token:provider:context:onSuccess:onError)` method with `Facebook` provider instead.
-     */
-    authenticateByFacebook(facebookToken: string, context: ClientFacebookAuthenticationContext, onSuccess: () => void, onError: (error: Error) => void): void;
-    /**
-     * This method authenticates a customer with OAuth.
-     *
-     * @param facebookToken Facebook Access Token
-     * @param authID Optional identifier of authorization
-     * @param onSuccess Function to be executed when the operation finishes successfully
-     * @param onError Function to be executed when the operation finishes unsuccessfully
-     *
-     * @deprecated Use the new `Client.authenticateConditionally(token:provider:context:onSuccess:onError)` method with `Facebook` provider instead.
-     */
-    authenticateByFacebookIfRegistered(facebookToken: string, authID: string | null, onSuccess: () => void, onError: (error: Error) => void): void;
-    /**
-     * This method authenticates a customer with OAuth.
-     *
-     * @param identityToken Apple Identity Token
-     * @param context `ClientAppleSignInAuthenticationContext` object with agreements and optional attributes
-     * @param onSuccess Function to be executed when the operation finishes successfully
-     * @param onError Function to be executed when the operation finishes unsuccessfully
-     *
-     * @deprecated Use the new `Client.authenticate(token:provider:context:onSuccess:onError)` method with `Apple` provider instead.
-     */
-    authenticateByAppleSignIn(identityToken: string, context: ClientAppleSignInAuthenticationContext, onSuccess: () => void, onError: (error: Error) => void): void;
-    /**
-     * This method authenticates a customer with OAuth.
-     *
-     * @param identityToken Apple Identity Token
-     * @param authID Optional identifier of authorization
-     * @param onSuccess Function to be executed when the operation finishes successfully
-     * @param onError Function to be executed when the operation finishes unsuccessfully
-     *
-     * @deprecated Use the new `Client.authenticateConditionally(token:provider:context:onSuccess:onError)` method with `Apple` provider instead.
-     */
-    authenticateByAppleSignInIfRegistered(identityToken: string, authID: string, onSuccess: () => void, onError: (error: Error) => void): void;
     /**
      * This method signs in a customer with Simple Authentication.
      *
@@ -341,36 +272,6 @@ declare class ClientModule extends Module {
      * @param onError Function to be executed when the operation finishes unsuccessfully
      */
     deleteAccountByIdentityProvider(clientAuthFactor: string, clientIdentityProvider: ClientIdentityProvider, authID: string | null, onSuccess: () => void, onError: (error: Error) => void): void;
-    /**
-     * This method deletes a customer’s account.
-     *
-     * @param password Customer’s password
-     * @param onSuccess Function to be executed when the operation finishes successfully
-     * @param onError Function to be executed when the operation finishes unsuccessfully
-     *
-     * @deprecated Use the new `Client.deleteAccountByIdentityProvider(clientAuthFactor:clientIdentityProvider:authID:onSuccess:onError)` with `Synerise` provider method instead.
-     */
-    deleteAccount(password: string, onSuccess: () => void, onError: (error: Error) => void): void;
-    /**
-     * This method deletes a customer’s account by OAuth.
-     *
-     * @param accessToken OAuth Access Token
-     * @param onSuccess Function to be executed when the operation finishes successfully
-     * @param onError Function to be executed when the operation finishes unsuccessfully
-     *
-     * @deprecated Use the new `Client.deleteAccountByIdentityProvider(clientAuthFactor:clientIdentityProvider:authID:onSuccess:onError)` method instead.
-     */
-    deleteAccountByOAuth(accessToken: string, onSuccess: () => void, onError: (error: Error) => void): void;
-    /**
-     * This method deletes a customer’s account by Facebook.
-     *
-     * @param facebookToken Facebook Access Token
-     * @param onSuccess Function to be executed when the operation finishes successfully
-     * @param onError Function to be executed when the operation finishes unsuccessfully
-     *
-     * @deprecated Use the new `Client.deleteAccountByIdentityProvider(clientAuthFactor:clientIdentityProvider:authID:onSuccess:onError)` method instead.
-     */
-    deleteAccountByFacebook(facebookToken: string, onSuccess: () => void, onError: (error: Error) => void): void;
     /**
      * This method recognizes anonymous users and save personal information from their CRM entries.
      *

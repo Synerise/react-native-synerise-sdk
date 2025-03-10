@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface RNSyneriseInitializer : NSObject
 
-@property (copy, nonatomic, nullable, readwrite) NSString *clientApiKey;
+@property (copy, nonatomic, nullable, readwrite) NSString *apiKey;
 @property (copy, nonatomic, nullable, readwrite) NSString *baseURL;
 @property (copy, nonatomic, nullable, readwrite) NSString *requestValidationSalt;
 @property (assign, nonatomic, readwrite) BOOL debugModeEnabled;

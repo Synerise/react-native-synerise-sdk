@@ -12,29 +12,19 @@
 static NSString * const RNInjectorEventListenerUrlActionKey = @"URL_ACTION_LISTENER_KEY";
 static NSString * const RNInjectorEventListenerDeepLinkActionKey = @"DEEPLINK_ACTION_LISTENER_KEY";
 
-static NSString * const RNInjectorEventListenerBannerPresentedKey = @"BANNER_PRESENTED_LISTENER_KEY";
-static NSString * const RNInjectorEventListenerBannerHiddenKey = @"BANNER_HIDDEN_LISTENER_KEY";
-
-static NSString * const RNInjectorEventListenerWalkthroughLoadedKey = @"WALKTHROUGH_LOADED_LISTENER_KEY";
-static NSString * const RNInjectorEventListenerWalkthroughLoadingErrorKey = @"WALKTHROUGH_LOADING_ERROR_LISTENER_KEY";
-static NSString * const RNInjectorEventListenerWalkthroughPresentedKey = @"WALKTHROUGH_PRESENTED_LISTENER_KEY";
-static NSString * const RNInjectorEventListenerWalkthroughHiddenKey = @"WALKTHROUGH_HIDDEN_LISTENER_KEY";
-
 static NSString * const RNInjectorEventListenerInAppMessagePresentedKey = @"IN_APP_MESSAGE_PRESENTED_LISTENER_KEY";
 static NSString * const RNInjectorEventListenerInAppMessageHiddenKey = @"IN_APP_MESSAGE_HIDDEN_LISTENER_KEY";
 static NSString * const RNInjectorEventListenerInAppMessageUrlActionKey = @"IN_APP_MESSAGE_URL_ACTION_LISTENER_KEY";
-static NSString * const RNInjectorEventListenerInAppMessageDeeplinkActionKey = @"IN_APP_MESSAGE_DEEPLINK_ACTION_LISTENER_KEY";
+static NSString * const RNInjectorEventListenerInAppMessageDeepLinkActionKey = @"IN_APP_MESSAGE_DEEPLINK_ACTION_LISTENER_KEY";
 static NSString * const RNInjectorEventListenerInAppMessageCustomActionKey = @"IN_APP_MESSAGE_CUSTOM_ACTION_LISTENER_KEY";
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RNInjector () <RNSyneriseManagerDelegate, SNRInjectorBannerDelegate, SNRInjectorWalkthroughDelegate, SNRInjectorInAppMessageDelegate>
+@interface RNInjector () <RNSyneriseManagerDelegate, SNRInjectorInAppMessageDelegate>
 
 @end
 
-@implementation RNInjector {
-    BOOL _bannerShouldPresentFlag;
-}
+@implementation RNInjector
 
 static RNInjector *moduleInstance;
 
@@ -51,8 +41,6 @@ RCT_EXPORT_MODULE();
     
     if (self) {
         [[RNSyneriseManager sharedInstance] addDelegate:self];
-        
-        _bannerShouldPresentFlag = YES;
     }
     
     moduleInstance = self;
@@ -62,55 +50,30 @@ RCT_EXPORT_MODULE();
          
 #pragma mark - Public
 
-- (void)executeURLAction:(NSURL *)URL activity:(SNRSyneriseActivity)activity {
-    [self sendURLActionToJS:URL activity:activity];
+- (void)executeURLAction:(NSURL *)URL source:(SNRSyneriseSource)source {
+    [self sendURLActionToJS:URL source:source];
 }
 
-- (void)executeDeepLinkAction:(NSString *)deepLink activity:(SNRSyneriseActivity)activity {
-    [self sendDeepLinkActionToJS:deepLink activity:activity];
+- (void)executeDeepLinkAction:(NSString *)deepLink source:(SNRSyneriseSource)source {
+    [self sendDeepLinkActionToJS:deepLink source:source];
 }
 
 #pragma mark - Private
 
-- (void)sendURLActionToJS:(NSURL *)URL activity:(SNRSyneriseActivity)activity {
+- (void)sendURLActionToJS:(NSURL *)URL source:(SNRSyneriseSource)source {
     NSDictionary *userInfo = @{
         @"url": [URL absoluteString],
-        @"source": [self stringWithSyneriseActivity:activity]
+        @"source": [self stringWithSyneriseSource:source]
     };
     [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseUrlActionEvent object:nil userInfo:userInfo];
 }
 
-- (void)sendDeepLinkActionToJS:(NSString *)deepLink activity:(SNRSyneriseActivity)activity {
+- (void)sendDeepLinkActionToJS:(NSString *)deepLink source:(SNRSyneriseSource)source {
     NSDictionary *userInfo = @{
         @"deepLink": deepLink,
-        @"source": [self stringWithSyneriseActivity:activity]
+        @"source": [self stringWithSyneriseSource:source]
     };
     [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseDeepLinkActionEvent object:nil userInfo:userInfo];
-}
-
-- (void)sendBannerPresentedToJS {
-    [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseBannerPresentedEvent object:nil userInfo:nil];
-}
-
-- (void)sendBannerHiddenToJS {
-    [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseBannerHiddenEvent object:nil userInfo:nil];
-}
-
-- (void)sendWalkthroughLoadedToJS {
-    [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseWalkthroughLoadedEvent object:nil userInfo:nil];
-}
-
-- (void)sendWalkthroughLoadingErrorToJS:(NSError *)error {
-    NSDictionary *errorDictionary = [self dictionaryWithError:error];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseWalkthroughLoadingErrorEvent object:nil userInfo:errorDictionary];
-}
-
-- (void)sendWalkthroughPresentedToJS {
-    [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseWalkthroughPresentedEvent object:nil userInfo:nil];
-}
-
-- (void)sendWalkthroughHiddenToJS {
-    [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseWalkthroughHiddenEvent object:nil userInfo:nil];
 }
 
 - (void)sendInAppMessagePresentedToJS:(SNRInAppMessageData *)data {
@@ -159,45 +122,7 @@ RCT_EXPORT_MODULE();
 }
 
 - (void)syneriseJavaScriptDidLoad {
-    [SNRInjector setBannerDelegate:self];
-    [SNRInjector setWalkthroughDelegate:self];
     [SNRInjector setInAppMessageDelegate:self];
-}
-
-#pragma mark - SNRInjectorBannerDelegate
-
-- (BOOL)SNR_shouldBannerAppear:(NSDictionary *)bannerDictionary {
-    return _bannerShouldPresentFlag;
-}
-
-- (void)SNR_bannerDidAppear {
-    [self sendBannerPresentedToJS];
-}
-
-- (void)SNR_bannerDidDisappear {
-    [self sendBannerHiddenToJS];
-}
-
-#pragma mark - SNRInjectorWalkthroughDelegate
-
-- (void)SNR_walkthroughDidLoad {
-    [self sendWalkthroughLoadedToJS];
-}
-
-- (void)SNR_walkthroughDidLoad:(NSDictionary *)walkthroughDictionary {
-    [self sendWalkthroughLoadedToJS];
-}
-
-- (void)SNR_walkthroughLoadingError:(NSError *)error {
-    [self sendWalkthroughLoadingErrorToJS:error];
-}
-
-- (void)SNR_walkthroughDidAppear {
-    [self sendBannerPresentedToJS];
-}
-
-- (void)SNR_walkthroughDidDisappear {
-    [self sendWalkthroughHiddenToJS];
 }
 
 #pragma mark - SNRInjectorInAppMessageDelegate
@@ -226,7 +151,7 @@ RCT_EXPORT_MODULE();
     [self sendInAppMessageUrlActionToJS:data url:url];
 }
 
-- (void)SNR_inAppMessageHandledDeeplinkAction:(SNRInAppMessageData *)data deeplink:(NSString *)deeplink {
+- (void)SNR_inAppMessageHandledDeepLinkAction:(SNRInAppMessageData *)data deeplink:(NSString *)deeplink {
     [self sendInAppMessageDeepLinkActionToJS:data deepLink:deeplink];
 }
 
@@ -236,14 +161,10 @@ RCT_EXPORT_MODULE();
 
 #pragma mark - JS Mapping
 
-- (NSString *)stringWithSyneriseActivity:(SNRSyneriseActivity)activity {
-    if (activity == SNRSyneriseActivitySimplePush) {
+- (NSString *)stringWithSyneriseSource:(SNRSyneriseSource)source {
+    if (source == SNRSyneriseSourceSimplePush) {
         return @"SIMPLE_PUSH";
-    } else if (activity == SNRSyneriseActivityBanner) {
-        return @"BANNER";
-    } else if (activity == SNRSyneriseActivityWalkthrough) {
-        return @"WALKTHROUGH";
-    } else if (activity == SNRSyneriseActivityInAppMessage) {
+    } else if (source == SNRSyneriseSourceInAppMessage) {
         return @"IN_APP_MESSAGE";
     } else {
         return @"NOT_SPECIFIED";
@@ -273,18 +194,10 @@ RCT_EXPORT_MODULE();
     RNInjectorEventListenerUrlActionKey: kRNSyneriseUrlActionEvent,
     RNInjectorEventListenerDeepLinkActionKey: kRNSyneriseDeepLinkActionEvent,
     
-    RNInjectorEventListenerBannerPresentedKey : kRNSyneriseBannerPresentedEvent,
-    RNInjectorEventListenerBannerHiddenKey: kRNSyneriseBannerHiddenEvent,
-    
-    RNInjectorEventListenerWalkthroughLoadedKey: kRNSyneriseWalkthroughLoadedEvent,
-    RNInjectorEventListenerWalkthroughLoadingErrorKey: kRNSyneriseWalkthroughLoadingErrorEvent,
-    RNInjectorEventListenerWalkthroughPresentedKey: kRNSyneriseWalkthroughPresentedEvent,
-    RNInjectorEventListenerWalkthroughHiddenKey: kRNSyneriseWalkthroughHiddenEvent,
-    
     RNInjectorEventListenerInAppMessagePresentedKey: kRNSyneriseInAppMessagePresentedKey,
     RNInjectorEventListenerInAppMessageHiddenKey: kRNSyneriseInAppMessageHiddenKey,
     RNInjectorEventListenerInAppMessageUrlActionKey: kRNSyneriseInAppMessageUrlActionKey,
-    RNInjectorEventListenerInAppMessageDeeplinkActionKey: kRNSyneriseInAppMessageDeeplinkActionKey,
+    RNInjectorEventListenerInAppMessageDeepLinkActionKey: kRNSyneriseInAppMessageDeeplinkActionKey,
     RNInjectorEventListenerInAppMessageCustomActionKey: kRNSyneriseInAppMessageCustomActionKey
   };
 }
@@ -321,34 +234,6 @@ RCT_EXPORT_METHOD(handleDeepLinkBySDK:(nonnull NSString *)deepLink)
             }
         }
     });
-}
-
-//getWalkthrough()
-
-RCT_EXPORT_METHOD(getWalkthrough)
-{
-    [SNRInjector getWalkthrough];
-}
-
-//showWalkthrough()
-
-RCT_EXPORT_METHOD(showWalkthrough)
-{
-    [SNRInjector showWalkthrough];
-}
-
-//isWalkthroughLoaded() : boolean
-
-RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(isWalkthroughLoaded)
-{
-    return [NSNumber numberWithBool:[SNRInjector isWalkthroughLoaded]];
-}
-
-//isLoadedWalkthroughUnique() : boolean
-
-RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(isLoadedWalkthroughUnique)
-{
-    return [NSNumber numberWithBool:[SNRInjector isLoadedWalkthroughUnique]];
 }
 
 @end
