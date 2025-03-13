@@ -13,7 +13,7 @@ declare class SyneriseInitializer {
     static isSyneriseInitialized(): boolean;
     static invokeOnReadyCallback(): void;
     static invokeOnErrorCallback(errorObject: IError): void;
-    withApiKey(apiKey: string): this;
+    withClientApiKey(clientApiKey: string): this;
     withBaseUrl(baseUrl: string): this;
     withRequestValidationSalt(requestValidationSalt: string): this;
     withDebugModeEnabled(debugModeEnabled: boolean): this;
@@ -29,7 +29,7 @@ declare class Synerise {
     static isInitialized(): Boolean;
     static onReady(callback: () => void): void;
     static onError(callback: (error: Error) => void): void;
-    static changeApiKey(apiKey: string, config?: InitializationConfig | undefined): void;
+    static changeClientApiKey(clientApiKey: string, config?: InitializationConfig | undefined): void;
     static get Settings(): Settings;
     static get Client(): Client;
     static get Tracker(): Tracker;

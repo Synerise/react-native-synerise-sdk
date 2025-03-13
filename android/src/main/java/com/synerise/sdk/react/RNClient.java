@@ -293,6 +293,82 @@ public class RNClient extends RNBaseModule {
         });
     }
 
+    //authenticateByOAuth(accessToken: string, context: ClientOAuthAuthenticationContext, onSuccess: () => void, onError: (error: Error) => void)
+    @ReactMethod
+    public void authenticateByOAuth(String accessToken, ReadableMap authenticateByOAuthMap, Callback callback) {
+        Agreements agreements = null;
+        Attributes attributes = null;
+        String authID = null;
+        if (authenticateByOAuthMap.hasKey("agreements")) {
+            agreements = agreementsMapper(authenticateByOAuthMap.getMap("agreements"));
+        }
+
+        if (authenticateByOAuthMap.hasKey("attributes")) {
+            attributes = attributesMapper(authenticateByOAuthMap.getMap("attributes").toHashMap());
+        }
+
+        if (authenticateByOAuthMap.hasKey("authID")) {
+            authID = authenticateByOAuthMap.getString("authID");
+        }
+
+        IApiCall authenticateByOAuthCall = Client.authenticateByOAuth(accessToken, agreements, attributes, authID);
+        authenticateByOAuthCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
+        });
+    }
+
+    @ReactMethod
+    public void authenticateByOAuthIfRegistered(String accessToken, String authID, Callback callback) {
+        IApiCall authenticateByOAuthIfRegisteredCall = Client.authenticateByOAuthIfRegistered(accessToken, authID);
+        authenticateByOAuthIfRegisteredCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
+        });
+    }
+
+    //authenticateByFacebook(facebookToken: string, context: ClientFacebookAuthenticationContext, onSuccess: () => void, onError: (error: Error) => void)
+    @ReactMethod
+    public void authenticateByFacebook(String facebookToken, ReadableMap authenticateByFacebookMap, Callback callback) {
+        Agreements agreements = null;
+        Attributes attributes = null;
+        String authID = null;
+        if (authenticateByFacebookMap.hasKey("agreements")) {
+            agreements = agreementsMapper(authenticateByFacebookMap.getMap("agreements"));
+        }
+
+        if (authenticateByFacebookMap.hasKey("attributes")) {
+            attributes = attributesMapper(authenticateByFacebookMap.getMap("attributes").toHashMap());
+        }
+
+        if (authenticateByFacebookMap.hasKey("authID")) {
+            authID = authenticateByFacebookMap.getString("authID");
+        }
+        IApiCall authenticateByFacebookCall = Client.authenticateByFacebook(facebookToken, agreements, attributes, authID);
+        authenticateByFacebookCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
+        });
+    }
+
+    //authenticateByFacebookIfRegistered(facebookToken: string, authID: string, onSuccess: () => void, onError: (error: Error) => void)
+    @ReactMethod
+    public void authenticateByFacebookIfRegistered(String facebookToken, String authID, Callback callback) {
+        IApiCall authenticateByFacebookIfRegisteredCall = Client.authenticateByFacebookIfRegistered(facebookToken, authID);
+        authenticateByFacebookIfRegisteredCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
+        });
+    }
+
     //simpleAuthentication(data: ClientSimpleAuthenticationData, authID: string, onSuccess: () => void, onError: (error: Error) => void)
     @ReactMethod
     public void simpleAuthentication(ReadableMap map, String authId, Callback callback) {
@@ -374,12 +450,12 @@ public class RNClient extends RNBaseModule {
         });
     }
 
-    //requestAccountActivation(email: String, onSuccess: () => void, onError: (error: Error) => void)
+    //confirmAccount(token: String, onSuccess: () => void, onError: (error: Error) => void)
     @ReactMethod
-    public void requestAccountActivation(String email, Callback callback) {
-        if (activateCall != null) activateCall.cancel();
-        activateCall = Client.requestAccountActivation(email);
-        activateCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
+    public void confirmAccount(String token, Callback callback) {
+        if (confirmCall != null) confirmCall.cancel();
+        confirmCall = Client.confirmAccount(token);
+        confirmCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
             @Override
             public void onDataAction(ApiError apiError) {
                 executeFailureCallbackResponse(callback, null, apiError);
@@ -387,12 +463,12 @@ public class RNClient extends RNBaseModule {
         });
     }
 
-    //confirmAccountActivation(token: String, onSuccess: () => void, onError: (error: Error) => void)
+    //activateAccount(email: String, onSuccess: () => void, onError: (error: Error) => void)
     @ReactMethod
-    public void confirmAccountActivation(String token, Callback callback) {
-        if (confirmCall != null) confirmCall.cancel();
-        confirmCall = Client.confirmAccountActivation(token);
-        confirmCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
+    public void activateAccount(String email, Callback callback) {
+        if (activateCall != null) activateCall.cancel();
+        activateCall = Client.activateAccount(email);
+        activateCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
             @Override
             public void onDataAction(ApiError apiError) {
                 executeFailureCallbackResponse(callback, null, apiError);
@@ -691,6 +767,42 @@ public class RNClient extends RNBaseModule {
     public void deleteAccountByIdentityProvider(String clientAuthFactor, String clientIdentityProvider, String authId, Callback callback) {
         IApiCall deleteAccountCall = Client.deleteAccount(clientAuthFactor, ClientIdentityProvider.getByProvider(clientIdentityProvider), authId);
         deleteAccountCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
+        });
+    }
+
+    //deleteAccount(password: String, onSuccess: () => void, onError: (error: Error) => void)
+    @ReactMethod
+    public void deleteAccount(String password, Callback callback) {
+        IApiCall deleteAccountCall = Client.deleteAccount(password);
+        deleteAccountCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
+        });
+    }
+
+    @ReactMethod
+    public void deleteAccountByFacebook(String facebookToken, Callback callback) {
+        if (deleteAccountByFacebookCall != null) deleteAccountByFacebookCall.cancel();
+        deleteAccountByFacebookCall = Client.deleteAccountByFacebook(facebookToken, null);
+        deleteAccountByFacebookCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError apiError) {
+                executeFailureCallbackResponse(callback, null, apiError);
+            }
+        });
+    }
+
+    @ReactMethod
+    public void deleteAccountByOAuth(String accessToken, Callback callback) {
+        if (deleteAccountByOAuthCall != null) deleteAccountByOAuthCall.cancel();
+        deleteAccountByOAuthCall = Client.deleteAccountByOAuth(accessToken, null);
+        deleteAccountByOAuthCall.execute(() -> executeSuccessCallbackResponse(callback, null, null), new DataActionListener<ApiError>() {
             @Override
             public void onDataAction(ApiError apiError) {
                 executeFailureCallbackResponse(callback, null, apiError);

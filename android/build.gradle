@@ -1,11 +1,11 @@
 apply plugin: 'com.android.library'
 
 ext.versions = [
-        'minSdk'     : 24,
+        'minSdk'     : 21,
         'compileSdk' : 33,
         'targetSdk'  : 33,
         'versionCode': 43,
-        'versionName': "1.0.0"
+        'versionName': "0.24.3"
 ]
 
 buildscript {
@@ -26,7 +26,7 @@ android {
     compileSdkVersion 33
 
     defaultConfig {
-        minSdkVersion 24
+        minSdkVersion 21
         targetSdkVersion 33
         versionCode 1
         versionName "1.0"
@@ -58,7 +58,7 @@ repositories {
 dependencies {
     implementation 'com.facebook.react:react-native:+'
     implementation "com.squareup.okhttp3:logging-interceptor:4.9.1"
-    api 'com.synerise.sdk:synerise-mobile-sdk:6.0.1'
+    api 'com.synerise.sdk:synerise-mobile-sdk:5.22.1'
 }
 
 //apply from: 'publish.gradle'

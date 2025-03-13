@@ -2,7 +2,7 @@ declare enum TokenOrigin {
     Unknown = "UNKNOWN",
     Anonymous = "ANONYMOUS",
     Synerise = "SYNERISE",
-    OAuth = "OAUTH",
+    Oauth = "OAUTH",
     SimpleAuth = "SIMPLE_AUTH",
     Facebook = "FACEBOOK",
     Google = "GOOGLE",

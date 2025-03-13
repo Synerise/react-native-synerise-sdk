@@ -1,4 +1,7 @@
 export { IClientAuthContext, ClientAuthContext } from '../classes/models/Client/ClientAuthContext';
+export { IClientOAuthAuthenticationContext, ClientOAuthAuthenticationContext } from './../classes/models/Client/ClientOAuthAuthenticationContext';
+export { IClientFacebookAuthenticationContext, ClientFacebookAuthenticationContext } from './../classes/models/Client/ClientFacebookAuthenticationContext';
+export { IClientAppleSignInAuthenticationContext, ClientAppleSignInAuthenticationContext } from './../classes/models/Client/ClientAppleSignInAuthenticationContext';
 export { IClientSimpleAuthenticationData, ClientSimpleAuthenticationData } from './../classes/models/Client/ClientSimpleAuthenticationData';
 export { ClientAccountInformation } from './../classes/models/Client/ClientAccountInformation';
 export { IClientAccountRegisterContext, ClientAccountRegisterContext } from './../classes/models/Client/ClientAccountRegisterContext';
@@ -35,6 +38,8 @@ export { Document } from './../classes/models/Content/Document';
 export { RecommendationOptions } from './../classes/models/Content/RecommendationOptions';
 export { RecommendationResponse } from './../classes/models/Content/RecommendationResponse';
 export { Recommendation } from './../classes/models/Content/Recommendation';
+export { ScreenViewAudience } from './../classes/models/Content/ScreenViewAudience';
+export { ScreenViewResponse } from './../classes/models/Content/ScreenViewResponse';
 export { ScreenView } from './../classes/models/Content/ScreenView';
 export { ScreenViewAudienceInfo } from '../classes/models/Content/ScreenViewAudienceInfo';
 export { BaseApiQuery, IApiQuerySorting, ApiQuerySortingOrder } from './../classes/api_queries/BaseApiQuery';

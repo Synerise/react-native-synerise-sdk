@@ -3,6 +3,7 @@ package com.synerise.sdk.react;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
@@ -111,6 +112,11 @@ public class RNNotifications extends RNBaseModule {
         return Injector.isSyneriseSimplePush(MapUtil.toStringMap(map));
     }
 
+    //isSyneriseBanner(payload: Object)
+    @ReactMethod(isBlockingSynchronousMethod = true)
+    public boolean isSyneriseBanner(ReadableMap map) {
+        return Injector.isSyneriseBanner(MapUtil.toStringMap(map));
+    }
     //isNotificationEncrypted(payload: object)
     @ReactMethod(isBlockingSynchronousMethod = true)
     public boolean isNotificationEncrypted(ReadableMap map) {

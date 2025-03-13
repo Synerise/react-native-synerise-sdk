@@ -1,6 +1,6 @@
 {
   "name": "react-native-synerise-sdk",
-  "version": "1.0.0",
+  "version": "0.24.3",
   "description": "React Native wrapper for Synerise SDK",
   "author": {
     "name": "Synerise",

@@ -49,6 +49,14 @@ declare class NotificationsModule extends Module {
      */
     isSyneriseSimplePush(payload: object): boolean;
     /**
+     * This method verifies if a notification’s sender is Synerise and if the notification is a Banner campaign.
+     *
+     * @param payload Notification’s key-value data object
+     *
+     * @returns `true` if the notification is Synerise Banner provided by Synerise, otherwise returns `false`
+     */
+    isSyneriseBanner(payload: object): boolean;
+    /**
      * This method verifies if a notification’s sender is Synerise and if the notification is a Silent Command.
      *
      * @param payload Notification’s key-value data object
