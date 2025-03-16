@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.24.4] - 2025-03-16
+
+### Fixed
+- [iOS] `campaignId`, `schema`, `slug`, `uuid` properties mapping in `RecommendationResponse` object.
+
+
 ## [0.24.3] - 2024-11-12
 
 ### Fixed
