@@ -8,7 +8,7 @@
 
 #import "RNSyneriseInitializer.h"
 
-NSString * const SNRSyneriseSDKPluginVersion = @"0.24.4";
+NSString * const SNRSyneriseSDKPluginVersion = @"1.0.1";
 
 @implementation RNSyneriseInitializer
 
@@ -18,7 +18,7 @@ NSString * const SNRSyneriseSDKPluginVersion = @"0.24.4";
     dispatch_async(dispatch_get_main_queue(), ^{
         [self overwriteDefaultSettings];
         
-        [SNRSynerise initializeWithClientApiKey:self.clientApiKey andBaseUrl:self.baseURL];
+        [SNRSynerise initializeWithApiKey:self.apiKey andBaseUrl:self.baseURL];
         
         if (self.requestValidationSalt != nil) {
             [SNRSynerise setRequestValidationSalt:self.requestValidationSalt];

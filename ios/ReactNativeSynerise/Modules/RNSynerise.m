@@ -73,16 +73,12 @@ RCT_EXPORT_MODULE();
     [[RNSyneriseManager sharedInstance].notifications executeRegistrationRequired];
 }
 
-- (void)SNR_handledActionWithURL:(NSURL *)url activity:(SNRSyneriseActivity)activity completionHandler:(SNRSyneriseActivityCompletionHandler)completionHandler {
-    completionHandler(SNRSyneriseActivityActionNone, ^{
-        [[RNSyneriseManager sharedInstance].injector executeURLAction:url activity:activity];
-    });
+- (void)SNR_handledActionWithURL:(NSURL *)url source:(SNRSyneriseSource)source {
+    [[RNSyneriseManager sharedInstance].injector executeURLAction:url source:source];
 }
 
-- (void)SNR_handledActionWithDeepLink:(NSString *)deepLink activity:(SNRSyneriseActivity)activity completionHandler:(SNRSyneriseActivityCompletionHandler)completionHandler {
-    completionHandler(SNRSyneriseActivityActionNone, ^{
-        [[RNSyneriseManager sharedInstance].injector executeDeepLinkAction:deepLink activity:activity];
-    });
+- (void)SNR_handledActionWithDeepLink:(NSString *)deepLink source:(SNRSyneriseSource)source {
+    [[RNSyneriseManager sharedInstance].injector executeDeepLinkAction:deepLink source:source];
 }
 
 #pragma mark - JS Module
@@ -99,12 +95,12 @@ RCT_EXPORT_METHOD(createInitializer) {
    self.initializer = [RNSyneriseInitializer new];
 }
 
-RCT_EXPORT_METHOD(withClientApiKey:(NSString *)clientApiKey) {
-    if (clientApiKey == nil) {
+RCT_EXPORT_METHOD(withApiKey:(NSString *)apiKey) {
+    if (apiKey == nil) {
         return;
     }
     
-    self.initializer.clientApiKey = clientApiKey;
+    self.initializer.apiKey = apiKey;
 }
 
 RCT_EXPORT_METHOD(withBaseUrl:(NSString *)baseUrl) {
@@ -143,8 +139,8 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(isSyneriseInitialized) {
     return [NSNumber numberWithBool:isInitialized];
 }
 
-RCT_EXPORT_METHOD(changeClientApiKey:(NSString *)clientApiKey config:(NSDictionary *)initializationConfigDictionary) {
-    if (clientApiKey == nil) {
+RCT_EXPORT_METHOD(changeApiKey:(NSString *)apiKey config:(NSDictionary *)initializationConfigDictionary) {
+    if (apiKey == nil) {
         return;
     }
     
@@ -156,7 +152,7 @@ RCT_EXPORT_METHOD(changeClientApiKey:(NSString *)clientApiKey config:(NSDictiona
         }
     }
 
-    [SNRSynerise changeClientApiKey:clientApiKey config:initializationConfig];
+    [SNRSynerise changeApiKey:apiKey config:initializationConfig];
 }
 
 @end
