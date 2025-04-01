@@ -1,8 +1,6 @@
 declare enum SyneriseSource {
     NotSpecified = "NOT_SPECIFIED",
     SimplePush = "SIMPLE_PUSH",
-    Banner = "BANNER",
-    Walkthrough = "WALKTHROUGH",
     InAppMessage = "IN_APP_MESSAGE"
 }
 declare function SyneriseSourceFromString(string: string): SyneriseSource;

@@ -133,42 +133,6 @@ RCT_EXPORT_MODULE();
     return nil;
 }
 
-- (nullable SNRClientOAuthAuthenticationContext *)modelClientOAuthAuthenticationContextWithDictionary:(nullable NSDictionary *)dictionary {
-    if (dictionary != nil) {
-        SNRClientOAuthAuthenticationContext *model = [SNRClientOAuthAuthenticationContext new];
-        model.attributes = [dictionary getDictionaryForKey:@"attributes"];
-        model.agreements = [self modelClientAgreementsWithDictionary:[dictionary getDictionaryForKey:@"agreements"]];
-        
-        return model;
-    }
-    
-    return nil;
-}
-
-- (nullable SNRClientFacebookAuthenticationContext *)modelClientFacebookAuthenticationContextWithDictionary:(nullable NSDictionary *)dictionary {
-    if (dictionary != nil) {
-        SNRClientFacebookAuthenticationContext *model = [SNRClientFacebookAuthenticationContext new];
-        model.attributes = [dictionary getDictionaryForKey:@"attributes"];
-        model.agreements = [self modelClientAgreementsWithDictionary:[dictionary getDictionaryForKey:@"agreements"]];
-        
-        return model;
-    }
-    
-    return nil;
-}
-
-- (nullable SNRClientAppleSignInAuthenticationContext *)modelClientAppleSignInAuthenticationContextWithDictionary:(nullable NSDictionary *)dictionary {
-    if (dictionary != nil) {
-        SNRClientAppleSignInAuthenticationContext *model = [SNRClientAppleSignInAuthenticationContext new];
-        model.attributes = [dictionary getDictionaryForKey:@"attributes"];
-        model.agreements = [self modelClientAgreementsWithDictionary:[dictionary getDictionaryForKey:@"agreements"]];
-            
-        return model;
-    }
-    
-    return nil;
-}
-
 - (nullable SNRClientSimpleAuthenticationData *)modelClientSimpleAuthenticationDataWithDictionary:(nullable NSDictionary *)dictionary {
     if (dictionary != nil) {
         SNRClientSimpleAuthenticationData *model = [SNRClientSimpleAuthenticationData new];
@@ -432,7 +396,7 @@ RCT_EXPORT_METHOD(registerAccount:(NSDictionary *)dictionary response:(RCTRespon
 {
     SNRClientRegisterAccountContext *clientRegisterAccountContext = [self modelClientRegisterAccountContextWithDictionary:dictionary];
     if (clientRegisterAccountContext != nil) {
-        [SNRClient registerAccount:clientRegisterAccountContext success:^(BOOL isSuccess) {
+        [SNRClient registerAccount:clientRegisterAccountContext success:^() {
             [self executeSuccessCallbackResponse:response data:@1];
         } failure:^(NSError *error) {
             [self executeFailureCallbackResponse:response error:error];
@@ -442,22 +406,22 @@ RCT_EXPORT_METHOD(registerAccount:(NSDictionary *)dictionary response:(RCTRespon
     }
 }
 
-//confirmAccount(token: String, onSuccess: () => void, onError: (error: Error) => void)
+//requestAccountActivation(email: String, onSuccess: () => void, onError: (error: Error) => void)
 
-RCT_EXPORT_METHOD(confirmAccount:(NSString *)token response:(RCTResponseSenderBlock)response)
+RCT_EXPORT_METHOD(requestAccountActivation:(NSString *)email response:(RCTResponseSenderBlock)response)
 {
-   [SNRClient confirmAccount:token success:^(BOOL isSuccess) {
+   [SNRClient requestAccountActivationWithEmail:email success:^() {
        [self executeSuccessCallbackResponse:response data:@1];
    } failure:^(NSError *error) {
        [self executeFailureCallbackResponse:response error:error];
    }];
 }
 
-//activateAccount(email: String, onSuccess: () => void, onError: (error: Error) => void)
+//confirmAccountActivation(token: String, onSuccess: () => void, onError: (error: Error) => void)
 
-RCT_EXPORT_METHOD(activateAccount:(NSString *)email response:(RCTResponseSenderBlock)response)
+RCT_EXPORT_METHOD(confirmAccountActivation:(NSString *)token response:(RCTResponseSenderBlock)response)
 {
-   [SNRClient activateAccount:email success:^(BOOL isSuccess) {
+   [SNRClient confirmAccountActivationByToken:token success:^() {
        [self executeSuccessCallbackResponse:response data:@1];
    } failure:^(NSError *error) {
        [self executeFailureCallbackResponse:response error:error];
@@ -468,7 +432,7 @@ RCT_EXPORT_METHOD(activateAccount:(NSString *)email response:(RCTResponseSenderB
 
 RCT_EXPORT_METHOD(requestAccountActivationByPin:(NSString *)email response:(RCTResponseSenderBlock)response)
 {
-    [SNRClient requestAccountActivationByPinWithEmail:email success:^(BOOL isSuccess) {
+    [SNRClient requestAccountActivationByPinWithEmail:email success:^() {
         [self executeSuccessCallbackResponse:response data:@1];
     } failure:^(NSError *error) {
         [self executeFailureCallbackResponse:response error:error];
@@ -479,7 +443,7 @@ RCT_EXPORT_METHOD(requestAccountActivationByPin:(NSString *)email response:(RCTR
 
 RCT_EXPORT_METHOD(confirmAccountActivationByPin:(NSString *)pinCode email:(NSString *)email response:(RCTResponseSenderBlock)response)
 {
-    [SNRClient confirmAccountActivationByPin:pinCode email:email success:^(BOOL isSuccess) {
+    [SNRClient confirmAccountActivationByPin:pinCode email:email success:^() {
         [self executeSuccessCallbackResponse:response data:@1];
     } failure:^(NSError *error) {
         [self executeFailureCallbackResponse:response error:error];
@@ -490,7 +454,7 @@ RCT_EXPORT_METHOD(confirmAccountActivationByPin:(NSString *)pinCode email:(NSStr
 
 RCT_EXPORT_METHOD(signIn:(NSString *)email password:(NSString *)password response:(RCTResponseSenderBlock)response)
 {
-    [SNRClient signInWithEmail:email password:password success:^(BOOL isSuccess) {
+    [SNRClient signInWithEmail:email password:password success:^() {
         [self executeSuccessCallbackResponse:response data:@1];
     } failure:^(NSError *error) {
         [self executeFailureCallbackResponse:response error:error];
@@ -522,7 +486,7 @@ RCT_EXPORT_METHOD(authenticate:(NSString *)token provider:(NSString *)provider c
     SNRClientIdentityProvider clientIdentityProvider = SNR_StringToClientIdentityProvider(provider);
     SNRClientAuthenticationContext *context = [self modelClientAuthenticationContextWithDictionary:contextDictionary];
     
-    [SNRClient authenticateWithToken:token clientIdentityProvider:clientIdentityProvider authID:authID context:context success:^(BOOL isSuccess) {
+    [SNRClient authenticateWithToken:token clientIdentityProvider:clientIdentityProvider authID:authID context:context success:^() {
         [self executeSuccessCallbackResponse:response data:@1];
     } failure:^(NSError *error) {
         [self executeFailureCallbackResponse:response error:error];
@@ -544,85 +508,6 @@ RCT_EXPORT_METHOD(authenticateConditionally:(NSString *)token provider:(NSString
         } else {
             [self executeDefaultFailureCallbackResponse:response];
         }
-    } failure:^(NSError *error) {
-        [self executeFailureCallbackResponse:response error:error];
-    }];
-}
-    
-//authenticateByOAuth(accessToken: string, context: ClientOAuthAuthenticationContext, onSuccess: () => void, onError: (error: Error) => void)
-
-RCT_EXPORT_METHOD(authenticateByOAuth:(NSString *)accessToken context:(NSDictionary *)contextDictionary response:(RCTResponseSenderBlock)response)
-{
-    NSString *authID = contextDictionary[@"authID"];
-    SNRClientOAuthAuthenticationContext *context = [self modelClientOAuthAuthenticationContextWithDictionary:contextDictionary];
-    
-    [SNRClient authenticateByOAuthWithAccessToken:accessToken authID:authID context:context success:^(BOOL isSuccess) {
-        [self executeSuccessCallbackResponse:response data:@1];
-    } failure:^(NSError *error) {
-        [self executeFailureCallbackResponse:response error:error];
-    }];
-}
-
-//authenticateByOAuthIfRegistered(accessToken: string, authID: string, onSuccess: () => void, onError: (error: Error) => void)
-
-RCT_EXPORT_METHOD(authenticateByOAuthIfRegistered:(NSString *)accessToken authID:(NSString *)authID response:(RCTResponseSenderBlock)response)
-{
-    [SNRClient authenticateByOAuthIfRegisteredWithAccessToken:accessToken authID:authID success:^(BOOL isSuccess) {
-        [self executeSuccessCallbackResponse:response data:@1];
-    } failure:^(NSError *error) {
-        [self executeFailureCallbackResponse:response error:error];
-    }];
-}
-
-//authenticateByFacebook(facebookToken: string, context: ClientFacebookAuthenticationContext, onSuccess: () => void, onError: (error: Error) => void)
-
-RCT_EXPORT_METHOD(authenticateByFacebook:(NSString *)facebookToken context:(NSDictionary *)contextDictionary response:(RCTResponseSenderBlock)response)
-{
-    NSString *authID = contextDictionary[@"authID"];
-    SNRClientFacebookAuthenticationContext *context = [self modelClientFacebookAuthenticationContextWithDictionary:contextDictionary];
-    
-    [SNRClient authenticateByFacebookWithFacebookToken:facebookToken authID:authID context:context success:^(BOOL isSuccess) {
-        [self executeSuccessCallbackResponse:response data:@1];
-    } failure:^(NSError *error) {
-        [self executeFailureCallbackResponse:response error:error];
-    }];
-}
-
-//authenticateByFacebookIfRegistered(facebookToken: string, authID: string, onSuccess: () => void, onError: (error: Error) => void)
-
-RCT_EXPORT_METHOD(authenticateByFacebookIfRegistered:(NSString *)facebookToken authID:(NSString *)authID response:(RCTResponseSenderBlock)response)
-{
-    [SNRClient authenticateByFacebookIfRegisteredWithFacebookToken:facebookToken authID:authID success:^(BOOL isSuccess) {
-        [self executeSuccessCallbackResponse:response data:@1];
-    } failure:^(NSError *error) {
-        [self executeFailureCallbackResponse:response error:error];
-    }];
-}
-
-//authenticateByAppleSignIn(identityToken: string, context: AppleSignInAuthenticationContext, onSuccess: () => void, onError: (error: Error) => void)
-
-RCT_EXPORT_METHOD(authenticateByAppleSignIn:(NSString *)identityToken context:(NSDictionary *)contextDictionary response:(RCTResponseSenderBlock)response)
-{
-    NSData *identityTokenData = [identityToken dataUsingEncoding:NSUTF8StringEncoding];
-    
-    NSString *authID = contextDictionary[@"authID"];
-    SNRClientAppleSignInAuthenticationContext *context = [self modelClientAppleSignInAuthenticationContextWithDictionary:contextDictionary];
-    
-    [SNRClient authenticateByAppleSignInWithIdentityToken:identityTokenData authID:authID context:context success:^(BOOL isSuccess) {
-        [self executeSuccessCallbackResponse:response data:@1];
-    } failure:^(NSError *error) {
-        [self executeFailureCallbackResponse:response error:error];
-    }];
-}
-
-//authenticateByAppleSignInIfRegistered(identityToken: string, authID: string, onSuccess: () => void, onError: (error: Error) => void)
-
-RCT_EXPORT_METHOD(authenticateByAppleSignInIfRegistered:(NSString *)identityToken authID:(NSString *)authID response:(RCTResponseSenderBlock)response)
-{
-    NSData *identityTokenData = [identityToken dataUsingEncoding:NSUTF8StringEncoding];
-    
-    [SNRClient authenticateByAppleSignInIfRegisteredWithIdentityToken:identityTokenData authID:authID success:^(BOOL isSuccess) {
-        [self executeSuccessCallbackResponse:response data:@1];
     } failure:^(NSError *error) {
         [self executeFailureCallbackResponse:response error:error];
     }];
@@ -757,7 +642,7 @@ RCT_EXPORT_METHOD(updateAccountBasicInformation:(NSDictionary *)dictionary respo
 {
     SNRClientUpdateAccountBasicInformationContext *context = [self modelClientUpdateAccountBasicInformationContextWithDictionary:dictionary];
     if (context != nil) {
-        [SNRClient updateAccountBasicInformation:context success:^(BOOL isSuccess) {
+        [SNRClient updateAccountBasicInformation:context success:^() {
             [self executeSuccessCallbackResponse:response data:@1];
         } failure:^(NSError *error) {
             [self executeFailureCallbackResponse:response error:error];
@@ -773,7 +658,7 @@ RCT_EXPORT_METHOD(updateAccount:(NSDictionary *)dictionary response:(RCTResponse
 {
     SNRClientUpdateAccountContext *context = [self modelClientUpdateAccountContextWithDictionary:dictionary];
     if (context != nil) {
-        [SNRClient updateAccount:context success:^(BOOL isSuccess) {
+        [SNRClient updateAccount:context success:^() {
             [self executeSuccessCallbackResponse:response data:@1];
         } failure:^(NSError *error) {
             [self executeFailureCallbackResponse:response error:error];
@@ -789,7 +674,7 @@ RCT_EXPORT_METHOD(requestPasswordReset:(NSString *)email response:(RCTResponseSe
 {
     SNRClientPasswordResetRequestContext *clientPasswordResetRequestContext = [[SNRClientPasswordResetRequestContext alloc] initWithEmail:email];
 
-    [SNRClient requestPasswordReset:clientPasswordResetRequestContext success:^(BOOL isSuccess) {
+    [SNRClient requestPasswordReset:clientPasswordResetRequestContext success:^() {
         [self executeSuccessCallbackResponse:response data:@1];
     } failure:^(NSError *error) {
         [self executeFailureCallbackResponse:response error:error];
@@ -802,7 +687,7 @@ RCT_EXPORT_METHOD(confirmPasswordReset:(NSString *)password token:(NSString *)to
 {
     SNRClientPasswordResetConfirmationContext *clientPasswordResetConfirmationContext = [[SNRClientPasswordResetConfirmationContext alloc] initWithPassword:password andToken:token];
     
-    [SNRClient confirmResetPassword:clientPasswordResetConfirmationContext success:^(BOOL isSuccess) {
+    [SNRClient confirmResetPassword:clientPasswordResetConfirmationContext success:^() {
         [self executeSuccessCallbackResponse:response data:@1];
     } failure:^(NSError *error) {
         [self executeFailureCallbackResponse:response error:error];
@@ -813,7 +698,7 @@ RCT_EXPORT_METHOD(confirmPasswordReset:(NSString *)password token:(NSString *)to
 
 RCT_EXPORT_METHOD(changePassword:(NSString *)oldPassword newPassword:(NSString *)newPassword response:(RCTResponseSenderBlock)response)
 {
-    [SNRClient changePassword:newPassword oldPassword:oldPassword success:^(BOOL isSuccess) {
+    [SNRClient changePassword:newPassword oldPassword:oldPassword success:^() {
         [self executeSuccessCallbackResponse:response data:@1];
     } failure:^(NSError *error) {
         [self executeFailureCallbackResponse:response error:error];
@@ -824,7 +709,7 @@ RCT_EXPORT_METHOD(changePassword:(NSString *)oldPassword newPassword:(NSString *
 
 RCT_EXPORT_METHOD(requestEmailChange:(NSString *)email password:(nullable NSString *)password externalToken:(nullable NSString *)externalToken authID:(nullable NSString *)authID response:(RCTResponseSenderBlock)response)
 {
-    [SNRClient requestEmailChange:email password:password externalToken:externalToken authID:authID success:^(BOOL isSuccess) {
+    [SNRClient requestEmailChange:email password:password externalToken:externalToken authID:authID success:^() {
         [self executeSuccessCallbackResponse:response data:@1];
     } failure:^(NSError *error) {
         [self executeFailureCallbackResponse:response error:error];
@@ -835,7 +720,7 @@ RCT_EXPORT_METHOD(requestEmailChange:(NSString *)email password:(nullable NSStri
 
 RCT_EXPORT_METHOD(confirmEmailChange:(NSString *)token newsletterAgreement:(nonnull NSNumber *)newsletterAgreement response:(RCTResponseSenderBlock)response)
 {
-    [SNRClient confirmEmailChange:token newsletterAgreement:[newsletterAgreement boolValue] success:^(BOOL isSuccess) {
+    [SNRClient confirmEmailChange:token newsletterAgreement:[newsletterAgreement boolValue] success:^() {
         [self executeSuccessCallbackResponse:response data:@1];
     } failure:^(NSError *error) {
         [self executeFailureCallbackResponse:response error:error];
@@ -846,7 +731,7 @@ RCT_EXPORT_METHOD(confirmEmailChange:(NSString *)token newsletterAgreement:(nonn
 
 RCT_EXPORT_METHOD(requestPhoneUpdate:(NSString *)phone response:(RCTResponseSenderBlock)response)
 {
-    [SNRClient requestPhoneUpdate:phone success:^(BOOL isSuccess) {
+    [SNRClient requestPhoneUpdate:phone success:^() {
         [self executeSuccessCallbackResponse:response data:@1];
     } failure:^(NSError *error) {
         [self executeFailureCallbackResponse:response error:error];
@@ -857,18 +742,7 @@ RCT_EXPORT_METHOD(requestPhoneUpdate:(NSString *)phone response:(RCTResponseSend
 
 RCT_EXPORT_METHOD(confirmPhoneUpdate:(NSString *)phone confirmationCode:(NSString *)confirmationCode smsAgreement:(nonnull NSNumber *)smsAgreement response:(RCTResponseSenderBlock)response)
 {
-    [SNRClient confirmPhoneUpdate:phone confirmationCode:confirmationCode smsAgreement:[smsAgreement boolValue] success:^(BOOL isSuccess) {
-        [self executeSuccessCallbackResponse:response data:@1];
-    } failure:^(NSError *error) {
-        [self executeFailureCallbackResponse:response error:error];
-    }];
-}
-
-//deleteAccount(password: String, onSuccess: () => void, onError: (error: Error) => void)
-
-RCT_EXPORT_METHOD(deleteAccount:(NSString *)password response:(RCTResponseSenderBlock)response)
-{
-    [SNRClient deleteAccount:password success:^(BOOL isSuccess) {
+    [SNRClient confirmPhoneUpdate:phone confirmationCode:confirmationCode smsAgreement:[smsAgreement boolValue] success:^() {
         [self executeSuccessCallbackResponse:response data:@1];
     } failure:^(NSError *error) {
         [self executeFailureCallbackResponse:response error:error];
@@ -881,29 +755,7 @@ RCT_EXPORT_METHOD(deleteAccountByIdentityProvider:(id)clientAuthFactor clientIde
 {
     SNRClientIdentityProvider clientIdentityProvider = SNR_StringToClientIdentityProvider(clientIdentityProviderString);
     
-    [SNRClient deleteAccount:clientAuthFactor clientIdentityProvider:clientIdentityProvider authID:authID success:^(BOOL isSuccess) {
-        [self executeSuccessCallbackResponse:response data:@1];
-    } failure:^(NSError *error) {
-        [self executeFailureCallbackResponse:response error:error];
-    }];
-}
-
-//deleteAccountByOAuth(password: String, onSuccess: () => void, onError: (error: Error) => void)
-
-RCT_EXPORT_METHOD(deleteAccountByOAuth:(NSString *)accessToken response:(RCTResponseSenderBlock)response)
-{
-    [SNRClient deleteAccountByOAuth:accessToken success:^(BOOL isSuccess) {
-        [self executeSuccessCallbackResponse:response data:@1];
-    } failure:^(NSError *error) {
-        [self executeFailureCallbackResponse:response error:error];
-    }];
-}
-
-//deleteAccountByFacebook(facebookToken: String, onSuccess: () => void, onError: (error: Error) => void)
-
-RCT_EXPORT_METHOD(deleteAccountByFacebook:(NSString *)facebookToken response:(RCTResponseSenderBlock)response)
-{
-    [SNRClient deleteAccountByFacebook:facebookToken success:^(BOOL isSuccess) {
+    [SNRClient deleteAccount:clientAuthFactor clientIdentityProvider:clientIdentityProvider authID:authID success:^() {
         [self executeSuccessCallbackResponse:response data:@1];
     } failure:^(NSError *error) {
         [self executeFailureCallbackResponse:response error:error];

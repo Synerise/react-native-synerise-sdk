@@ -237,13 +237,13 @@ RCT_EXPORT_MODULE();
 RCT_EXPORT_METHOD(registerForNotifications:(NSString *)registrationToken withMobileAgreement:(nonnull NSNumber *)withMobileAgreement mobileAgreement:(nonnull NSNumber *)mobileAgreement response:(RCTResponseSenderBlock)response)
 {
     if (withMobileAgreement != nil && [withMobileAgreement boolValue] == YES) {
-        [SNRClient registerForPush:registrationToken mobilePushAgreement:[mobileAgreement boolValue] success:^(BOOL isSuccess) {
+        [SNRClient registerForPush:registrationToken mobilePushAgreement:[mobileAgreement boolValue] success:^() {
             [self executeSuccessCallbackResponse:response data:@1];
         } failure:^(NSError *error) {
             [self executeFailureCallbackResponse:response error:error];
         }];
     } else {
-        [SNRClient registerForPush:registrationToken success:^(BOOL isSuccess) {
+        [SNRClient registerForPush:registrationToken success:^() {
             [self executeSuccessCallbackResponse:response data:@1];
         } failure:^(NSError *error) {
             [self executeFailureCallbackResponse:response error:error];
@@ -263,13 +263,6 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(isSyneriseNotification:(NSDictionary *)us
 RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(isSyneriseSimplePush:(NSDictionary *)userInfo)
 {
     return [NSNumber numberWithBool:[SNRSynerise isSyneriseSimplePush:userInfo]];
-}
-
-//isSyneriseBanner(payload: object)
-
-RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(isSyneriseBanner:(NSDictionary *)userInfo)
-{
-    return [NSNumber numberWithBool:[SNRSynerise isSyneriseBanner:userInfo]];
 }
 
 //isSilentCommand(payload: object)
