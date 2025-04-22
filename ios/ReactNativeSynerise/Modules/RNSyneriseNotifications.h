@@ -1,5 +1,5 @@
 //
-//  RNNotifications.h
+//  RNSyneriseNotifications.h
 //  react-native-synerise-sdk
 //
 //  Created by Synerise
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RNNotifications : RNBaseModule <RCTBridgeModule>
+@interface RNSyneriseNotifications : RNBaseModule <RCTBridgeModule>
 
 + (void)didChangeRegistrationToken:(NSString *)registrationToken;
 + (void)didReceiveNotification:(NSDictionary *)userInfo;

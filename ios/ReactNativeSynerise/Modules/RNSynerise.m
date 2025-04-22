@@ -9,7 +9,7 @@
 #import "RNSynerise.h"
 #import "RNSyneriseInitializer.h"
 #import "RNInjector.h"
-#import "RNNotifications.h"
+#import "RNSyneriseNotifications.h"
 
 static NSString * const RNSyneriseInitializationSucessEventListenerKey = @"INITIALIZATION_SUCCESS_LISTENER_KEY";
 static NSString * const RNSyneriseInitializationFailureEventListenerKey = @"INITIALIZATION_FAILURE_LISTENER_KEY";

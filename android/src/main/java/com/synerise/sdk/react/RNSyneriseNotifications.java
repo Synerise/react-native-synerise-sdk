@@ -35,7 +35,7 @@ import static com.synerise.sdk.injector.SynerisePushKeys.CONTENT_TYPE;
 import static com.synerise.sdk.injector.SynerisePushKeys.ISSUER;
 import static com.synerise.sdk.injector.SynerisePushKeys.MESSAGE_TYPE;
 
-public class RNNotifications extends RNBaseModule {
+public class RNSyneriseNotifications extends RNBaseModule {
 
     private static ReactApplicationContext reactApplicationContext;
     private static List<Map<String, String>> dataToSend = new ArrayList<>();
@@ -53,7 +53,7 @@ public class RNNotifications extends RNBaseModule {
     private static final String REGISTRATION_REQUIRED_LISTENER_VALUE = "TokenRegistrationRequired";
     private IApiCall registerForNotificationCall;
 
-    public RNNotifications(ReactApplicationContext reactApplicationContext) {
+    public RNSyneriseNotifications(ReactApplicationContext reactApplicationContext) {
         super(reactApplicationContext);
         this.reactApplicationContext = reactApplicationContext;
 
@@ -78,7 +78,7 @@ public class RNNotifications extends RNBaseModule {
     @Nonnull
     @Override
     public String getName() {
-        return "RNNotifications";
+        return "RNSyneriseNotifications";
     }
 
     //handleNotification(payload: Object)

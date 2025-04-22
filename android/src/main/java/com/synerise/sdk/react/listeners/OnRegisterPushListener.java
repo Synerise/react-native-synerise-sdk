@@ -1,6 +1,6 @@
 package com.synerise.sdk.react.listeners;
 
-import com.synerise.sdk.react.RNNotifications;
+import com.synerise.sdk.react.RNSyneriseNotifications;
 
 public interface OnRegisterPushListener {
 
@@ -8,7 +8,7 @@ public interface OnRegisterPushListener {
 
         @Override
         public void onRegisterPushRequired() {
-            RNNotifications.sendRegisterForPushRequiredInfo();
+            RNSyneriseNotifications.sendRegisterForPushRequiredInfo();
         }
     };
 

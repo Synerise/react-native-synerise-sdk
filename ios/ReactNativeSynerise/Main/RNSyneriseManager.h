@@ -9,7 +9,7 @@
 #import "ReactNativeSynerise.h"
 
 @class RNInjector;
-@class RNNotifications;
+@class RNSyneriseNotifications;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface RNSyneriseManager : NSObject
 
 @property (weak, nonatomic, nullable, readwrite) RNInjector *injector;
-@property (weak, nonatomic, nullable, readwrite) RNNotifications *notifications;
+@property (weak, nonatomic, nullable, readwrite) RNSyneriseNotifications *notifications;
 
 + (instancetype)sharedInstance;
 

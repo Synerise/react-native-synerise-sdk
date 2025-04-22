@@ -16,7 +16,7 @@ public class RNSyneriseSdkPackage implements ReactPackage {
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
       List<NativeModule> modules = new ArrayList<NativeModule>();
       modules.add(new RNSynerise(reactContext));
-      modules.add(new RNNotifications(reactContext));
+      modules.add(new RNSyneriseNotifications(reactContext));
       modules.add(new RNInjector(reactContext));
       modules.add(new RNClient(reactContext));
       modules.add(new RNTracker(reactContext));
