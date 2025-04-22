@@ -1,12 +1,12 @@
 //
-//  RNNotifications.m
+//  RNSyneriseNotifications.m
 //  react-native-synerise-sdk
 //
 //  Created by Synerise
 //  Copyright © 2021 Synerise. All rights reserved.
 //
 
-#import "RNNotifications.h"
+#import "RNSyneriseNotifications.h"
 #import "RNSyneriseManager.h"
 
 static char * const RNNotificationsQueueLabel = "com.synerise.sdk.react.notifications.queue";
@@ -21,31 +21,31 @@ static NSString * const RNNotificationsEventObjectActionIdentifierKey = @"action
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RNNotificationItem: NSObject
+@interface RNSyneriseNotificationItem: NSObject
 
 @property (copy, nonatomic, nonnull, readwrite) NSDictionary *userInfo;
 @property (copy, nonatomic, nullable, readwrite) NSString *actionIdentifier;
 
 @end
 
-@implementation RNNotificationItem
+@implementation RNSyneriseNotificationItem
 
 @end
 
-@interface RNNotifications () <RNSyneriseManagerDelegate>
+@interface RNSyneriseNotifications () <RNSyneriseManagerDelegate>
 
 @property (strong, nonatomic, nonnull, readonly) dispatch_queue_t queue;
 
 @property (copy, nonatomic, nullable, readwrite) NSString *registrationToken;
-@property (copy, nonatomic, nonnull, readonly) NSMutableArray<RNNotificationItem *> *pendingNotificationItems;
+@property (copy, nonatomic, nonnull, readonly) NSMutableArray<RNSyneriseNotificationItem *> *pendingNotificationItems;
 
 @end
 
-@implementation RNNotifications {
+@implementation RNSyneriseNotifications {
     BOOL _isProcessing;
 }
 
-static RNNotifications *moduleInstance;
+static RNSyneriseNotifications *moduleInstance;
 
 RCT_EXPORT_MODULE();
 
@@ -105,7 +105,7 @@ RCT_EXPORT_MODULE();
 }
 
 - (void)didReceiveNotification:(NSDictionary *)userInfo actionIdentifier:(nullable NSString *)actionIdentifier {
-    RNNotificationItem *notificationItem = [self notificationItemWithUserInfo:userInfo andActionIdentifier:actionIdentifier];
+    RNSyneriseNotificationItem *notificationItem = [self notificationItemWithUserInfo:userInfo andActionIdentifier:actionIdentifier];
     if (notificationItem == nil) {
         return;
     }
@@ -117,8 +117,8 @@ RCT_EXPORT_MODULE();
     }
 }
 
-- (nullable RNNotificationItem *)notificationItemWithUserInfo:(NSDictionary *)userInfo andActionIdentifier:(nullable NSString *)actionIdentifier {
-    RNNotificationItem *notificationItem = [RNNotificationItem new];
+- (nullable RNSyneriseNotificationItem *)notificationItemWithUserInfo:(NSDictionary *)userInfo andActionIdentifier:(nullable NSString *)actionIdentifier {
+    RNSyneriseNotificationItem *notificationItem = [RNSyneriseNotificationItem new];
     
     if (userInfo != nil) {
         notificationItem.userInfo = userInfo;
@@ -159,7 +159,7 @@ RCT_EXPORT_MODULE();
     }
 }
 
-- (void)addPendingNotificationItem:(RNNotificationItem *)notificationItem {
+- (void)addPendingNotificationItem:(RNSyneriseNotificationItem *)notificationItem {
     dispatch_async(self.queue, ^{
         [self.pendingNotificationItems addObject:notificationItem];
     });
@@ -171,7 +171,7 @@ RCT_EXPORT_MODULE();
         NSInteger countNotificationItems = [pendingNotificationItemsCopied count];
 
         for (NSInteger i = 0; i < countNotificationItems; i++) {
-            RNNotificationItem *notificationItem = pendingNotificationItemsCopied[i];
+            RNSyneriseNotificationItem *notificationItem = pendingNotificationItemsCopied[i];
 
             [self sendNotificationItemToJS:notificationItem];
         }
@@ -189,7 +189,7 @@ RCT_EXPORT_MODULE();
     [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseRegistrationRequiredEvent object:nil userInfo:nil];
 }
 
-- (void)sendNotificationItemToJS:(RNNotificationItem *)notificationItem {
+- (void)sendNotificationItemToJS:(RNSyneriseNotificationItem *)notificationItem {
     id eventBody = [self dictionaryWithNotificationItem:notificationItem];
     [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseNotificationEvent object:nil userInfo:eventBody];
 }
@@ -202,7 +202,7 @@ RCT_EXPORT_MODULE();
     };
 }
 
-- (NSDictionary *)dictionaryWithNotificationItem:(RNNotificationItem *)notificationItem {
+- (NSDictionary *)dictionaryWithNotificationItem:(RNSyneriseNotificationItem *)notificationItem {
     return @{
         RNNotificationsEventObjectPayloadKey: notificationItem.userInfo,
         RNNotificationsEventObjectActionIdentifierKey: notificationItem.actionIdentifier ?: [NSNull null]

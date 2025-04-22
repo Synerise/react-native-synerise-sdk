@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.1] - 2025-04-18
+ 
+### Fixed
+- Changed the name of `RNNotifications` class to `RNSyneriseNotifications` to avoid name conflicts with some popular plugins for React Native.
+
+
 ## [1.1.0] - 2025-04-15
 
 ### Fixed

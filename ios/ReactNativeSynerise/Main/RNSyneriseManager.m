@@ -9,7 +9,7 @@
 #import "RNSyneriseManager.h"
 #import "RNSettings.h"
 #import "RNSynerise.h"
-#import "RNNotifications.h"
+#import "RNSyneriseNotifications.h"
 #import "RNClient.h"
 #import "RNTracker.h"
 #import "RNInjector.h"
@@ -34,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSArray *nativeModulesToCreate = @[
         RNSettings.class,
         RNSynerise.class,
-        RNNotifications.class,
+        RNSyneriseNotifications.class,
         RNClient.class,
         RNTracker.class,
         RNInjector.class,
@@ -95,8 +95,8 @@ NS_ASSUME_NONNULL_BEGIN
     return [self getModuleForClass:RNInjector.class];
 }
 
-- (nullable RNNotifications *)notifications {
-    return [self getModuleForClass:RNNotifications.class];
+- (nullable RNSyneriseNotifications *)notifications {
+    return [self getModuleForClass:RNSyneriseNotifications.class];
 }
 
 #pragma mark - Public
