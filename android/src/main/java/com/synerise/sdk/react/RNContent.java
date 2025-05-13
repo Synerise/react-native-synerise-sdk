@@ -29,8 +29,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
@@ -190,7 +192,11 @@ public class RNContent extends RNBaseModule {
     public void generateScreenViewWithApiQuery(ReadableMap screenViewApiQueryMap, Callback callback) {
         String feedSlug = screenViewApiQueryMap.hasKey("feedSlug") ? screenViewApiQueryMap.getString("feedSlug") : "";
         String productId = screenViewApiQueryMap.hasKey("productId") ? screenViewApiQueryMap.getString("productId") : "";
+        HashMap<String, Object> params = screenViewApiQueryMap.hasKey("params") ? screenViewApiQueryMap.getMap("params").toHashMap() : null;
         ScreenViewApiQuery screenViewApiQuery = new ScreenViewApiQuery(feedSlug, productId);
+        if (params != null) {
+            screenViewApiQuery.setParams(params);
+        }
         if (generateScreenViewApiCall != null) generateScreenViewApiCall.cancel();
         generateScreenViewApiCall = Content.generateScreenView(screenViewApiQuery);
         generateScreenViewApiCall.execute(
@@ -232,7 +238,7 @@ public class RNContent extends RNBaseModule {
     }
 
     private DocumentApiQuery readableMapToDocumentApiQuery(ReadableMap map) {
-        String slugName = map.hasKey("feedSlug") ? map.getString("feedSlug") : "";
+        String slugName = map.hasKey("slug") ? map.getString("slug") : "";
         DocumentApiQuery documentApiQuery = new DocumentApiQuery(slugName);
         documentApiQuery.setProductId(map.hasKey("productId") ? map.getString("productId") : null);
         documentApiQuery.setItemsIds(map.hasKey("itemsIds") ? readableArrayToListOfStrings(map.getArray("itemsIds")) : null);
@@ -246,6 +252,11 @@ public class RNContent extends RNBaseModule {
         }
         if (map.hasKey("elasticFiltersJoiner")) {
             documentApiQuery.setElasticFiltersJoiner(FiltersJoinerRule.valueOf(map.getString("elasticFiltersJoiner")));
+        }
+        if (map.hasKey("params")) {
+            if (map.getMap("params") != null) {
+                documentApiQuery.setParams(map.getMap("params").toHashMap());
+            }
         }
 
         return documentApiQuery;
