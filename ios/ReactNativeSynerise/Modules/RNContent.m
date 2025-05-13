@@ -57,7 +57,8 @@ RCT_EXPORT_MODULE();
             
             model.displayAttribute = [dictionary getArrayForKey:@"displayAttribute"];
             model.includeContextItems = [dictionary getBoolForKey:@"includeContextItems"];
-            
+            model.params = [dictionary getDictionaryForKey:@"params"];
+
             return model;
         }
     }
@@ -98,8 +99,9 @@ RCT_EXPORT_MODULE();
     if (dictionary != nil) {
         NSString *feedSlug = [dictionary getStringForKey:@"feedSlug"];
         if (feedSlug != nil) {
-            SNRScreenViewApiQuery *model = [[SNRScreenViewApiQuery alloc] initWithFeedSlug:feedSlug productID:nil];
+            SNRScreenViewApiQuery *model = [[SNRScreenViewApiQuery alloc] initWithSlug:feedSlug];
             model.productID = [dictionary getStringForKey:@"productId"];
+            model.params = [dictionary getDictionaryForKey:@"params"];
             
             return model;
         }

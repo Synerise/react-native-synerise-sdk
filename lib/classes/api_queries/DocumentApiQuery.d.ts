@@ -10,6 +10,7 @@ declare class DocumentApiQuery {
     elasticFiltersJoiner?: RecommendationFiltersJoinerRule;
     displayAttribute?: Array<string>;
     includeContextItems?: boolean;
+    params?: object;
     constructor(slug: string);
     toObject(): {
         slug: string;
@@ -22,6 +23,7 @@ declare class DocumentApiQuery {
         elasticFiltersJoiner: RecommendationFiltersJoinerRule | undefined;
         displayAttribute: string[] | undefined;
         includeContextItems: boolean | undefined;
+        params: object | undefined;
     };
 }
 export { DocumentApiQuery };

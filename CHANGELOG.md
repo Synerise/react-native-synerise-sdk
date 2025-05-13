@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2025-05-13
+
+### Added
+- `params` property in `DocumentApiQuery` model to set custom params for fetching Documents.
+- `params` property in `ScreenViewApiQuery` model to set custom params for fetching Screen Views.
+
+
 ## [1.1.1] - 2025-04-18
  
 ### Fixed
