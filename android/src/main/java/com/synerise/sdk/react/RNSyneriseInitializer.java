@@ -9,20 +9,20 @@ import com.synerise.sdk.core.types.enums.HostApplicationType;
 
 public class RNSyneriseInitializer {
 
-    public String apiKey;
+    public String clientApiKey;
     public String baseUrl = null;
     public String requestValidationSalt = null;
     public Boolean isDebugModeEnabled;
     public Boolean isCrashHandlingEnabled;
     public static volatile boolean isInitialized = false;
 
-    public static final String SDK_PLUGIN_VERSION = "1.2.0";
+    public static final String SDK_PLUGIN_VERSION = "0.25.0";
 
     public void initialize(Application app) {
         if (isInitialized == false) {
             prepareDefaultSettings();
             RNInjector.initializeActionInjectorListener();
-            Synerise.Builder.with(app, apiKey, getApplicationName(app))
+            Synerise.Builder.with(app, clientApiKey, getApplicationName(app))
                     .baseUrl(baseUrl)
                     .syneriseDebugMode(isDebugModeEnabled)
                     .crashHandlingEnabled(isCrashHandlingEnabled)

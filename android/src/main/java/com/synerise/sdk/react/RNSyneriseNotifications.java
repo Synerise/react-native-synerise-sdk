@@ -111,6 +111,12 @@ public class RNSyneriseNotifications extends RNBaseModule {
         return Injector.isSyneriseSimplePush(MapUtil.toStringMap(map));
     }
 
+    //isSyneriseBanner(payload: Object)
+    @ReactMethod(isBlockingSynchronousMethod = true)
+    public boolean isSyneriseBanner(ReadableMap map) {
+        return false;
+    }
+
     //isNotificationEncrypted(payload: object)
     @ReactMethod(isBlockingSynchronousMethod = true)
     public boolean isNotificationEncrypted(ReadableMap map) {

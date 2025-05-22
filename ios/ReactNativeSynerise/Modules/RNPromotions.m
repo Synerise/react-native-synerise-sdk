@@ -401,7 +401,7 @@ RCT_EXPORT_METHOD(getPromotionByCode:(NSString *)code response:(RCTResponseSende
 
 RCT_EXPORT_METHOD(activatePromotionByUUID:(NSString *)UUID response:(RCTResponseSenderBlock)response)
 {
-    [SNRPromotions activatePromotionByUuid:UUID success:^() {
+    [SNRPromotions activatePromotionByUuid:UUID success:^(BOOL isSuccess) {
         [self executeSuccessCallbackResponse:response data:@1];
     } failure:^(NSError *error) {
         [self executeFailureCallbackResponse:response error:error];
@@ -412,7 +412,7 @@ RCT_EXPORT_METHOD(activatePromotionByUUID:(NSString *)UUID response:(RCTResponse
 
 RCT_EXPORT_METHOD(activatePromotionByCode:(NSString *)code response:(RCTResponseSenderBlock)response)
 {
-    [SNRPromotions activatePromotionByCode:code success:^() {
+    [SNRPromotions activatePromotionByCode:code success:^(BOOL isSuccess) {
         [self executeSuccessCallbackResponse:response data:@1];
     } failure:^(NSError *error) {
         [self executeFailureCallbackResponse:response error:error];
@@ -424,7 +424,7 @@ RCT_EXPORT_METHOD(activatePromotionByCode:(NSString *)code response:(RCTResponse
 RCT_EXPORT_METHOD(activatePromotionsBatch:(NSArray *)array response:(RCTResponseSenderBlock)response)
 {
     NSArray *promotionIdentifiers = [self modelPromotionIdentifiersWithArray:array];
-    [SNRPromotions activatePromotionsWithIdentifiers:promotionIdentifiers success:^() {
+    [SNRPromotions activatePromotionsWithIdentifiers:promotionIdentifiers success:^(BOOL isSuccess) {
         [self executeSuccessCallbackResponse:response data:@1];
     } failure:^(NSError *error) {
         [self executeFailureCallbackResponse:response error:error];
@@ -435,7 +435,7 @@ RCT_EXPORT_METHOD(activatePromotionsBatch:(NSArray *)array response:(RCTResponse
 
 RCT_EXPORT_METHOD(deactivatePromotionByUUID:(NSString *)UUID response:(RCTResponseSenderBlock)response)
 {
-    [SNRPromotions deactivatePromotionByUuid:UUID success:^() {
+    [SNRPromotions deactivatePromotionByUuid:UUID success:^(BOOL isSuccess) {
         [self executeSuccessCallbackResponse:response data:@1];
     } failure:^(NSError *error) {
         [self executeFailureCallbackResponse:response error:error];
@@ -446,7 +446,7 @@ RCT_EXPORT_METHOD(deactivatePromotionByUUID:(NSString *)UUID response:(RCTRespon
 
 RCT_EXPORT_METHOD(deactivatePromotionByCode:(NSString *)code response:(RCTResponseSenderBlock)response)
 {
-    [SNRPromotions deactivatePromotionByCode:code success:^() {
+    [SNRPromotions deactivatePromotionByCode:code success:^(BOOL isSuccess) {
         [self executeSuccessCallbackResponse:response data:@1];
     } failure:^(NSError *error) {
         [self executeFailureCallbackResponse:response error:error];
@@ -458,7 +458,7 @@ RCT_EXPORT_METHOD(deactivatePromotionByCode:(NSString *)code response:(RCTRespon
 RCT_EXPORT_METHOD(deactivatePromotionsBatch:(NSArray *)array response:(RCTResponseSenderBlock)response)
 {
     NSArray *promotionIdentifiers = [self modelPromotionIdentifiersWithArray:array];
-    [SNRPromotions deactivatePromotionsWithIdentifiers:promotionIdentifiers success:^() {
+    [SNRPromotions deactivatePromotionsWithIdentifiers:promotionIdentifiers success:^(BOOL isSuccess) {
         [self executeSuccessCallbackResponse:response data:@1];
     } failure:^(NSError *error) {
         [self executeFailureCallbackResponse:response error:error];

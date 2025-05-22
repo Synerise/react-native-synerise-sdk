@@ -58,8 +58,8 @@ public class RNSynerise extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void withApiKey(@NonNull String apiKey) {
-    initializer.apiKey = apiKey;
+  public void withClientApiKey(@NonNull String clientApiKey) {
+    initializer.clientApiKey = clientApiKey;
   }
 
   @ReactMethod
@@ -97,7 +97,7 @@ public class RNSynerise extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void changeApiKey(String apiKey, ReadableMap initializationConfigMap) {
+  public void changeClientApiKey(String apiKey, ReadableMap initializationConfigMap) {
     if (initializationConfigMap != null) {
       InitializationConfig initializationConfig = new InitializationConfig();
       initializationConfig.setSalt(initializationConfigMap.hasKey("requestValidationSalt") ? initializationConfigMap.getString("requestValidationSalt") : null);

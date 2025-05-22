@@ -2,80 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.2.0] - 2025-05-13
-
-### Added
-- `params` property in `DocumentApiQuery` model to set custom params for fetching Documents.
-- `params` property in `ScreenViewApiQuery` model to set custom params for fetching Screen Views.
-
-
-## [1.1.1] - 2025-04-18
+## [0.25.0] - 2025-05-22
  
 ### Fixed
 - Changed the name of `RNNotifications` class to `RNSyneriseNotifications` to avoid name conflicts with some popular plugins for React Native.
 
 
-## [1.1.0] - 2025-04-15
-
-### Fixed
-- [Android] Empty payload in NotificationInfo after clicking on push.
-
-### Added
-- In-app campaigns can now use the safe area of the screen, allowing you to display full-screen in-app messages. This option is called "Safe area" in the "Display type" option group in the campaign creator. If switched on, it allows the in-app message to extend into system UI. If switched off, it avoids system bars, notches, and other UI elements.
-
-
-## [1.0.1] - 2025-04-01
+## [0.24.4] - 2025-03-16
 
 ### Fixed
 - [iOS] `campaignId`, `schema`, `slug`, `uuid` properties mapping in `RecommendationResponse` object.
-
-### Changed
-- Improvements to stability.
-
-
-## [1.0.0] - 2025-03-10 - REMOVED
-
-IMPORTANT:
-- This major version is NOT backwards compatible.
-- Update of native SDK's dependencies to 6.0.0 (Android) and 5.0.0 (iOS).
-- [iOS] Support for older iOS versions ends. Minimum deployment target is changed to iOS 13.
-- [iOS] Bitcode is not supported in SDK version 5.0.0 and higher. Xcode ignores bitcode.
-
-### Added
-- `appVersion` parameter for `client.applicationStarted` event. It is the same as `version`. `version` is deprecated.
-- `sdkPreviousVersion` parameter for `client.applicationStarted` event. It is the version of the SDK before the current version in the application.
-
-### Removed
-- `Synerise.Client.authenticateByOAuth(accessToken:context:onSuccess:onError:)` method. You should use the`Synerise.Client.authenticate(token:provider:context:onSuccess:onError:)` method.
-- `Synerise.Client.authenticateByOAuthIfRegistered(accessToken:context:onSuccess:onError:)` method. You should use the `Synerise.Client.authenticate(token:provider:context:onSuccess:onError:)` method.
-- `Synerise.Client.authenticateByFacebook(facebookToken:context:onSuccess:onError:)` method. You should use the `Synerise.Client.authenticate(token:provider:context:onSuccess:onError:)` method.
-- `Synerise.Client.authenticateByFacebookIfRegistered(facebookToken:context:onSuccess:onError:)` method. You should use the `Synerise.Client.authenticate(token:provider:context:onSuccess:onError:)` method.
-- `Synerise.Client.authenticateByAppleSignIn(identityToken:context:onSuccess:onError:)` method. You should use the `Synerise.Client.authenticate(token:provider:context:onSuccess:onError:)` method.
-- `Synerise.Client.authenticateByAppleSignInIfRegistered(identityToken:context:onSuccess:onError:)` method. You should use the `Synerise.Client.authenticate(token:provider:context:onSuccess:onError:)` method.
-- `Synerise.Client.deleteAccountByOAuth(accessToken:onSuccess:onError:)` method. You should use the `Synerise.Client.deleteAccountByIdentityProvider(clientAuthFactor:clientIdentityProvider:authID:onSuccess:onError:)` method.
-- `Synerise.Client.deleteAccountByFacebook(facebookToken:onSuccess:onError:)` method. You should use the `Synerise.Client.deleteAccountByIdentityProvider(clientAuthFactor:clientIdentityProvider:authID:onSuccess:onError:)` method.
-- `Synerise.Client.deleteAccountByAppleSignIn(identityToken:onSuccess:onError:)` method. You should use the `Synerise.Client.deleteAccountByIdentityProvider(clientAuthFactor:clientIdentityProvider:authID:onSuccess:onError:)` method.
-- `IInjectorWalkthroughListener` for handling actions from Walkthrough campaigns.
-- `IInjectorBannerListener` for handling actions from Banner campaigns.
-- `Synerise.Content.getDocument(slug:onSuccess:onError:)` method. You should use `Synerise.Content.generateDocument(slug:onSuccess:onError:)` method.
-- `Synerise.Content.getDocuments(apiQuery:onSuccess:onError:)` method.
-- `Synerise.Content.getRecommendations(options:onSuccess:onError:)` method.
-- `Synerise.Content.getScreenView(onSuccess:onError:)` method and correlated models (`ScreenViewResponse`, `ScreenViewAudience`). You should use the `Synerise.Content.generateScreenView(feedSlug:onSuccess:onError:)` or the `Synerise.Content.generateScreenViewWithApiQuery(apiQuery:onSuccess:onError:)` method.
-- `Synerise.Notifications.isSyneriseBanner(payload:)`
-- `Synerise.Injector.getWalkthrough()` method.
-- `Synerise.Injector.showWalkthrough()` method.
-- `Synerise.Injector.isWalkthroughLoaded()` method.
-- `Synerise.Injector.isLoadedWalkthroughUnique()` method.
-- `Synerise.Injector.getPushes(success:failure:)` method.
-- [iOS] `deviceID` parameter from `client.applicationStarted` event. It was redundant with the `deviceId` parameter.
-
-### Changed
-- Synerise initialization builder method `withClientApiKey(clientApiKey:)` to `withApiKey(apiKey:)`.
-- `Synerise.changeClientApiKey(clientApiKey:config:)` to `Synerise.changeApiKey(apiKey:config:)`.
-- `Synerise.Client.activateAccount(email:onSuccess:onError:)` to `Synerise.Client.requestAccountActivation(email:onSuccess:onError:)`.
-- `Synerise.Client.confirmAccount(token:onSuccess:onError:)` to `Synerise.Client.confirmAccountActivation(token:onSuccess:onError:)`.
-- `TokenOrigin.oauth` enum value changed to `TokenOrigin.OAuth`.
-- Improvements to stability.
 
 
 ## [0.24.3] - 2024-11-12
