@@ -78,6 +78,18 @@ IMPORTANT:
 - Improvements to stability.
 
 
+## [0.25.0] - 2025-05-22
+ 
+### Fixed
+- Changed the name of `RNNotifications` class to `RNSyneriseNotifications` to avoid name conflicts with some popular plugins for React Native.
+
+
+## [0.24.4] - 2025-03-16
+
+### Fixed
+- [iOS] `campaignId`, `schema`, `slug`, `uuid` properties mapping in `RecommendationResponse` object.
+
+
 ## [0.24.3] - 2024-11-12
 
 ### Fixed
