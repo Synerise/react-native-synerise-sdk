@@ -21,13 +21,21 @@ Most up-to-date documentation is available at [Developer Guide - Mobile SDK](htt
 * Development environment configured - [React Native - Setting up the development environment](https://reactnative.dev/docs/environment-setup)
 
 ### Android
-* Minimum Android SDK version - 21
-* Supported targetSDKVersion - 33
+
+* Recommended environment:
+  - Minimum Android SDK version - 24
+  - Supported targetSDKVersion - 33
 
 ### iOS
-* Xcode 15 and iOS SDK 17
-* iOS 9.0+ minimum deployment target
-* Valid architectures: arm64 devices and arm64, x86_64 simulators
+
+* Recommended environment:
+    - Xcode 16
+    - iOS SDK 18
+* Target deployment:
+    - **iOS 13.0+** for SDK versions 1.0.0 and higher
+    - **iOS 9.0+** for SDK versions lower than 1.0.0
+
+**Bitcode is not supported in SDK version 1.0.0 and higher. Xcode ignores bitcode.**
 
 ## Installation
 
