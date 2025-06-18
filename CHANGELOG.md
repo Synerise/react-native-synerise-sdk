@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.0] - 2025-06-18
+
+### Fixed
+- [iOS] InAppMessage deeplink action.
+- [iOS] Some potential issues with notification processing in NotificationServiceExtension.
+
+### Changed
+- Properties in `Promotion` model: `currentRedeemedQuantity`, `currentRedeemLimit`, `activationCounter`, `possibleRedeems`, `requireRedeemedPoints` and `discountValue` are nullable now.
+
+### Added
+- `Synerise.śettings.sdk.doNotTrack` option to fully disable tracking customer's activity in SDK. When enabled, the SDK stops sending tracking events and replaces the UUID with a random one, preventing profile creation and blocking some functionalities (e.g. authentication).
+
+
 ## [1.2.0] - 2025-05-13
 
 ### Added
@@ -76,18 +89,6 @@ IMPORTANT:
 - `Synerise.Client.confirmAccount(token:onSuccess:onError:)` to `Synerise.Client.confirmAccountActivation(token:onSuccess:onError:)`.
 - `TokenOrigin.oauth` enum value changed to `TokenOrigin.OAuth`.
 - Improvements to stability.
-
-
-## [0.25.0] - 2025-05-22
- 
-### Fixed
-- Changed the name of `RNNotifications` class to `RNSyneriseNotifications` to avoid name conflicts with some popular plugins for React Native.
-
-
-## [0.24.4] - 2025-03-16
-
-### Fixed
-- [iOS] `campaignId`, `schema`, `slug`, `uuid` properties mapping in `RecommendationResponse` object.
 
 
 ## [0.24.3] - 2024-11-12

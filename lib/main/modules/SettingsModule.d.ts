@@ -4,6 +4,7 @@ declare const LocalizableStringKeyCancel = "LocalizableStringKeyCancel";
 interface ISettingsOptions {
     sdk?: {
         enabled?: boolean;
+        doNotTrack?: boolean;
         appGroupIdentifier?: string;
         keychainGroupIdentifier?: string;
         minTokenRefreshInterval?: number;
@@ -37,6 +38,7 @@ declare class SettingsModule extends Module {
     private static _instance;
     sdk: {
         enabled: any;
+        doNotTrack: any;
         appGroupIdentifier: any;
         keychainGroupIdentifier: any;
         minTokenRefreshInterval: any;

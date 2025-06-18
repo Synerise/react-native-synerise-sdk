@@ -7,6 +7,7 @@
 //
 
 #import "RNPromotions.h"
+#import "RNPromotions+Functions.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -94,7 +95,7 @@ RCT_EXPORT_MODULE();
             }
             
             if ([key isEqualToString:@"UUID"]) {
-                return [[SNRPromotionIdentifier alloc] initWithUUID:value];
+                return [[SNRPromotionIdentifier alloc] initWithUuid:value];
             }
         }
     }
@@ -233,7 +234,7 @@ RCT_EXPORT_MODULE();
     if (model != nil) {
         NSMutableDictionary *dictionary = [@{} mutableCopy];
         
-        [dictionary setNumber:model.discountValue forKey:@"discountValue"];
+        [dictionary setNumber:[NSNumber numberWithDouble:model.discountValue] forKey:@"discountValue"];
         [dictionary setNumber:model.usageThreshold forKey:@"usageThreshold"];
         
         return dictionary;
