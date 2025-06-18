@@ -83,6 +83,11 @@ public class RNSynerise extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void withInitialDoNotTrack(boolean initialDoNotTrack) {
+    initializer.initialDoNotTrack = initialDoNotTrack;
+  }
+
+  @ReactMethod
   public void initializeSynerise() {
     if (initializer != null) {
       initializer.initialize(app);

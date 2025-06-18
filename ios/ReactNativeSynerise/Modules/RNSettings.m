@@ -9,6 +9,7 @@
 #import "RNSettings.h"
 
 static NSString * const RNSettingsSDKEnabled = @"SDK_ENABLED";
+static NSString * const RNSettingsSDKDoNotTrack = @"SDK_DO_NOT_TRACK";
 static NSString * const RNSettingsSDKAppGroupIdentifier = @"SDK_APP_GROUP_IDENTIFIER";
 static NSString * const RNSettingsSDKKeychainGroupIdentifier = @"SDK_KEYCHAIN_GROUP_IDENTIFIER";
 static NSString * const RNSettingsSDKMinTokenRefreshInterval = @"SDK_MIN_TOKEN_REFRESH_INTERVAL";
@@ -63,6 +64,7 @@ RCT_EXPORT_MODULE();
 
 - (void)updateSettingsWithDictionary:(NSDictionary *)dictionary {
     [self updateSettingsKeyPath:@"sdk.enabled" expectedClass:[NSNumber class] object:dictionary[RNSettingsSDKEnabled]];
+    [self updateSettingsKeyPath:@"sdk.doNotTrack" expectedClass:[NSNumber class] object:dictionary[RNSettingsSDKDoNotTrack]];
     [self updateSettingsKeyPath:@"sdk.appGroupIdentifier" expectedClass:[NSString class] object:dictionary[RNSettingsSDKAppGroupIdentifier]];
     [self updateSettingsKeyPath:@"sdk.keychainGroupIdentifier" expectedClass:[NSString class] object:dictionary[RNSettingsSDKKeychainGroupIdentifier]];
     [self updateSettingsKeyPath:@"sdk.minTokenRefreshInterval" expectedClass:[NSNumber class] object:dictionary[RNSettingsSDKMinTokenRefreshInterval]];
@@ -137,6 +139,7 @@ RCT_EXPORT_MODULE();
     NSMutableDictionary *dictionary = [@{} mutableCopy];
     
     dictionary[RNSettingsSDKEnabled] = [NSNumber numberWithBool:SNRSynerise.settings.sdk.enabled];
+    dictionary[RNSettingsSDKDoNotTrack] = [NSNumber numberWithBool:SNRSynerise.settings.sdk.doNotTrack];
     dictionary[RNSettingsSDKAppGroupIdentifier] = SNRSynerise.settings.sdk.appGroupIdentifier ?: [NSNull null];
     dictionary[RNSettingsSDKKeychainGroupIdentifier] = SNRSynerise.settings.sdk.keychainGroupIdentifier ?: [NSNull null];
     dictionary[RNSettingsSDKMinTokenRefreshInterval] = [NSNumber numberWithDouble:SNRSynerise.settings.sdk.minTokenRefreshInterval];
@@ -170,6 +173,7 @@ RCT_EXPORT_MODULE();
 {
   return @{
       RNSettingsSDKEnabled: RNSettingsSDKEnabled,
+      RNSettingsSDKDoNotTrack: RNSettingsSDKDoNotTrack,
       RNSettingsSDKAppGroupIdentifier: RNSettingsSDKAppGroupIdentifier,
       RNSettingsSDKKeychainGroupIdentifier: RNSettingsSDKKeychainGroupIdentifier,
       RNSettingsSDKMinTokenRefreshInterval: RNSettingsSDKMinTokenRefreshInterval,

@@ -114,6 +114,11 @@ RCT_EXPORT_METHOD(withBaseUrl:(NSString *)baseUrl) {
 RCT_EXPORT_METHOD(withRequestValidationSalt:(NSString *)requestValidationSalt) {
     self.initializer.requestValidationSalt = requestValidationSalt;
 }
+
+RCT_EXPORT_METHOD(withInitialDoNotTrack:(nonnull NSNumber *)initialDoNotTrack) {
+    self.initializer.initialDoNotTrack = initialDoNotTrack;
+}
+
 RCT_EXPORT_METHOD(withDebugModeEnabled:(BOOL)debugModeEnabled) {
     self.initializer.debugModeEnabled = debugModeEnabled;
 }

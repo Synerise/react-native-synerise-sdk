@@ -16,6 +16,7 @@ declare class SyneriseInitializer {
     withApiKey(apiKey: string): this;
     withBaseUrl(baseUrl: string): this;
     withRequestValidationSalt(requestValidationSalt: string): this;
+    withInitialDoNotTrack(initialDoNotTrack: boolean): this;
     withDebugModeEnabled(debugModeEnabled: boolean): this;
     withCrashHandlingEnabled(crashHandlingEnabled: boolean): this;
     withSettings(settings: ISettingsOptions): this;

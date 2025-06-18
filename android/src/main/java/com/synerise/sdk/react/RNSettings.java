@@ -27,6 +27,7 @@ import javax.annotation.Nullable;
 public class RNSettings extends RNBaseModule {
 
     public static final String RN_SETTINGS_SDK_ENABLED = "SDK_ENABLED";
+    public static final String RN_SETTINGS_SDK_DO_NOT_TRACK = "SDK_DO_NOT_TRACK";
     public static final String RN_SETTINGS_SDK_MIN_TOKEN_REFRESH_INTERVAL = "SDK_MIN_TOKEN_REFRESH_INTERVAL";
     public static final String RN_SETTINGS_SHOULD_DESTROY_SESSION_ON_API_KEY_CHANGE = "SDK_SHOULD_DESTROY_SESSION_ON_API_KEY_CHANGE";
     public static final String RN_SETTINGS_TRACKER_IS_BACKEND_TIME_SYNC_REQUIRED = "TRACKER_IS_BACKEND_TIME_SYNC_REQUIRED";
@@ -58,6 +59,7 @@ public class RNSettings extends RNBaseModule {
     public Map<String, Object> getConstants() {
         final Map<String, Object> constants = new HashMap<>();
         constants.put(RN_SETTINGS_SDK_ENABLED, RN_SETTINGS_SDK_ENABLED);
+        constants.put(RN_SETTINGS_SDK_DO_NOT_TRACK, RN_SETTINGS_SDK_DO_NOT_TRACK);
         constants.put(RN_SETTINGS_SDK_MIN_TOKEN_REFRESH_INTERVAL, RN_SETTINGS_SDK_MIN_TOKEN_REFRESH_INTERVAL);
         constants.put(RN_SETTINGS_TRACKER_IS_BACKEND_TIME_SYNC_REQUIRED, RN_SETTINGS_TRACKER_IS_BACKEND_TIME_SYNC_REQUIRED);
         constants.put(RN_SETTINGS_TRACKER_MIN_BATCH_SIZE, RN_SETTINGS_TRACKER_MIN_BATCH_SIZE);
@@ -156,6 +158,11 @@ public class RNSettings extends RNBaseModule {
                     Settings.getInstance().sdk.setSDKEnabled((Boolean) value);
                 }
                 break;
+            case RN_SETTINGS_SDK_DO_NOT_TRACK:
+                if (value instanceof Boolean) {
+                    Settings.getInstance().sdk.setDoNotTrack((Boolean) value);
+                }
+                break;
             case RN_SETTINGS_SDK_MIN_TOKEN_REFRESH_INTERVAL:
                 if (value instanceof Integer) {
                     Settings.getInstance().sdk.setMinTokenRefreshInterval((int) value);
@@ -236,6 +243,7 @@ public class RNSettings extends RNBaseModule {
     private Map<String, Object> settingsDictionary() {
         Map<String, Object> settings = new HashMap<>();
         settings.put(RN_SETTINGS_SDK_ENABLED, Synerise.settings.sdk.isSDKEnabled());
+        settings.put(RN_SETTINGS_SDK_DO_NOT_TRACK, Synerise.settings.sdk.getDoNotTrack());
         settings.put(RN_SETTINGS_SDK_MIN_TOKEN_REFRESH_INTERVAL, Synerise.settings.sdk.getMinTokenRefreshInterval());
         settings.put(RN_SETTINGS_TRACKER_IS_BACKEND_TIME_SYNC_REQUIRED, Synerise.settings.tracker.isBackendTimeSyncRequired);
         settings.put(RN_SETTINGS_TRACKER_MIN_BATCH_SIZE, Synerise.settings.tracker.minBatchSize);
