@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.1] - 2025-07-14
+
+### Fixed
+- [iOS] The issue with vouchers api methods.
+- [iOS] Potential issues with URL and deeplink actions when the delegate is set after SDK initialization.
+
+
 ## [1.3.0] - 2025-06-18
 
 ### Fixed
@@ -12,7 +19,7 @@ All notable changes to this project will be documented in this file.
 - Properties in `Promotion` model: `currentRedeemedQuantity`, `currentRedeemLimit`, `activationCounter`, `possibleRedeems`, `requireRedeemedPoints` and `discountValue` are nullable now.
 
 ### Added
-- `Synerise.Settings.sdk.doNotTrack` option to fully disable tracking customer's activity in SDK. When enabled, the SDK stops sending tracking events and replaces the UUID with a random one, preventing profile creation and blocking some functionalities (e.g. authentication).
+- `Synerise.śettings.sdk.doNotTrack` option to fully disable tracking customer's activity in SDK. When enabled, the SDK stops sending tracking events and replaces the UUID with a random one, preventing profile creation and blocking some functionalities (e.g. authentication).
 
 
 ## [1.2.0] - 2025-05-13
