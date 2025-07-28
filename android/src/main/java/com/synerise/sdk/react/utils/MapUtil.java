@@ -4,10 +4,12 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.ReadableType;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class MapUtil {
@@ -56,6 +58,67 @@ public class MapUtil {
         }
 
         return writableMap;
+    }
+
+    public static WritableMap objectMapToWritableMap(Map<String, Object> map) {
+        WritableMap writableMap = Arguments.createMap();
+
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+
+            if (value == null) {
+                writableMap.putNull(key);
+            } else if (value instanceof String) {
+                writableMap.putString(key, (String) value);
+            } else if (value instanceof Integer) {
+                writableMap.putInt(key, (Integer) value);
+            } else if (value instanceof Double) {
+                writableMap.putDouble(key, (Double) value);
+            } else if (value instanceof Float) {
+                writableMap.putDouble(key, ((Float) value).doubleValue());
+            } else if (value instanceof Boolean) {
+                writableMap.putBoolean(key, (Boolean) value);
+            } else if (value instanceof Map) {
+                // Recursive mapping
+                writableMap.putMap(key, objectMapToWritableMap((Map<String, Object>) value));
+            } else if (value instanceof List) {
+                writableMap.putArray(key, objectListToWritableArray((List<Object>) value));
+            } else {
+                writableMap.putString(key, value.toString());
+            }
+        }
+
+        return writableMap;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static WritableArray objectListToWritableArray(List<Object> list) {
+        WritableArray array = Arguments.createArray();
+
+        for (Object item : list) {
+            if (item == null) {
+                array.pushNull();
+            } else if (item instanceof String) {
+                array.pushString((String) item);
+            } else if (item instanceof Integer) {
+                array.pushInt((Integer) item);
+            } else if (item instanceof Double) {
+                array.pushDouble((Double) item);
+            } else if (item instanceof Float) {
+                array.pushDouble(((Float) item).doubleValue());
+            } else if (item instanceof Boolean) {
+                array.pushBoolean((Boolean) item);
+            } else if (item instanceof Map) {
+                array.pushMap(objectMapToWritableMap((Map<String, Object>) item));
+            } else if (item instanceof List) {
+                array.pushArray(objectListToWritableArray((List<Object>) item));
+            } else {
+                array.pushString(item.toString());
+            }
+        }
+
+        return array;
     }
 
     public static Map<String, Object> toMap(ReadableMap readableMap) {
