@@ -480,7 +480,7 @@ public class RNClient extends RNBaseModule {
                 accountMap.putString("avatarUrl", getAccountInformation.getAvatarUrl());
                 accountMap.putBoolean("anonymous", getAccountInformation.getAnonymous());
                 accountMap.putMap("agreements", agreements);
-                accountMap.putMap("attributes", MapUtil.stringMapToWritableMap(getAccountInformation.getAttributes()));
+                accountMap.putMap("attributes", MapUtil.objectMapToWritableMap(getAccountInformation.getAttributes()));
                 if (getAccountInformation.getLastActivityDate() != null) {
                     accountMap.putDouble("lastActivityDate", getAccountInformation.getLastActivityDate().getTime());
                 }
@@ -499,21 +499,58 @@ public class RNClient extends RNBaseModule {
     @ReactMethod
     public void updateAccountBasicInformation(ReadableMap map, Callback callback) {
         UpdateAccountBasicInformation updateAccountBasicInformation = new UpdateAccountBasicInformation();
-        updateAccountBasicInformation.setFirstName(map.hasKey("firstName") ? map.getString("firstName") : null);
-        updateAccountBasicInformation.setLastName(map.hasKey("lastName") ? map.getString("lastName") : null);
-        updateAccountBasicInformation.setDisplayName(map.hasKey("displayName") ? map.getString("displayName") : null);
+
+        if (map.hasKey("firstName")) {
+            updateAccountBasicInformation.setFirstName(map.getString("firstName"));
+        }
+
+        if (map.hasKey("lastName")) {
+            updateAccountBasicInformation.setLastName(map.getString("lastName"));
+        }
+
+        if (map.hasKey("displayName")) {
+            updateAccountBasicInformation.setDisplayName(map.getString("displayName"));
+        }
+
         if (map.hasKey("sex")) {
             updateAccountBasicInformation.setSex(Sex.getSex(map.getString("sex")));
         }
-        updateAccountBasicInformation.setPhoneNumber(map.hasKey("phone") ? map.getString("phone") : null);
-        updateAccountBasicInformation.setBirthDate(map.hasKey("birthDate") ? map.getString("birthDate") : null);
-        updateAccountBasicInformation.setAvatarUrl(map.hasKey("avatarUrl") ? map.getString("avatarUrl") : null);
-        updateAccountBasicInformation.setCompany(map.hasKey("company") ? map.getString("company") : null);
-        updateAccountBasicInformation.setAddress(map.hasKey("address") ? map.getString("address") : null);
-        updateAccountBasicInformation.setCity(map.hasKey("city") ? map.getString("city") : null);
-        updateAccountBasicInformation.setProvince(map.hasKey("province") ? map.getString("province") : null);
-        updateAccountBasicInformation.setZipCode(map.hasKey("zipCode") ? map.getString("zipCode") : null);
-        updateAccountBasicInformation.setCountryCode(map.hasKey("countryCode") ? map.getString("countryCode") : null);
+
+        if (map.hasKey("phone")) {
+            updateAccountBasicInformation.setPhoneNumber(map.getString("phone"));
+        }
+
+        if (map.hasKey("birthDate")) {
+            updateAccountBasicInformation.setBirthDate(map.getString("birthDate"));
+        }
+
+        if (map.hasKey("avatarUrl")) {
+            updateAccountBasicInformation.setAvatarUrl(map.getString("avatarUrl"));
+        }
+
+        if (map.hasKey("company")) {
+            updateAccountBasicInformation.setCompany(map.getString("company"));
+        }
+
+        if (map.hasKey("address")) {
+            updateAccountBasicInformation.setAddress(map.getString("address"));
+        }
+
+        if (map.hasKey("city")) {
+            updateAccountBasicInformation.setCity(map.getString("city"));
+        }
+
+        if (map.hasKey("province")) {
+            updateAccountBasicInformation.setProvince(map.getString("province"));
+        }
+
+        if (map.hasKey("zipCode")) {
+            updateAccountBasicInformation.setZipCode(map.getString("zipCode"));
+        }
+
+        if (map.hasKey("countryCode")) {
+            updateAccountBasicInformation.setCountryCode(map.getString("countryCode"));
+        }
 
         if (map.hasKey("attributes")) {
             Attributes attributes = attributesMapper(map.getMap("attributes").toHashMap());
@@ -539,24 +576,70 @@ public class RNClient extends RNBaseModule {
     @ReactMethod
     public void updateAccount(ReadableMap map, Callback callback) {
         UpdateAccountInformation updateAccountInformation = new UpdateAccountInformation();
-        updateAccountInformation.setEmail(map.hasKey("email") ? map.getString("email") : null);
-        updateAccountInformation.setPhoneNumber(map.hasKey("phone") ? map.getString("phone") : null);
-        updateAccountInformation.setCustomId(map.hasKey("customId") ? map.getString("customId") : null);
-        updateAccountInformation.setUuid(map.hasKey("uuid") ? map.getString("uuid") : null);
-        updateAccountInformation.setFirstName(map.hasKey("firstName") ? map.getString("firstName") : null);
-        updateAccountInformation.setLastName(map.hasKey("lastName") ? map.getString("lastName") : null);
-        updateAccountInformation.setDisplayName(map.hasKey("displayName") ? map.getString("displayName") : null);
+
+        if (map.hasKey("email")) {
+            updateAccountInformation.setEmail(map.getString("email"));
+        }
+
+        if (map.hasKey("phone")) {
+            updateAccountInformation.setPhoneNumber(map.getString("phone"));
+        }
+
+        if (map.hasKey("customId")) {
+            updateAccountInformation.setCustomId(map.getString("customId"));
+        }
+
+        if (map.hasKey("uuid")) {
+            updateAccountInformation.setUuid(map.getString("uuid"));
+        }
+
+        if (map.hasKey("firstName")) {
+            updateAccountInformation.setFirstName(map.getString("firstName"));
+        }
+
+        if (map.hasKey("lastName")) {
+            updateAccountInformation.setLastName(map.getString("lastName"));
+        }
+
+        if (map.hasKey("displayName")) {
+            updateAccountInformation.setDisplayName(map.getString("displayName"));
+        }
+
         if (map.hasKey("sex")) {
             updateAccountInformation.setSex(Sex.getSex(map.getString("sex")));
         }
-        updateAccountInformation.setBirthDate(map.hasKey("birthDate") ? map.getString("birthDate") : null);
-        updateAccountInformation.setAvatarUrl(map.hasKey("avatarUrl") ? map.getString("avatarUrl") : null);
-        updateAccountInformation.setCompany(map.hasKey("company") ? map.getString("company") : null);
-        updateAccountInformation.setAddress(map.hasKey("address") ? map.getString("address") : null);
-        updateAccountInformation.setCity(map.hasKey("city") ? map.getString("city") : null);
-        updateAccountInformation.setProvince(map.hasKey("province") ? map.getString("province") : null);
-        updateAccountInformation.setZipCode(map.hasKey("zipCode") ? map.getString("zipCode") : null);
-        updateAccountInformation.setCountryCode(map.hasKey("countryCode") ? map.getString("countryCode") : null);
+
+        if (map.hasKey("birthDate")) {
+            updateAccountInformation.setBirthDate(map.getString("birthDate"));
+        }
+
+        if (map.hasKey("avatarUrl")) {
+            updateAccountInformation.setAvatarUrl(map.getString("avatarUrl"));
+        }
+
+        if (map.hasKey("company")) {
+            updateAccountInformation.setCompany(map.getString("company"));
+        }
+
+        if (map.hasKey("address")) {
+            updateAccountInformation.setAddress(map.getString("address"));
+        }
+
+        if (map.hasKey("city")) {
+            updateAccountInformation.setCity(map.getString("city"));
+        }
+
+        if (map.hasKey("province")) {
+            updateAccountInformation.setProvince(map.getString("province"));
+        }
+
+        if (map.hasKey("zipCode")) {
+            updateAccountInformation.setZipCode(map.getString("zipCode"));
+        }
+
+        if (map.hasKey("countryCode")) {
+            updateAccountInformation.setCountryCode(map.getString("countryCode"));
+        }
 
         if (map.hasKey("attributes")) {
             Attributes attributes = attributesMapper(map.getMap("attributes").toHashMap());
@@ -710,9 +793,7 @@ public class RNClient extends RNBaseModule {
         Iterator it = map.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry) it.next();
-            if (pair.getValue() instanceof String) {
-                attributes.add(pair.getKey().toString(), pair.getValue().toString());
-            }
+            attributes.add(pair.getKey().toString(), pair.getValue());
             it.remove(); // avoids a ConcurrentModificationException
         }
         return attributes;
