@@ -3,7 +3,7 @@ import { Error } from './../../classes/types/Error';
 interface INotificationsListener {
     onRegistrationToken?(token: string): void;
     onRegistrationRequired?(): void;
-    onNotification(payload: object, actionIdentifier: string | null): void;
+    onNotification?(payload: object, actionIdentifier: string | null): void;
 }
 declare class NotificationsModule extends Module {
     private static _instance;

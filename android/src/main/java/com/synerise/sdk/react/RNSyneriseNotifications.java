@@ -60,7 +60,14 @@ public class RNSyneriseNotifications extends RNBaseModule {
         registerNativeForPushListener = new OnRegisterForPushListener() {
             @Override
             public void onRegisterForPushRequired() {
-                pushListener.onRegisterPushRequired();
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        pushListener.onRegisterPushRequired();
+                    }
+                }, 2000);
+
             }
         };
     }
