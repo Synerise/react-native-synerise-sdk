@@ -44,8 +44,15 @@ public class RNSettings extends RNBaseModule {
     public static final String RN_SETTINGS_IN_APP_MESSAGING_RENDERING_TIMEOUT = "IN_APP_MESSAGING_RENDERING_TIMEOUT";
     public static final String RN_SETTINGS_IN_APP_MESSAGING_SHOULD_SEND_IN_APP_CAPPING_EVENT = "IN_APP_MESSAGING_SHOULD_SEND_IN_APP_CAPPING_EVENT";
 
+    private HashMap<String, Object> settingsQueue;
+
     public RNSettings(ReactApplicationContext reactApplicationContext) {
         super(reactApplicationContext);
+        settingsQueue = new HashMap<>();
+    }
+
+    protected void initializeSettings() {
+        releaseQueue();
     }
 
     @Nonnull
@@ -160,7 +167,11 @@ public class RNSettings extends RNBaseModule {
                 break;
             case RN_SETTINGS_SDK_DO_NOT_TRACK:
                 if (value instanceof Boolean) {
-                    Settings.getInstance().sdk.setDoNotTrack((Boolean) value);
+                    if (RNSyneriseInitializer.isInitialized) {
+                        Settings.getInstance().sdk.setDoNotTrack((Boolean) value);
+                    } else {
+                        settingsQueue.put(key, value);
+                    }
                 }
                 break;
             case RN_SETTINGS_SDK_MIN_TOKEN_REFRESH_INTERVAL:
@@ -260,5 +271,15 @@ public class RNSettings extends RNBaseModule {
         settings.put(RN_SETTINGS_IN_APP_MAX_DEFINITION_UPDATE_INTERVAL_LIMIT, Synerise.settings.inAppMessaging.getMaxDefinitionUpdateIntervalLimit());
         settings.put(RN_SETTINGS_IN_APP_MESSAGING_SHOULD_SEND_IN_APP_CAPPING_EVENT, Synerise.settings.inAppMessaging.shouldSendInAppCappingEvent);
         return settings;
+    }
+
+    private void releaseQueue() {
+        for (Map.Entry<String, Object> entry : settingsQueue.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            matchSetting(key, value);
+        }
+
+        settingsQueue.clear();
     }
 }

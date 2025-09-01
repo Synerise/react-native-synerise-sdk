@@ -14,25 +14,30 @@ public class RNSyneriseSdkPackage implements ReactPackage {
 
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
-      List<NativeModule> modules = new ArrayList<NativeModule>();
-      modules.add(new RNSynerise(reactContext));
-      modules.add(new RNSyneriseNotifications(reactContext));
-      modules.add(new RNInjector(reactContext));
-      modules.add(new RNClient(reactContext));
-      modules.add(new RNTracker(reactContext));
-      modules.add(new RNSettings(reactContext));
-      modules.add(new RNPromotions(reactContext));
-      modules.add(new RNContent(reactContext));
-      return modules;
+        List<NativeModule> modules = new ArrayList<NativeModule>();
+        modules.add(new RNSynerise(reactContext));
+        modules.add(new RNSyneriseNotifications(reactContext));
+        modules.add(new RNInjector(reactContext));
+        modules.add(new RNClient(reactContext));
+        modules.add(new RNTracker(reactContext));
+        modules.add(new RNSettings(reactContext));
+        modules.add(new RNPromotions(reactContext));
+        modules.add(new RNContent(reactContext));
+
+        for (NativeModule module : modules) {
+            RNModuleRegistry.register(module);
+        }
+
+        return modules;
     }
 
     // Deprecated from RN 0.47
     public List<Class<? extends JavaScriptModule>> createJSModules() {
-      return Collections.emptyList();
+        return Collections.emptyList();
     }
 
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-      return Collections.emptyList();
+        return Collections.emptyList();
     }
 }
