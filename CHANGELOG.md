@@ -1,6 +1,14 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [1.3.4] - 2025-09-01
+
+### Fixed
+- [Android] Issue with anonymous login after doNotTrack update.
+
+### Changed
+- Update of native SDK's dependencies.
+
 
 ## [1.3.3] - 2025-08-28
 

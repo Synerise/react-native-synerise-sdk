@@ -18,7 +18,7 @@ public class RNSyneriseInitializer {
     public Boolean initialDoNotTrack;
     public static volatile boolean isInitialized = false;
 
-    public static final String SDK_PLUGIN_VERSION = "1.3.3";
+    public static final String SDK_PLUGIN_VERSION = "1.3.4";
 
     public void initialize(Application app) {
         if (isInitialized == false) {
@@ -56,5 +56,7 @@ public class RNSyneriseInitializer {
         RNSyneriseNotifications.initializeNotifications();
         RNInjector.initializeInjector();
         RNClient.initializeClient();
+        RNSettings settings = RNModuleRegistry.get(RNSettings.class);
+        settings.initializeSettings();
     }
 }
