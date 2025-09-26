@@ -1,6 +1,6 @@
 //
 //  RNPromotions+Functions.h
-//  flutter-synerise-sdk
+//  react-native-synerise-sdk
 //
 //  Created by Synerise
 //  Copyright © 2023 Synerise. All rights reserved.

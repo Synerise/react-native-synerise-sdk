@@ -8,7 +8,7 @@
 
 #import "RNSyneriseInitializer.h"
 
-NSString * const SNRSyneriseSDKPluginVersion = @"1.3.4";
+NSString * const SNRSyneriseSDKPluginVersion = @"1.4.0";
 
 @implementation RNSyneriseInitializer
 

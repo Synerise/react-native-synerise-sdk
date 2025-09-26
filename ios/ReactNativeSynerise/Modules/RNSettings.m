@@ -118,12 +118,12 @@ RCT_EXPORT_MODULE();
 
     NSString *localizableKeyOK = dictionary[JSLocalizableKeyOK];
     if (localizableKeyOK != nil) {
-        newDictionary[_SNR_Constants.LOCALIZABLE_STRING_KEY_OK] = localizableKeyOK;
+        newDictionary[SNR_LOCALIZABLE_STRING_KEY_OK] = localizableKeyOK;
     }
 
     NSString *localizableKeyCancel = dictionary[JSLocalizableKeyCancel];
     if (localizableKeyCancel != nil) {
-        newDictionary[_SNR_Constants.LOCALIZABLE_STRING_KEY_CANCEL] = localizableKeyCancel;
+        newDictionary[SNR_LOCALIZABLE_STRING_KEY_CANCEL] = localizableKeyCancel;
     }
 
     if ([newDictionary count] == 0 ){

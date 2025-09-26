@@ -7,6 +7,7 @@
 //
 
 #import "RNClient.h"
+#import "RNClient+Functions.h"
 
 static NSString * const RNClientEventListenerClientIsSignedInKey = @"CLIENT_SIGNED_IN_LISTENER_KEY";
 static NSString * const RNClientEventListenerClientIsSignedOutKey = @"CLIENT_SIGNED_OUT_LISTENER_KEY";
@@ -167,7 +168,7 @@ RCT_EXPORT_MODULE();
 
 - (nullable SNRClientUpdateAccountBasicInformationContext *)modelClientUpdateAccountBasicInformationContextWithDictionary:(nullable NSDictionary *)dictionary {
     if (dictionary != nil) {
-        SNRClientUpdateAccountBasicInformationContext *model = [SNRClientUpdateAccountContext new];
+        SNRClientUpdateAccountBasicInformationContext *model = [SNRClientUpdateAccountBasicInformationContext new];
         model.firstName = [dictionary getStringForKey:@"firstName"];
         model.lastName = [dictionary getStringForKey:@"lastName"];
         model.displayName = [dictionary getStringForKey:@"displayName"];
