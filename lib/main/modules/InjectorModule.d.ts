@@ -42,6 +42,13 @@ declare class InjectorModule extends Module {
      *
      */
     setInAppMessageListener(listener: IInjectorInAppMessageListener): void;
+    /**
+     * This method closes the current in-app message.
+     *
+     * @param campaignHash An identifier of the in-app message campaign that is currently opened
+     *
+     */
+    closeInAppMessage(campaignHash: String): void;
     handleOpenUrlBySDK(url: string): void;
     handleDeepLinkBySDK(deepLink: string): void;
 }

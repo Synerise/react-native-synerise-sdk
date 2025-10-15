@@ -52,6 +52,11 @@ public class RNInjector extends RNBaseModule {
     }
 
     @ReactMethod
+    public void closeInAppMessage(String campaignHash) {
+        Injector.closeInAppMessage(campaignHash);
+    }
+
+    @ReactMethod
     public void handleOpenUrlBySDK(String url) {
         SystemUtils.openURL(Synerise.getApplicationContext(), url);
     }
