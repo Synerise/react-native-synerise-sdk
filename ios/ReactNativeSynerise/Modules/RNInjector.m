@@ -202,6 +202,13 @@ RCT_EXPORT_MODULE();
   };
 }
 
+//closeInAppMessage(campaignHash: String)
+
+RCT_EXPORT_METHOD(closeInAppMessage:(nonnull NSString *)campaignHash)
+{
+    [SNRInjector closeInAppMessageWithCampaignHash:campaignHash];
+}
+
 //handleOpenUrlBySDK(url: string)
 
 RCT_EXPORT_METHOD(handleOpenUrlBySDK:(nonnull NSString *)urlString)
