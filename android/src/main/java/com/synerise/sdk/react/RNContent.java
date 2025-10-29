@@ -11,6 +11,7 @@ import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.google.gson.Gson;
 import com.synerise.sdk.content.Content;
+import com.synerise.sdk.content.model.brickwork.BrickworksApiQuery;
 import com.synerise.sdk.content.model.screenview.Audience;
 import com.synerise.sdk.content.model.document.Document;
 import com.synerise.sdk.content.model.document.DocumentApiQuery;
@@ -23,8 +24,10 @@ import com.synerise.sdk.content.widgets.dataModel.Recommendation;
 import com.synerise.sdk.core.listeners.DataActionListener;
 import com.synerise.sdk.core.net.IDataApiCall;
 import com.synerise.sdk.error.ApiError;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,7 +35,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
+import java.util.Optional;
 
 import javax.annotation.Nonnull;
 
@@ -42,6 +45,7 @@ public class RNContent extends RNBaseModule {
     private final String ISO8601_FORMAT = "yyyy-MM-dd'T'kk:mm:ss.SSS'Z'";
     private IDataApiCall<RecommendationResponse> getRecommendationsApiCall;
     private IDataApiCall<ScreenView> generateScreenViewApiCall;
+    private IDataApiCall<Object> generateBrickworksApiCall;
     private Gson gson = new Gson();
 
     public RNContent(ReactApplicationContext reactApplicationContext) {
@@ -235,6 +239,46 @@ public class RNContent extends RNBaseModule {
                     }
                 }
         );
+    }
+
+    @ReactMethod
+    public void generateBrickworks(ReadableMap brickWorksApiQueryMap, Callback callback) {
+        BrickworksApiQuery brickworksApiQuery = new BrickworksApiQuery();
+
+        Optional.ofNullable(brickWorksApiQueryMap.hasKey("schemaSlug") ? brickWorksApiQueryMap.getString("schemaSlug") : null)
+                .ifPresent(brickworksApiQuery::setSchemaSlug);
+
+        Optional.ofNullable(brickWorksApiQueryMap.hasKey("recordSlug") ? brickWorksApiQueryMap.getString("recordSlug") : null)
+                .ifPresent(brickworksApiQuery::setRecordSlug);
+
+        Optional.ofNullable(brickWorksApiQueryMap.hasKey("recordId") ? brickWorksApiQueryMap.getString("recordId") : null)
+                .ifPresent(brickworksApiQuery::setRecordId);
+
+        Optional.ofNullable(brickWorksApiQueryMap.hasKey("context") ? brickWorksApiQueryMap.getMap("context").toHashMap() : null)
+                .ifPresent(brickworksApiQuery::setContext);
+
+        Optional.ofNullable(brickWorksApiQueryMap.hasKey("fieldContext") ? brickWorksApiQueryMap.getMap("fieldContext").toHashMap() : null)
+                .ifPresent(brickworksApiQuery::setFieldContext);
+
+        if (generateBrickworksApiCall != null) generateBrickworksApiCall.cancel();
+        generateBrickworksApiCall = Content.generateBrickworks(brickworksApiQuery);
+        generateBrickworksApiCall.execute(new DataActionListener<Object>() {
+            @Override
+            public void onDataAction(Object object) {
+                String jsonObject = gson.toJson(object);
+                try {
+                    WritableMap brickworksMap = convertJsonToMap(new JSONObject(jsonObject));
+                    executeSuccessCallbackResponse(callback, brickworksMap, null);
+                } catch (JSONException e) {
+                    executeFailureCallbackResponse(callback, null, new ApiError(e));
+                }
+            }
+        }, new DataActionListener<ApiError>() {
+            @Override
+            public void onDataAction(ApiError error) {
+                executeFailureCallbackResponse(callback, null, error);
+            }
+        });
     }
 
     private DocumentApiQuery readableMapToDocumentApiQuery(ReadableMap map) {

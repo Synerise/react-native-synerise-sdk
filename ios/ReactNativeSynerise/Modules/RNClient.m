@@ -90,7 +90,10 @@ RCT_EXPORT_MODULE();
 
             model.firstName = [dictionary getStringForKey:@"firstName"];
             model.lastName = [dictionary getStringForKey:@"lastName"];
-            model.sex = SNR_StringToClientSex([dictionary getStringForKey:@"sex"]);
+            NSString *clientSex = [dictionary getStringForKey:@"sex"];
+            if (clientSex != nil) {
+                model.sex = SNR_StringToClientSex(clientSex);
+            }
 
             model.company = [dictionary getStringForKey:@"company"];
             model.address = [dictionary getStringForKey:@"address"];
@@ -145,7 +148,10 @@ RCT_EXPORT_MODULE();
         model.firstName = [dictionary getStringForKey:@"firstName"];
         model.lastName = [dictionary getStringForKey:@"lastName"];
         model.displayName = [dictionary getStringForKey:@"displayName"];
-        model.sex = SNR_StringToClientSex([dictionary getStringForKey:@"sex"]);
+        NSString *clientSex = [dictionary getStringForKey:@"sex"];
+        if (clientSex != nil) {
+            model.sex = SNR_StringToClientSex(clientSex);
+        }
         model.birthDate = [dictionary getStringForKey:@"birthDate"];
         model.avatarUrl = [dictionary getStringForKey:@"avatarUrl"];
                                                 
@@ -172,7 +178,10 @@ RCT_EXPORT_MODULE();
         model.firstName = [dictionary getStringForKey:@"firstName"];
         model.lastName = [dictionary getStringForKey:@"lastName"];
         model.displayName = [dictionary getStringForKey:@"displayName"];
-        model.sex = SNR_StringToClientSex([dictionary getStringForKey:@"sex"]);
+        NSString *clientSex = [dictionary getStringForKey:@"sex"];
+        if (clientSex != nil) {
+            model.sex = SNR_StringToClientSex(clientSex);
+        }
         model.phone = [dictionary getStringForKey:@"phone"];
         model.birthDate = [dictionary getStringForKey:@"birthDate"];
         model.avatarUrl = [dictionary getStringForKey:@"avatarUrl"];
@@ -205,7 +214,10 @@ RCT_EXPORT_MODULE();
         model.firstName = [dictionary getStringForKey:@"firstName"];
         model.lastName = [dictionary getStringForKey:@"lastName"];
         model.displayName = [dictionary getStringForKey:@"displayName"];
-        model.sex = SNR_StringToClientSex([dictionary getStringForKey:@"sex"]);
+        NSString *clientSex = [dictionary getStringForKey:@"sex"];
+        if (clientSex != nil) {
+            model.sex = SNR_StringToClientSex(clientSex);
+        }
         model.birthDate = [dictionary getStringForKey:@"birthDate"];
         model.avatarUrl = [dictionary getStringForKey:@"avatarUrl"];
                                                 

@@ -41,6 +41,7 @@ export { BaseApiQuery, IApiQuerySorting, ApiQuerySortingOrder } from './../class
 export { PromotionsApiQuery } from './../classes/api_queries/PromotionsApiQuery';
 export { DocumentApiQuery } from './../classes/api_queries/DocumentApiQuery';
 export { ScreenViewApiQuery } from './../classes/api_queries/ScreenViewApiQuery';
+export { BrickworksApiQuery } from './../classes/api_queries/BrickworksApiQuery';
 export { Token } from './../classes/models/Token/Token';
 export { TokenOrigin, TokenOriginFromString, TokenOriginToString } from './../classes/models/Token/TokenOrigin';
 export { InitializationConfig } from './../classes/models/Misc/InitializationConfig';

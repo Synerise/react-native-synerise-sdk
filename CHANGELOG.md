@@ -2,13 +2,32 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.6.0] - 2025-10-29
+
+### Fixed
+- [iOS] Potential issues with registering and updating accounts (also with Simple Authentication) when the `sex` property was set to `ClientSex.NotSpecified`. This caused a `Bad Request` error. The problem occurred since version 1.4.0.
+- [iOS] Issue with the `sex` property in the `ClientAccountUpdateContext` model. It could not be updated. The problem occurred since version 1.4.0.
+- [iOS] Issue with the `agreements` property while registering, authenticating, and updating accounts (also with Simple Authentication). The property could not be updated. The problem occurred since version 1.4.0.
+
+### Added
+- The `Synerise.Content.generateBrickworks(apiQuery:onSuccess:onError)` method. The new method generates a Brickworks record for the parameters provided in the query object.
+
+### Changed
+- Update of native SDK's dependencies.
+- Improvements to stability.
+
+
 ## [1.5.0] - 2025-10-15
+
+!!! THIS VERSION HAS POTENTIAL ISSUES WITH MANAGING ACCOUNT. USE VERSION 1.6.0 !!!
 
 ### Added
 - The `Synerise.Injector.closeInAppMessage(campaignHash:)` method to programmaticaly close a currently opened inapp from the application.
 
 
 ## [1.4.0] - 2025-09-25
+
+!!! THIS VERSION HAS POTENTIAL ISSUES WITH MANAGING ACCOUNT. USE VERSION 1.6.0 !!!
 
 ### Added
 - `SRInApp.internalMethod` method to JS interface in the in-app messaging module. This method allows to invoke the native SDK method from predefined methods. You can read more in the documentation about available methods and params you may use. 
