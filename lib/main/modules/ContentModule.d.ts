@@ -6,6 +6,7 @@ import { ScreenViewApiQuery } from '../../classes/api_queries/ScreenViewApiQuery
 import { ScreenView } from '../../classes/models/Content/ScreenView';
 import { Document } from '../../classes/models/Content/Document';
 import { Error } from '../..';
+import { BrickworksApiQuery } from '../../classes/api_queries/BrickworksApiQuery';
 declare class ContentModule extends Module {
     private static _instance;
     static instance(): ContentModule;
@@ -54,5 +55,14 @@ declare class ContentModule extends Module {
      *
      */
     generateScreenViewWithApiQuery(apiQuery: ScreenViewApiQuery, onSuccess: (screenView: ScreenView) => void, onError: (error: Error) => void): void;
+    /**
+     * This method generates Brickworks record that is defined for parameters provided in the query object.
+     *
+     * @param apiQuery `BrickworksApiQuery` object responsible for storing all query parameters.
+     * @param onSuccess Function to be executed when the operation finishes successfully
+     * @param onError Function to be executed when the operation finishes unsuccessfully
+     *
+     */
+    generateBrickworks(apiQuery: BrickworksApiQuery, onSuccess: (brickWorks: object) => void, onError: (error: Error) => void): void;
 }
 export { ContentModule };

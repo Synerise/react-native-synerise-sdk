@@ -110,6 +110,36 @@ RCT_EXPORT_MODULE();
     return nil;
 }
 
+- (SNRBrickworksApiQuery *)modelBrickworksApiQueryWithDictionary:(NSDictionary *)dictionary {
+    if (dictionary != nil) {
+        NSString *schemaSlug = [dictionary getStringForKey:@"schemaSlug"];
+        if (schemaSlug != nil) {
+            NSDictionary *context = [dictionary getDictionaryForKey:@"context"];
+            NSDictionary *fieldContext = [dictionary getDictionaryForKey:@"fieldContext"];
+
+            NSString *recordSlug = [dictionary getStringForKey:@"recordSlug"];
+            if (recordSlug != nil) {
+                SNRBrickworksApiQuery *model = [[SNRBrickworksApiQuery alloc] initWithSchemaSlug:schemaSlug recordSlug:recordSlug];
+                model.context = context;
+                model.fieldContext = fieldContext;
+
+                return model;
+            }
+
+            NSString *recordId = [dictionary getStringForKey:@"recordId"];
+            if (recordId != nil) {
+                SNRBrickworksApiQuery *model = [[SNRBrickworksApiQuery alloc] initWithSchemaSlug:schemaSlug recordId:recordId];
+                model.context = context;
+                model.fieldContext = fieldContext;
+                
+                return model;
+            }
+        }
+    }
+    
+    return nil;
+}
+
 - (SNRRecommendationFiltersJoinerRule)modelFiltersJoiner:(NSString *)string {
     if ([string isEqualToString:@"AND"]) {
         return SNRRecommendationFiltersJoinerRuleAnd;
@@ -308,6 +338,19 @@ RCT_EXPORT_METHOD(generateScreenViewWithApiQuery:(NSDictionary *)dictionary resp
             } else {
                 [self executeDefaultFailureCallbackResponse:response];
             }
+        } failure:^(NSError *error) {
+            [self executeFailureCallbackResponse:response error:error];
+        }];
+    }
+}
+
+//generateBrickworks(apiQuery: BrickworksApiQuery, onSuccess: (brickWorks: object) => void, onError: (error: Error) => void)
+RCT_EXPORT_METHOD(generateBrickworks:(NSDictionary *)dictionary response:(RCTResponseSenderBlock)response)
+{
+    SNRBrickworksApiQuery *brickworksApiQuery = [self modelBrickworksApiQueryWithDictionary:dictionary];
+    if (brickworksApiQuery != nil) {
+        [SNRContent generateBrickworksWithApiQuery:brickworksApiQuery success:^(NSDictionary *brickworksDictionary) {
+            [self executeSuccessCallbackResponse:response data:brickworksDictionary];
         } failure:^(NSError *error) {
             [self executeFailureCallbackResponse:response error:error];
         }];
