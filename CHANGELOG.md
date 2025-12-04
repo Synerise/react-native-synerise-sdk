@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.6.2] - 2025-12-04
+
+### Fixed
+- [iOS] Issue that could have caused crash in the SDK initialization with predefined settings.
+
+### Changed
+- Improvements to stability.
+
+
 ## [1.6.1] - 2025-11-24
 
 ### Fixed
