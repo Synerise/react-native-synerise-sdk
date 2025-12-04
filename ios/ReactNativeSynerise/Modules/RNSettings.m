@@ -200,6 +200,22 @@ RCT_EXPORT_MODULE();
   };
 }
 
+//function setInitialSettings(settingsManyOptions: ISettingsManyOptions)
+
+RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(setInitialSettings:(NSDictionary *)settingsManyOptions)
+{
+    if (settingsManyOptions == nil || [settingsManyOptions count] == 0) {
+        return [NSNull null];
+    }
+    
+    NSMutableDictionary *settingsDictionary = [[self settingsDictionary] mutableCopy];
+    [settingsDictionary addEntriesFromDictionary:settingsManyOptions];
+    
+    [self updateSettingsWithDictionary:settingsDictionary];
+
+    return [NSNull null];
+}
+
 //function getOne(key: String)
 
 RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(getOne:(NSString *)key)

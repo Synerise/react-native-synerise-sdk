@@ -85,6 +85,33 @@ public class RNSettings extends RNBaseModule {
         return constants;
     }
 
+    //function setInitialSettings(settings: object)
+    @ReactMethod
+    public Object setInitialSettings(ReadableMap newSettings) {
+        ReadableMapKeySetIterator iterator = newSettings.keySetIterator();
+
+        while (iterator.hasNextKey()) {
+            String key = iterator.nextKey();
+            ReadableType type = newSettings.getType(key);
+            switch (type) {
+                case Boolean:
+                   matchSetting(key, newSettings.getBoolean(key));
+                    break;
+                case Number:
+                   matchSetting(key, newSettings.getInt(key));
+                    break;
+                case String:
+                   matchSetting(key, newSettings.getString(key));
+                    break;
+                case Array:
+                    matchSetting(key, newSettings.getArray(key));
+                    break;
+            }
+        }
+
+        return null;
+    }
+    
     //function getOne(key: string)
     @ReactMethod(isBlockingSynchronousMethod = true)
     public WritableMap getOne(String key) {
