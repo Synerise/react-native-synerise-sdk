@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.6.3] - 2025-12-15
+
+### Fixed
+- [iOS] Potential issue with `INotificationsListener` listener when the application is built with new React Native architecture.
+- [iOS] Some potential issues with notification processing in `NotificationServiceExtension`.
+- [iOS] Potential issue with the incorrect anonymous session after app reinstall.
+- [iOS] Potential issues with synchronizing data for shared storage when data was deleted.
+- [iOS] Potential issue with destroyinh a session after a manual API key change (`Synerise.Settings.sdk.shouldDestroySessionOnApiKeyChange` on `true`).
+- [iOS] Potential issues with authentication requests with a slow internet connection.
+- [iOS] Issue that could have caused a freeze when deleting an account.
+- [iOS] Issue with invoking client sign-out state twice in `IClientStateChangeListener` when there is sign out from the `SIGN_OUT` SDK command by silent notification.
+
+### Changed
+- Improvements to stability.
+
+
 ## [1.6.2] - 2025-12-04
 
 ### Fixed

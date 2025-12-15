@@ -135,7 +135,7 @@ RCT_EXPORT_MODULE();
 
 - (BOOL)canStartProcessing {
     if ([[RNSyneriseManager sharedInstance] isApplicationJavaScriptLoaded] == YES &&
-        [[RNSyneriseManager sharedInstance] isSyneriseJavaScriptLoaded] == YES) {
+        [[RNSyneriseManager sharedInstance] isSyneriseInitialized] == YES) {
         return YES;
     }
     
@@ -215,7 +215,7 @@ RCT_EXPORT_MODULE();
     // nothing for yet
 }
 
-- (void)syneriseJavaScriptDidLoad {
+- (void)syneriseIsInitialized {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self performSelector:@selector(startProcessingIfPossible) withObject:nil afterDelay:0.25f];
     });

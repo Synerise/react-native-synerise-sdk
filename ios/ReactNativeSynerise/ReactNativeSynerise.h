@@ -19,6 +19,7 @@
 #import "RNSyneriseManager.h"
 
 static NSString * const kRNSyneriseJavaScriptDidLoadNotification = @"kRNSyneriseJavaScriptDidLoadNotification";
+static NSString * const kRNSyneriseIsInitializedNotification = @"kRNSyneriseIsInitializedNotification";
 
 static NSString * const kRNSyneriseInitializationSuccessEvent = @"kRNSyneriseInitializationSuccessEvent";
 static NSString * const kRNSyneriseInitializationFailureEvent = @"kRNSyneriseInitializationFailureEvent";
