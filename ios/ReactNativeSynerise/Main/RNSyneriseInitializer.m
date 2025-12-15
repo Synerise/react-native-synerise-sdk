@@ -8,7 +8,7 @@
 
 #import "RNSyneriseInitializer.h"
 
-NSString * const SNRSyneriseSDKPluginVersion = @"1.6.2";
+NSString * const SNRSyneriseSDKPluginVersion = @"1.6.3";
 
 @implementation RNSyneriseInitializer
 
@@ -36,11 +36,11 @@ NSString * const SNRSyneriseSDKPluginVersion = @"1.6.2";
 
 - (void)syneriseInitialized {
     [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseJavaScriptDidLoadNotification object:nil userInfo:@{}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseIsInitializedNotification object:nil userInfo:@{}];
 }
 
 - (void)overwriteDefaultSettings {
     SNRSynerise.settings.tracker.autoTracking.enabled = NO;
-    
 }
 
 @end

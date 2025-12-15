@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation RNSyneriseManager {
     BOOL _applicationJavaScriptIsLoaded;
-    BOOL _syneriseJavaScriptIsLoaded;
+    BOOL _syneriseIsInitialized;
 }
 
 + (void)load {
@@ -68,7 +68,7 @@ NS_ASSUME_NONNULL_BEGIN
         _delegates = [@[] mutableCopy];
         
         _applicationJavaScriptIsLoaded = NO;
-        _syneriseJavaScriptIsLoaded = NO;
+        _syneriseIsInitialized = NO;
         
         [self startObserving];
     }
@@ -82,7 +82,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)startObserving {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationJavaScriptDidFinishLoad) name:RCTJavaScriptDidLoadNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(syneriseJavaScriptDidFinishLoad:) name:kRNSyneriseJavaScriptDidLoadNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationJavaScriptDidFinishLoad) name:kRNSyneriseJavaScriptDidLoadNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(syneriseIsInitialized) name:kRNSyneriseIsInitializedNotification object:nil];
 }
 
 - (void)stopObserving {
@@ -111,8 +112,8 @@ NS_ASSUME_NONNULL_BEGIN
     return _applicationJavaScriptIsLoaded;
 }
 
-- (BOOL)isSyneriseJavaScriptLoaded {
-    return _syneriseJavaScriptIsLoaded;
+- (BOOL)isSyneriseInitialized {
+    return _syneriseIsInitialized;
 }
 
 #pragma mark - Private
@@ -132,6 +133,10 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (void)applicationJavaScriptDidFinishLoad {
+    if (_applicationJavaScriptIsLoaded == YES) {
+        return;
+    }
+
     _applicationJavaScriptIsLoaded = YES;
     
     for (id<RNSyneriseManagerDelegate> delegate in self.delegates) {
@@ -141,12 +146,16 @@ NS_ASSUME_NONNULL_BEGIN
     }
 }
 
-- (void)syneriseJavaScriptDidFinishLoad:(NSNotification *)notification {
-    _syneriseJavaScriptIsLoaded = YES;
+- (void)syneriseIsInitialized {
+    if (_syneriseIsInitialized == YES) {
+        return;
+    }
+
+    _syneriseIsInitialized = YES;
     
     for (id<RNSyneriseManagerDelegate> delegate in self.delegates) {
-        if ([delegate respondsToSelector:@selector(syneriseJavaScriptDidLoad)] == YES) {
-            [delegate syneriseJavaScriptDidLoad];
+        if ([delegate respondsToSelector:@selector(syneriseIsInitialized)] == YES) {
+            [delegate syneriseIsInitialized];
         }
     }
 }

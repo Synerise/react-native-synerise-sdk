@@ -61,7 +61,7 @@ RCT_EXPORT_MODULE();
     // nothing for yet
 }
 
-- (void)syneriseJavaScriptDidLoad {
+- (void)syneriseIsInitialized {
     [SNRClient setClientStateDelegate:self];
 }
 

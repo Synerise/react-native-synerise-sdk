@@ -121,7 +121,7 @@ RCT_EXPORT_MODULE();
     // nothing for yet
 }
 
-- (void)syneriseJavaScriptDidLoad {
+- (void)syneriseIsInitialized {
     [SNRInjector setInAppMessageDelegate:self];
 }
 

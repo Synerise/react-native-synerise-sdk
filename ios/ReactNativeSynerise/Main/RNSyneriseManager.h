@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @optional
 - (void)applicationJavaScriptDidLoad;
-- (void)syneriseJavaScriptDidLoad;
+- (void)syneriseIsInitialized;
 
 @end
 
@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addDelegate:(id<RNSyneriseManagerDelegate>)delegate;
 
 - (BOOL)isApplicationJavaScriptLoaded;
-- (BOOL)isSyneriseJavaScriptLoaded;
+- (BOOL)isSyneriseInitialized;
 
 @end
 
