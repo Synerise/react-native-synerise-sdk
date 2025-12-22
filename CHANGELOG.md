@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.6.4] - 2025-12-22
+
+### Fixed
+- [iOS] Potential issue with the `Synerise.notifications.handleNotification(payload:actionIdentifier)` method when using the new React Native architecture.
+
+### Changed
+- Improvements to stability.
+
+
 ## [1.6.3] - 2025-12-15
 
 ### Fixed
