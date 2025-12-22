@@ -84,6 +84,7 @@ declare class NotificationsModule extends Module {
      * This method handles a notification payload and starts activity.
      *
      * @param payload Notification’s key-value data object
+     * @param actionIdentifier Identifier of action received from the notification response
      */
     handleNotification(payload: object, actionIdentifier: string | null): void;
 }

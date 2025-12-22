@@ -315,7 +315,7 @@ RCT_EXPORT_METHOD(handleNotification:(NSDictionary *)userInfo)
 
 //handleNotification(payload: object, actionIdentifier: string)
 
-RCT_EXPORT_METHOD(handleNotification:(NSDictionary *)userInfo actionIdentifier:(NSString *)actionIdentifier)
+RCT_EXPORT_METHOD(handleNotificationWithAction:(NSDictionary *)userInfo actionIdentifier:(NSString *)actionIdentifier)
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [SNRSynerise handleNotification:userInfo actionIdentifier:actionIdentifier];

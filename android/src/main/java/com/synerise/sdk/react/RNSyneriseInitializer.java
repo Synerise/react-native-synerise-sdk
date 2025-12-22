@@ -18,7 +18,7 @@ public class RNSyneriseInitializer {
     public Boolean initialDoNotTrack;
     public static volatile boolean isInitialized = false;
 
-    public static final String SDK_PLUGIN_VERSION = "1.6.3";
+    public static final String SDK_PLUGIN_VERSION = "1.6.4";
 
     public void initialize(Application app) {
         if (isInitialized == false) {
