@@ -5,7 +5,8 @@ declare enum PromotionDiscountType {
     TwoForOne = "2_FOR_1",
     Points = "POINTS",
     Multibuy = "MULTIBUY",
-    ExactPrice = "EXACT_PRICE"
+    ExactPrice = "EXACT_PRICE",
+    DigitalCashback = "DIGITAL_CASHBACK"
 }
 declare function PromotionDiscountTypeFromString(string: string): PromotionDiscountType;
 declare function PromotionDiscountTypeToString(type: PromotionDiscountType): string;

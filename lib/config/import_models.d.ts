@@ -13,6 +13,8 @@ export { IClientConditionalAuthResult, ClientConditionalAuthResult } from '../cl
 export { ClientConditionalAuthStatus } from '../classes/models/Client/ClientConditionalAuthStatus';
 export { PromotionResponse } from './../classes/models/Promotions/PromotionResponse';
 export { Promotion, PromotionSortingKey } from './../classes/models/Promotions/Promotion';
+export { PromotionVoucherData } from './../classes/models/Promotions/PromotionVoucherData';
+export { PromotionActivationOptions } from './../classes/models/Promotions/PromotionActivationOptions';
 export { PromotionIdentifier } from './../classes/models/Promotions/PromotionIdentifier';
 export { PromotionIdentifierKey } from '../classes/models/Promotions/PromotionIdentifierKey';
 export { PromotionStatus } from './../classes/models/Promotions/PromotionStatus';

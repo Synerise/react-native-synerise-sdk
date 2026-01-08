@@ -5,8 +5,9 @@ import { IPromotionDetails, PromotionDetails } from './PromotionDetails';
 import { PromotionDiscountType } from './../Promotions/PromotionDiscountType';
 import { PromotionDiscountMode } from './../Promotions/PromotionDiscountMode';
 import { IPromotionDiscountModeDetails, PromotionDiscountModeDetails } from './PromotionDiscountModeDetails';
-import { IPromotionImage } from './PromotionImage';
+import { IPromotionVoucherData, PromotionVoucherData } from './PromotionVoucherData';
 import { PromotionItemScope } from './../Promotions/PromotionItemScope';
+import { IPromotionImage } from './PromotionImage';
 declare const PromotionSortingKey: {
     ExpireAt: string;
     CreatedAt: string;
@@ -38,6 +39,7 @@ interface IPromotion {
     itemScope: string;
     minBasketValue?: number;
     maxBasketValue?: number;
+    vouchers?: Array<IPromotionVoucherData>;
     name?: string;
     headline?: string;
     descriptionText?: string;
@@ -75,6 +77,7 @@ declare class Promotion extends BaseModel {
     itemScope: PromotionItemScope;
     minBasketValue?: number;
     maxBasketValue?: number;
+    vouchers?: Array<PromotionVoucherData>;
     name?: string;
     headline?: string;
     descriptionText?: string;
