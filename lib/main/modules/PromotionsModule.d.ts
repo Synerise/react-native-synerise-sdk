@@ -1,11 +1,12 @@
 import { BaseModule as Module } from './BaseModule';
 import { PromotionsApiQuery } from './../../classes/api_queries/PromotionsApiQuery';
+import { PromotionIdentifier } from '../../config/import_models';
+import { PromotionActivationOptions } from '../../classes/models/Promotions/PromotionActivationOptions';
 import { PromotionResponse } from './../../classes/models/Promotions/PromotionResponse';
 import { Promotion } from './../../classes/models/Promotions/Promotion';
 import { AssignVoucherResponse } from './../../classes/models/Vouchers/AssignVoucherResponse';
 import { VoucherCodesResponse } from './../../classes/models/Vouchers/VoucherCodesResponse';
 import { Error } from './../../classes/types/Error';
-import { PromotionIdentifier } from '../../config/import_models';
 declare class PromotionsModule extends Module {
     private static _instance;
     static instance(): PromotionsModule;
@@ -63,6 +64,15 @@ declare class PromotionsModule extends Module {
      *
      */
     activatePromotionByCode(code: string, onSuccess: () => void, onError: (error: Error) => void): void;
+    /**
+     * This method activates and gets the promotion defined for the options provided.
+     *
+     * @param options `PromotionActivationOptions` object with parameters for promotion activation.
+     * @param onSuccess Function to be executed when the operation finishes successfully
+     * @param onError Function to be executed when the operation finishes unsuccessfully
+     *
+     */
+    activatePromotion(options: PromotionActivationOptions, onSuccess: (promotion: Promotion) => void, onError: (error: Error) => void): void;
     /**
      * This method deactivates the promotion with the specified UUID.
      *

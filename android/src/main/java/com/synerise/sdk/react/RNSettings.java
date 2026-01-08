@@ -1,8 +1,5 @@
 package com.synerise.sdk.react;
 
-
-import android.util.Log;
-
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactMethod;
@@ -143,7 +140,6 @@ public class RNSettings extends RNBaseModule {
     @ReactMethod
     public void setMany(ReadableMap newSettings) {
         ReadableMapKeySetIterator iterator = newSettings.keySetIterator();
-
         while (iterator.hasNextKey()) {
             String key = iterator.nextKey();
             ReadableType type = newSettings.getType(key);

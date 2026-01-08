@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.7.0] - 2026-01-08
+
+### Fixed
+- [iOS] Optimization of the registration for push notifications process. The cache for that request is more efficient.
+
+### Added
+- We added a new `Synerise.Promotions.activatePromotion(options:onSuccess:onError:)` method. It's analogous to `Synerise.Promotions.activatePromotionByUUID(uuid:onSuccess:onError:)` and `Synerise.Promotions.activatePromotionByCode(code:onSuccess:onError:)`. The new method activates the promotion that is defined for the provided options and fetches the promotion as a response.
+- The `includeVouchers` property in `PromotionsApiQuery` model to set a param that indicates if the promotion should contain vouchers.
+- The `checkGlobalActivationLimits` property in `PromotionsApiQuery` model to set param that checks if the promotion is available considering how many times it was activated.
+- The `vouchers` property in `Promotion` model that contains vouchers as an array with the `PromotionVoucherData` models.
+- `PromotionVoucherData` model representing a voucher that can be included in the `Promotion` model.
+- `DigitalCashback` in `PromotionDiscountType` enumeration type.
+
+### Changed
+- Improvements to stability.
+
+
 ## [1.6.4] - 2025-12-22
 
 ### Fixed
@@ -18,7 +35,7 @@ All notable changes to this project will be documented in this file.
 - [iOS] Some potential issues with notification processing in `NotificationServiceExtension`.
 - [iOS] Potential issue with the incorrect anonymous session after app reinstall.
 - [iOS] Potential issues with synchronizing data for shared storage when data was deleted.
-- [iOS] Potential issue with destroyinh a session after a manual API key change (`Synerise.Settings.sdk.shouldDestroySessionOnApiKeyChange` on `true`).
+- [iOS] Potential issue with destroying a session after a manual API key change (`Synerise.Settings.sdk.shouldDestroySessionOnApiKeyChange` on `true`).
 - [iOS] Potential issues with authentication requests with a slow internet connection.
 - [iOS] Issue that could have caused a freeze when deleting an account.
 - [iOS] Issue with invoking client sign-out state twice in `IClientStateChangeListener` when there is sign out from the `SIGN_OUT` SDK command by silent notification.
