@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.0] - 2026-02-20
+
+### Fixed
+- [Android] Samsung issue with client.applicationStarted. Event was not sent properly due to wrong state of runningProcess on Samsung only.
+- [Android] Issue with mapping errors from promotions. Now it should correctly map to ApiErrorBody.
+- [Android] Issue with double OnDismissed callbacks in OnInAppListener.
+
+### Added
+- `SRInApp.getItem`, `SRInApp.setItem`, `SRInApp.removeItem` and `SRInApp.clear` methods to the JS interface in the in-app messaging module, allowing you to manage storage for the in-app message scoped to the current client context. You can read more in the documentation.
+
+
 ## [1.7.0] - 2026-01-08
 
 ### Fixed
