@@ -102,6 +102,7 @@ public class RNPromotions extends RNBaseModule {
         promotionsApiQuery.setPage(map.hasKey("page") ? map.getInt("page") : 1);
         promotionsApiQuery.setIncludeMeta(map.hasKey("includeMeta") ? map.getBoolean("includeMeta") : false);
         promotionsApiQuery.setIncludeVouchers(map.hasKey("includeVouchers") ? map.getBoolean("includeVouchers") : false);
+        promotionsApiQuery.setPresentOnly(map.hasKey("presentOnly") ? map.getBoolean("presentOnly") : true);
         promotionsApiQuery.setCheckGlobalActivationLimits(map.hasKey("checkGlobalActivationLimits") ? map.getBoolean("checkGlobalActivationLimits") : true);
         if (map.hasKey("sorting")) {
             promotionsApiQuery.setSortParameters(readableArrayToLinkedHashMapSorting(map.getArray("sorting")));

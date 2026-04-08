@@ -60,6 +60,7 @@ RCT_EXPORT_MODULE();
             model.sorting = sortingNormalized;
         }
         
+        model.presentOnly = [dictionary getBoolForKey:@"presentOnly"];
         model.checkGlobalActivationLimits = [dictionary getBoolForKey:@"checkGlobalActivationLimits"];
 
         model.limit = [dictionary getIntegerForKey:@"limit"];

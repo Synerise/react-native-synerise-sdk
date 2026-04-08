@@ -4,6 +4,7 @@ import { PromotionType } from '../models/Promotions/PromotionType';
 declare class PromotionsApiQuery extends BaseApiQuery {
     statuses: Array<PromotionStatus>;
     types: Array<PromotionType>;
+    presentOnly: Boolean;
     checkGlobalActivationLimits: Boolean;
     includeVouchers: Boolean;
     toObject(): {
@@ -13,6 +14,7 @@ declare class PromotionsApiQuery extends BaseApiQuery {
         limit: number;
         page: number;
         includeMeta: boolean;
+        presentOnly: Boolean;
         checkGlobalActivationLimits: Boolean;
         includeVouchers: Boolean;
     };
