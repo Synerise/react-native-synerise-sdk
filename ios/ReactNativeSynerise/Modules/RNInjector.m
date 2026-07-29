@@ -17,10 +17,13 @@ static NSString * const RNInjectorEventListenerInAppMessageHiddenKey = @"IN_APP_
 static NSString * const RNInjectorEventListenerInAppMessageUrlActionKey = @"IN_APP_MESSAGE_URL_ACTION_LISTENER_KEY";
 static NSString * const RNInjectorEventListenerInAppMessageDeepLinkActionKey = @"IN_APP_MESSAGE_DEEPLINK_ACTION_LISTENER_KEY";
 static NSString * const RNInjectorEventListenerInAppMessageCustomActionKey = @"IN_APP_MESSAGE_CUSTOM_ACTION_LISTENER_KEY";
+static NSString * const RNInjectorEventListenerInAppMessageCustomMethodKey = @"IN_APP_MESSAGE_CUSTOM_METHOD_LISTENER_KEY";
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface RNInjector () <RNSyneriseManagerDelegate, SNRInjectorInAppMessageDelegate>
+
+@property (nonatomic, strong) NSMutableDictionary<NSString *, SNRInAppCustomMethodCompletion *> *pendingInAppCustomMethodCompletions;
 
 @end
 
@@ -40,6 +43,7 @@ RCT_EXPORT_MODULE();
     self = [super init];
     
     if (self) {
+        _pendingInAppCustomMethodCompletions = [NSMutableDictionary dictionary];
         [[RNSyneriseManager sharedInstance] addDelegate:self];
     }
     
@@ -115,6 +119,21 @@ RCT_EXPORT_MODULE();
     [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseInAppMessageCustomActionKey object:nil userInfo:userInfo];
 }
 
+- (void)sendInAppMessageCustomMethodToJS:(SNRInAppMessageData *)data name:(NSString *)name parameters:(nullable NSDictionary *)parameters completion:(SNRInAppCustomMethodCompletion *)completion {
+    NSString *callId = [[NSUUID UUID] UUIDString];
+    @synchronized (self) {
+        self.pendingInAppCustomMethodCompletions[callId] = completion;
+    }
+    NSDictionary *dataDictionary = [self dictionaryWithInAppMessageData:data];
+    NSDictionary *userInfo = @{
+        @"callId": callId,
+        @"name": name,
+        @"parameters": parameters != nil ? [NSDictionary dictionaryWithDictionary:parameters] : @{},
+        @"data": dataDictionary != nil ? dataDictionary : @{}
+    };
+    [[NSNotificationCenter defaultCenter] postNotificationName:kRNSyneriseInAppMessageCustomMethodKey object:nil userInfo:userInfo];
+}
+
 #pragma mark - RNSyneriseManagerDelegate
 
 - (void)applicationJavaScriptDidLoad {
@@ -159,6 +178,10 @@ RCT_EXPORT_MODULE();
     [self sendInAppMessageCustomActionToJS:data name:name parameters:parameters];
 }
 
+- (void)SNR_inAppMessageHandledCustomMethod:(SNRInAppMessageData *)data name:(NSString *)name parameters:(NSDictionary *)parameters completion:(SNRInAppCustomMethodCompletion *)completion {
+    [self sendInAppMessageCustomMethodToJS:data name:name parameters:parameters completion:completion];
+}
+
 #pragma mark - JS Mapping
 
 - (NSString *)stringWithSyneriseSource:(SNRSyneriseSource)source {
@@ -198,8 +221,23 @@ RCT_EXPORT_MODULE();
     RNInjectorEventListenerInAppMessageHiddenKey: kRNSyneriseInAppMessageHiddenKey,
     RNInjectorEventListenerInAppMessageUrlActionKey: kRNSyneriseInAppMessageUrlActionKey,
     RNInjectorEventListenerInAppMessageDeepLinkActionKey: kRNSyneriseInAppMessageDeeplinkActionKey,
-    RNInjectorEventListenerInAppMessageCustomActionKey: kRNSyneriseInAppMessageCustomActionKey
+    RNInjectorEventListenerInAppMessageCustomActionKey: kRNSyneriseInAppMessageCustomActionKey,
+    RNInjectorEventListenerInAppMessageCustomMethodKey: kRNSyneriseInAppMessageCustomMethodKey
   };
+}
+
+//setInAppContext(context: object)
+
+RCT_EXPORT_METHOD(setInAppContext:(nonnull NSDictionary *)context)
+{
+    [SNRInjector setInAppContext:context];
+}
+
+//notifyInAppContextChange()
+
+RCT_EXPORT_METHOD(notifyInAppContextChange)
+{
+    [SNRInjector notifyInAppContextChange];
 }
 
 //closeInAppMessage(campaignHash: String)
@@ -241,6 +279,35 @@ RCT_EXPORT_METHOD(handleDeepLinkBySDK:(nonnull NSString *)deepLink)
             }
         }
     });
+}
+
+//resolveInAppCustomMethod(callId: String, success: boolean, result: any | null, error: string | null)
+
+RCT_EXPORT_METHOD(resolveInAppCustomMethod:(nonnull NSString *)callId success:(BOOL)success result:(nullable id)result error:(nullable NSString *)error)
+{
+    SNRInAppCustomMethodCompletion *completion;
+    @synchronized (self) {
+        completion = self.pendingInAppCustomMethodCompletions[callId];
+        [self.pendingInAppCustomMethodCompletions removeObjectForKey:callId];
+    }
+
+    if (completion == nil) {
+        return;
+    }
+
+    if ([result isKindOfClass:[NSNull class]] == YES) {
+        result = nil;
+    }
+
+    if (success == YES) {
+        [completion success:result];
+    } else {
+        if (error == nil || [error isKindOfClass:[NSNull class]] == YES) {
+          error = @"Unknown error.";
+        }
+
+        [completion failure:error];
+    }
 }
 
 @end
