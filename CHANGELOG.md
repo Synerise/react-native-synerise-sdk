@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.10.0] - 2026-07-28
+
+### Fixed
+- [iOS] Issue with invoking helper methods for notifications (for example, `Synerise.isSyneriseNotification(_:)`) in notification service and content extensions.
+- [iOS] Issue that could have caused problems with re-authorizing anonymous tokens when the app was removed and installed again. The problem occurred since version 5.12.1.
+- [Android] Memory leak according to: https://github.com/Synerise/android-sdk/issues/18
+- [Android] `java.util.ConcurrentModificationException` inside `AutoTrackerActivityFollower`
+- [Android] issue with blocking inapps queue when changing darkMode. Inapp is still closing but it is sending `inapp.discard` event and the inapp queue is not blocked any more.
+- [Android] concurrency problem with `SRInApp.internalMethods`
+
+### Added
+- `Client/destroySession` method available in the `SRInApp.internalMethod` method in the JS interface in the in-app messaging module. This method is equivalent to the `Client.destroySession` method in in-app messaging.
+- `Synerise.Injector.inAppContext` property to set the context for use in JS interface in the in-app messaging module.
+- `Synerise.Injector.notifyInAppContextChange()` method to trigger JS interface callback function in the in-app messaging module (`SRInApp.onContextFromApp(context)`).
+- `SRInApp.onContextFromApp(context)` callback function to JS interface in the in-app messaging module. This callback function allows notifying about the context change after `Injector.notifyInAppContextChange()` is invoked.  
+- `SRInApp.getContextFromApp()` method to JS interface in the in-app messaging module. This method allows to get the context from the host app available in JS interface in the in-app messaging module.
+- `SRInApp.handleCustomMethod(name, params, timeoutMs)` method to JS interface in the in-app messaging module. This method allows communicating with your host app.
+- `onCustomMethod(data, name, parameters, completion:)` callback method to `IInjectorInAppMessageListener`. This method is invoked when the JS interface of the in-app messaging module invokes the `SRInApp.handleCustomMethod(name, params, timeoutMs)` method. Notice, that it is required to invoke `completion.success(result)` or `completion.failure(errorMessage)` to resolve the pending in-app message JS Promise.
+- More debug logs.
+
+### Removed
+- [iOS] Client recovery mechanism that allowed recovering an UUID for an anonymous client after the app was reinstalled while the client was logged in.
+
+To learn how to use the new methods and properties, see https://hub.synerise.com/docs/campaign/in-app-messages/creating-inapp-templates/creating-inapp-template#receive-context-from-the-application
+
 
 ## [1.9.0] - 2026-04-08
 

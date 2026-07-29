@@ -2,24 +2,26 @@ package com.synerise.sdk.react;
 
 import android.os.Handler;
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
-import com.google.gson.Gson;
 import com.synerise.sdk.core.Synerise;
 import com.synerise.sdk.core.utils.SystemUtils;
 import com.synerise.sdk.injector.Injector;
 import com.synerise.sdk.injector.callback.OnInjectorListener;
 import com.synerise.sdk.injector.callback.SyneriseSource;
+import com.synerise.sdk.injector.inapp.InAppCustomMethodCompletion;
 import com.synerise.sdk.injector.inapp.InAppMessageData;
 import com.synerise.sdk.injector.inapp.OnInAppListener;
 import com.synerise.sdk.injector.ui.handler.InjectorActionHandler;
+import com.synerise.sdk.react.utils.ArrayUtil;
 import com.synerise.sdk.react.utils.MapUtil;
-import org.json.JSONException;
-import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -43,8 +45,9 @@ public class RNInjector extends RNBaseModule {
     private static final String IN_APP_MESSAGE_URL_ACTION_LISTENER_VALUE = "inAppUrlAction";
     private static final String IN_APP_MESSAGE_DEEPLINK_ACTION_LISTENER_VALUE = "inAppDeepLinkAction";
     private static final String IN_APP_MESSAGE_CUSTOM_ACTION_LISTENER_VALUE = "inAppCustomAction";
-    private static Boolean shouldBannerPresentFlag = false;
-    private Gson gson = new Gson();
+    private static final String IN_APP_MESSAGE_CUSTOM_METHOD_LISTENER_KEY = "IN_APP_MESSAGE_CUSTOM_METHOD_LISTENER_KEY";
+    private static final String IN_APP_MESSAGE_CUSTOM_METHOD_LISTENER_VALUE = "inAppCustomMethod";
+    private static final ConcurrentHashMap<String, InAppCustomMethodCompletion> pendingInAppCustomMethodCompletions = new ConcurrentHashMap<>();
 
     public RNInjector(ReactApplicationContext reactApplicationContext) {
         super(reactApplicationContext);
@@ -66,6 +69,49 @@ public class RNInjector extends RNBaseModule {
         SystemUtils.openDeepLink(Synerise.getApplicationContext(), deepLink);
     }
 
+    @ReactMethod
+    public void setInAppContext(ReadableMap context) {
+        Injector.setInAppContext(new HashMap<>(MapUtil.toMap(context)));
+    }
+
+    @ReactMethod
+    public void notifyInAppContextChange() {
+        Injector.notifyInAppContextChange();
+    }
+
+    @ReactMethod
+    public void resolveInAppCustomMethod(String callId, boolean success, Dynamic result, String error) {
+        InAppCustomMethodCompletion completion = pendingInAppCustomMethodCompletions.remove(callId);
+        if (completion == null) {
+            return;
+        }
+        if (success) {
+            completion.success(customMethodResultFromDynamic(result));
+        } else {
+            completion.failure(error);
+        }
+    }
+
+    private Object customMethodResultFromDynamic(Dynamic result) {
+        if (result == null || result.isNull()) {
+            return null;
+        }
+        switch (result.getType()) {
+            case Boolean:
+                return result.asBoolean();
+            case Number:
+                return result.asDouble();
+            case String:
+                return result.asString();
+            case Map:
+                return MapUtil.toMap(result.asMap());
+            case Array:
+                return ArrayUtil.toArray(result.asArray());
+            default:
+                return null;
+        }
+    }
+
     @Nullable
     @Override
     public Map<String, Object> getConstants() {
@@ -77,6 +123,7 @@ public class RNInjector extends RNBaseModule {
         constants.put(IN_APP_MESSAGE_URL_ACTION_LISTENER_KEY, IN_APP_MESSAGE_URL_ACTION_LISTENER_VALUE);
         constants.put(IN_APP_MESSAGE_DEEPLINK_ACTION_LISTENER_KEY, IN_APP_MESSAGE_DEEPLINK_ACTION_LISTENER_VALUE);
         constants.put(IN_APP_MESSAGE_CUSTOM_ACTION_LISTENER_KEY, IN_APP_MESSAGE_CUSTOM_ACTION_LISTENER_VALUE);
+        constants.put(IN_APP_MESSAGE_CUSTOM_METHOD_LISTENER_KEY, IN_APP_MESSAGE_CUSTOM_METHOD_LISTENER_VALUE);
         return constants;
     }
 
@@ -166,6 +213,11 @@ public class RNInjector extends RNBaseModule {
             public void onCustomAction(String identifier, HashMap<String, Object> params, InAppMessageData inAppMessageData) {
                 onInAppCustomAction(identifier, params, inAppMessageData);
             }
+
+            @Override
+            public void onCustomMethod(String name, HashMap<String, Object> params, InAppMessageData inAppMessageData, InAppCustomMethodCompletion completion) {
+                onInAppCustomMethod(name, params, inAppMessageData, completion);
+            }
         });
     }
 
@@ -175,6 +227,7 @@ public class RNInjector extends RNBaseModule {
         data.putString("campaignHash", inAppMessageData.getCampaignHash());
         data.putString("variantIdentifier", inAppMessageData.getVariantId());
         data.putMap("additionalParameters", MapUtil.toWritableMap(inAppMessageData.getAdditionalParameters()));
+        data.putBoolean("isTest", Boolean.TRUE.equals(inAppMessageData.getTest()));
         objectToJs.putMap("data", data);
         sendEventToJs(IN_APP_MESSAGE_PRESENTED_LISTENER_VALUE, objectToJs, reactApplicationContext);
     }
@@ -185,6 +238,7 @@ public class RNInjector extends RNBaseModule {
         data.putString("campaignHash", inAppMessageData.getCampaignHash());
         data.putString("variantIdentifier", inAppMessageData.getVariantId());
         data.putMap("additionalParameters", MapUtil.toWritableMap(inAppMessageData.getAdditionalParameters()));
+        data.putBoolean("isTest", Boolean.TRUE.equals(inAppMessageData.getTest()));
         objectToJs.putMap("data", data);
         sendEventToJs(IN_APP_MESSAGE_HIDDEN_LISTENER_VALUE, objectToJs, reactApplicationContext);
     }
@@ -195,6 +249,7 @@ public class RNInjector extends RNBaseModule {
         data.putString("campaignHash", inAppMessageData.getCampaignHash());
         data.putString("variantIdentifier", inAppMessageData.getVariantId());
         data.putMap("additionalParameters", MapUtil.toWritableMap(inAppMessageData.getAdditionalParameters()));
+        data.putBoolean("isTest", Boolean.TRUE.equals(inAppMessageData.getTest()));
         objectToJs.putMap("data", data);
         objectToJs.putString("url", inAppMessageData.getUrl());
         sendEventToJs(IN_APP_MESSAGE_URL_ACTION_LISTENER_VALUE, objectToJs, reactApplicationContext);
@@ -206,6 +261,7 @@ public class RNInjector extends RNBaseModule {
         data.putString("campaignHash", inAppMessageData.getCampaignHash());
         data.putString("variantIdentifier", inAppMessageData.getVariantId());
         data.putMap("additionalParameters", MapUtil.toWritableMap(inAppMessageData.getAdditionalParameters()));
+        data.putBoolean("isTest", Boolean.TRUE.equals(inAppMessageData.getTest()));
         objectToJs.putMap("data", data);
         objectToJs.putString("deepLink", inAppMessageData.getDeepLink());
         sendEventToJs(IN_APP_MESSAGE_DEEPLINK_ACTION_LISTENER_VALUE, objectToJs, reactApplicationContext);
@@ -217,21 +273,26 @@ public class RNInjector extends RNBaseModule {
         data.putString("campaignHash", inAppMessageData.getCampaignHash());
         data.putString("variantIdentifier", inAppMessageData.getVariantId());
         data.putMap("additionalParameters", MapUtil.toWritableMap(inAppMessageData.getAdditionalParameters()));
-        objectToJs.putMap("data", objectToJs);
+        data.putBoolean("isTest", Boolean.TRUE.equals(inAppMessageData.getTest()));
+        objectToJs.putMap("data", data);
         objectToJs.putString("name", identifier);
         objectToJs.putMap("parameters", MapUtil.toWritableMap(params));
         sendEventToJs(IN_APP_MESSAGE_CUSTOM_ACTION_LISTENER_VALUE, objectToJs, reactApplicationContext);
     }
 
-    private String readableMapToJson(ReadableMap map) {
-        String json;
-        try {
-            JSONObject jsonObject = new JSONObject(map.toString());
-            json = jsonObject.get("NativeMap").toString();
-        } catch (JSONException e) {
-            json = null;
-        }
-
-        return json;
+    private static void onInAppCustomMethod(String name, HashMap<String, Object> params, InAppMessageData inAppMessageData, InAppCustomMethodCompletion completion) {
+        String callId = UUID.randomUUID().toString();
+        pendingInAppCustomMethodCompletions.put(callId, completion);
+        WritableMap objectToJs = Arguments.createMap();
+        WritableMap data = Arguments.createMap();
+        data.putString("campaignHash", inAppMessageData.getCampaignHash());
+        data.putString("variantIdentifier", inAppMessageData.getVariantId());
+        data.putMap("additionalParameters", MapUtil.toWritableMap(inAppMessageData.getAdditionalParameters()));
+        data.putBoolean("isTest", Boolean.TRUE.equals(inAppMessageData.getTest()));
+        objectToJs.putString("callId", callId);
+        objectToJs.putString("name", name);
+        objectToJs.putMap("parameters", params != null ? MapUtil.toWritableMap(params) : Arguments.createMap());
+        objectToJs.putMap("data", data);
+        sendEventToJs(IN_APP_MESSAGE_CUSTOM_METHOD_LISTENER_VALUE, objectToJs, reactApplicationContext);
     }
 }

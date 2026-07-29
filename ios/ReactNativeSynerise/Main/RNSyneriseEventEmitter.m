@@ -26,6 +26,7 @@ RCT_EXPORT_MODULE();
         kRNSyneriseInAppMessageUrlActionKey,
         kRNSyneriseInAppMessageDeeplinkActionKey,
         kRNSyneriseInAppMessageCustomActionKey,
+        kRNSyneriseInAppMessageCustomMethodKey,
         kRNSyneriseClientIsSignedInEvent,
         kRNSyneriseClientIsSignedOutEvent
     ];
@@ -47,6 +48,7 @@ RCT_EXPORT_MODULE();
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseInAppMessageUrlActionKey object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseInAppMessageDeeplinkActionKey object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseInAppMessageCustomActionKey object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseInAppMessageCustomMethodKey object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseClientIsSignedInEvent object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendEventToJSWithNotification:) name:kRNSyneriseClientIsSignedOutEvent object:nil];

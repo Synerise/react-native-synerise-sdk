@@ -4,8 +4,8 @@ ext.versions = [
         'minSdk'     : 24,
         'compileSdk' : 34,
         'targetSdk'  : 34,
-        'versionCode': 82,
-        'versionName': "1.9.0"
+        'versionCode': 86,
+        'versionName': "1.10.0"
 ]
 
 buildscript {
@@ -58,7 +58,7 @@ repositories {
 dependencies {
     implementation 'com.facebook.react:react-native:+'
     implementation "com.squareup.okhttp3:logging-interceptor:4.9.1"
-    api 'com.synerise.sdk:synerise-mobile-sdk:6.12.1'
+    api 'com.synerise.sdk:synerise-mobile-sdk:6.14.2'
 }
 
 afterEvaluate {
