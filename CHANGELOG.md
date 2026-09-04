@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.10.1] - 2026-09-03
+
+### Fixed
+- Issue with the `finalUnitPrice`, `regularUnitPrice`, and `discountedUnitPrice` parameters in cart events (`ProductAddedToCartEvent`, `ProductRemovedFromCartEvent`). These parameters were missing in the event payload.
+
+
 ## [1.10.0] - 2026-07-28
 
 ### Fixed
