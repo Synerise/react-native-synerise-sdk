@@ -1,42 +1,25 @@
 import { BaseModule as Module } from './BaseModule';
-import { InAppMessageData } from './../../classes/models/Misc/InAppMessageData';
-import { InAppCustomMethodCompletion } from './../../classes/models/InApps/InAppCustomMethodCompletion';
 import { SyneriseSource } from '../../classes/models/Misc/SyneriseSource';
+import { IInjectorInAppMessageListener, IInlineInAppMessageListener } from './inapp/InAppManager';
 interface IInjectorListener {
     onOpenUrl(url: string, source: SyneriseSource): void;
     onDeepLink(deepLink: string, source: SyneriseSource): void;
 }
-interface IInjectorInAppMessageListener {
-    onPresent?(data: InAppMessageData): void;
-    onHide?(data: InAppMessageData): void;
-    onOpenUrl(data: InAppMessageData, url: string): void;
-    onDeepLink(data: InAppMessageData, deepLink: string): void;
-    onCustomAction?(data: InAppMessageData, name: string, parameters: object): void;
-    onCustomMethod?(data: InAppMessageData, name: string, parameters: object, completion: InAppCustomMethodCompletion): void;
-}
 declare class InjectorModule extends Module {
     private static _instance;
     private listener;
-    private inAppMessageListener;
-    private inAppContextTarget;
-    inAppContext: {
+    private inAppManager;
+    get inAppContext(): {
         [key: string]: any;
     };
+    set inAppContext(context: {
+        [key: string]: any;
+    });
     static instance(): InjectorModule;
     private constructor();
-    private configureListeners;
     private configureMainListener;
-    private configureInAppMessageListener;
     private onUrlAction;
     private onDeepLinkAction;
-    private onInAppMessagePresent;
-    private onInAppMessageHide;
-    private onInAppMessageOpenUrlAction;
-    private onInAppMessageDeepLinkAction;
-    private onInAppMessageCustomAction;
-    private onInAppMessageCustomMethod;
-    private createInAppContextProxy;
-    private pushInAppContext;
     /**
      * This method sets callbacks for an injector module.
      *
@@ -52,6 +35,13 @@ declare class InjectorModule extends Module {
      */
     setInAppMessageListener(listener: IInjectorInAppMessageListener): void;
     /**
+     * This method sets callbacks for inline in-app message campaigns.
+     *
+     * @param listener An object that implements the `IInlineInAppMessageListener` interface
+     *
+     */
+    setInlineInAppMessageListener(listener: IInlineInAppMessageListener): void;
+    /**
      * This method notifies current in-app messages that context from the app was changed.
      */
     notifyInAppContextChange(): void;
@@ -65,4 +55,4 @@ declare class InjectorModule extends Module {
     handleOpenUrlBySDK(url: string): void;
     handleDeepLinkBySDK(deepLink: string): void;
 }
-export { InjectorModule, IInjectorListener };
+export { InjectorModule, IInjectorListener, IInlineInAppMessageListener };

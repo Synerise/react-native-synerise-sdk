@@ -9,6 +9,8 @@ import com.synerise.sdk.event.Tracker;
 import com.synerise.sdk.event.TrackerParams;
 import com.synerise.sdk.event.model.CustomEvent;
 
+import androidx.annotation.VisibleForTesting;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -60,7 +62,8 @@ public class RNTracker extends RNBaseModule {
         executeSuccessCallbackResponse(callback, null, null);
     }
 
-    private TrackerParams trackerParamsMapper(HashMap<String, Object> map) {
+    @VisibleForTesting
+    static TrackerParams trackerParamsMapper(HashMap<String, Object> map) {
         if (map != null) {
             TrackerParams.Builder params = new TrackerParams.Builder();
             Iterator it = map.entrySet().iterator();

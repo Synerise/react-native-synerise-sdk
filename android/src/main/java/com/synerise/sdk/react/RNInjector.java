@@ -2,32 +2,31 @@ package com.synerise.sdk.react;
 
 import android.os.Handler;
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.uimanager.UIManagerModule;
 import com.synerise.sdk.core.Synerise;
 import com.synerise.sdk.core.utils.SystemUtils;
 import com.synerise.sdk.injector.Injector;
 import com.synerise.sdk.injector.callback.OnInjectorListener;
+import com.synerise.sdk.injector.inapp.inline.InlineInAppMessageData;
 import com.synerise.sdk.injector.callback.SyneriseSource;
-import com.synerise.sdk.injector.inapp.InAppCustomMethodCompletion;
-import com.synerise.sdk.injector.inapp.InAppMessageData;
-import com.synerise.sdk.injector.inapp.OnInAppListener;
 import com.synerise.sdk.injector.ui.handler.InjectorActionHandler;
-import com.synerise.sdk.react.utils.ArrayUtil;
+import com.synerise.sdk.react.inapp.inline.RNInlineInAppContainer;
 import com.synerise.sdk.react.utils.MapUtil;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class RNInjector extends RNBaseModule {
 
     private static ReactApplicationContext reactApplicationContext;
+    private static RNInAppManager inAppManager;
     private static final String URL = "url";
     private static final String OPEN_URL_KEY = "URL_ACTION_LISTENER_KEY";
     private static final String DEEP_LINK_KEY = "DEEPLINK_ACTION_LISTENER_KEY";
@@ -47,16 +46,26 @@ public class RNInjector extends RNBaseModule {
     private static final String IN_APP_MESSAGE_CUSTOM_ACTION_LISTENER_VALUE = "inAppCustomAction";
     private static final String IN_APP_MESSAGE_CUSTOM_METHOD_LISTENER_KEY = "IN_APP_MESSAGE_CUSTOM_METHOD_LISTENER_KEY";
     private static final String IN_APP_MESSAGE_CUSTOM_METHOD_LISTENER_VALUE = "inAppCustomMethod";
-    private static final ConcurrentHashMap<String, InAppCustomMethodCompletion> pendingInAppCustomMethodCompletions = new ConcurrentHashMap<>();
+    private static final String INLINE_IN_APP_MESSAGE_URL_ACTION_LISTENER_KEY = "INLINE_IN_APP_MESSAGE_URL_ACTION_LISTENER_KEY";
+    private static final String INLINE_IN_APP_MESSAGE_DEEPLINK_ACTION_LISTENER_KEY = "INLINE_IN_APP_MESSAGE_DEEPLINK_ACTION_LISTENER_KEY";
+    private static final String INLINE_IN_APP_MESSAGE_CUSTOM_ACTION_LISTENER_KEY = "INLINE_IN_APP_MESSAGE_CUSTOM_ACTION_LISTENER_KEY";
+    private static final String INLINE_IN_APP_MESSAGE_CUSTOM_METHOD_LISTENER_KEY = "INLINE_IN_APP_MESSAGE_CUSTOM_METHOD_LISTENER_KEY";
+    private static final String INLINE_IN_APP_MESSAGE_AVAILABLE_LISTENER_KEY = "INLINE_IN_APP_MESSAGE_AVAILABLE_LISTENER_KEY";
+    private static final String INLINE_IN_APP_MESSAGE_URL_ACTION_LISTENER_VALUE = "inlineInAppUrlAction";
+    private static final String INLINE_IN_APP_MESSAGE_DEEPLINK_ACTION_LISTENER_VALUE = "inlineInAppDeepLinkAction";
+    private static final String INLINE_IN_APP_MESSAGE_CUSTOM_ACTION_LISTENER_VALUE = "inlineInAppCustomAction";
+    private static final String INLINE_IN_APP_MESSAGE_CUSTOM_METHOD_LISTENER_VALUE = "inlineInAppCustomMethod";
+    private static final String INLINE_IN_APP_MESSAGE_AVAILABLE_LISTENER_VALUE = "inlineInAppAvailable";
 
     public RNInjector(ReactApplicationContext reactApplicationContext) {
         super(reactApplicationContext);
         this.reactApplicationContext = reactApplicationContext;
+        inAppManager = new RNInAppManager(reactApplicationContext);
     }
 
     @ReactMethod
     public void closeInAppMessage(String campaignHash) {
-        Injector.closeInAppMessage(campaignHash);
+        inAppManager.closeInAppMessage(campaignHash);
     }
 
     @ReactMethod
@@ -70,6 +79,81 @@ public class RNInjector extends RNBaseModule {
     }
 
     @ReactMethod
+    public void resolveInlineCustomMethod(String callId, boolean success, Dynamic result, String error) {
+        inAppManager.resolveInlineCustomMethod(callId, success, result, error);
+    }
+
+    @ReactMethod
+    public void resolveInAppCustomMethod(String callId, boolean success, Dynamic result, String error) {
+        inAppManager.resolveInAppCustomMethod(callId, success, result, error);
+    }
+
+    @ReactMethod
+    public void isInlineInAppRendered(int viewTag, Callback callback) {
+        UIManagerModule uiManager = getReactApplicationContext().getNativeModule(UIManagerModule.class);
+        if (uiManager == null) {
+            executeSuccessCallbackResponse(callback, false, null);
+            return;
+        }
+
+        uiManager.addUIBlock(nativeViewHierarchyManager -> {
+            try {
+                android.view.View view = nativeViewHierarchyManager.resolveView(viewTag);
+                if (view instanceof RNInlineInAppContainer) {
+                    boolean isRendered = ((RNInlineInAppContainer) view).getInlineInAppView().isRendered();
+                    executeSuccessCallbackResponse(callback, isRendered, null);
+                } else {
+                    executeSuccessCallbackResponse(callback, false, null);
+                }
+            } catch (Exception exception) {
+                executeSuccessCallbackResponse(callback, false, null);
+            }
+        });
+    }
+
+    /** Resolves null when the view is not mounted or holds no rendered campaign. */
+    @ReactMethod
+    public void getInlineInAppData(int viewTag, Callback callback) {
+        UIManagerModule uiManager = getReactApplicationContext().getNativeModule(UIManagerModule.class);
+        if (uiManager == null) {
+            executeSuccessCallbackResponse(callback, null, null);
+            return;
+        }
+
+        uiManager.addUIBlock(nativeViewHierarchyManager -> {
+            try {
+                android.view.View view = nativeViewHierarchyManager.resolveView(viewTag);
+                if (view instanceof RNInlineInAppContainer) {
+                    InlineInAppMessageData data = ((RNInlineInAppContainer) view).getInlineInAppView().getData();
+                    executeSuccessCallbackResponse(callback, inlineDataToWritableMap(data), null);
+                } else {
+                    executeSuccessCallbackResponse(callback, null, null);
+                }
+            } catch (Exception exception) {
+                executeSuccessCallbackResponse(callback, null, null);
+            }
+        });
+    }
+
+    private WritableMap inlineDataToWritableMap(InlineInAppMessageData data) {
+        if (data == null) {
+            return null;
+        }
+
+        WritableMap dataMap = Arguments.createMap();
+        dataMap.putString("campaignHash", data.getCampaignHash());
+        dataMap.putString("variantIdentifier", data.getVariantId());
+        dataMap.putString("placementKey", data.getPlacementKey());
+        dataMap.putMap("additionalParameters", data.getAdditionalParameters() != null
+                ? MapUtil.objectMapToWritableMap(data.getAdditionalParameters())
+                : Arguments.createMap());
+        dataMap.putBoolean("isTest", data.isTest());
+
+        return dataMap;
+    }
+
+
+    @ReactMethod
     public void setInAppContext(ReadableMap context) {
         Injector.setInAppContext(new HashMap<>(MapUtil.toMap(context)));
     }
@@ -77,39 +161,6 @@ public class RNInjector extends RNBaseModule {
     @ReactMethod
     public void notifyInAppContextChange() {
         Injector.notifyInAppContextChange();
-    }
-
-    @ReactMethod
-    public void resolveInAppCustomMethod(String callId, boolean success, Dynamic result, String error) {
-        InAppCustomMethodCompletion completion = pendingInAppCustomMethodCompletions.remove(callId);
-        if (completion == null) {
-            return;
-        }
-        if (success) {
-            completion.success(customMethodResultFromDynamic(result));
-        } else {
-            completion.failure(error);
-        }
-    }
-
-    private Object customMethodResultFromDynamic(Dynamic result) {
-        if (result == null || result.isNull()) {
-            return null;
-        }
-        switch (result.getType()) {
-            case Boolean:
-                return result.asBoolean();
-            case Number:
-                return result.asDouble();
-            case String:
-                return result.asString();
-            case Map:
-                return MapUtil.toMap(result.asMap());
-            case Array:
-                return ArrayUtil.toArray(result.asArray());
-            default:
-                return null;
-        }
     }
 
     @Nullable
@@ -124,6 +175,11 @@ public class RNInjector extends RNBaseModule {
         constants.put(IN_APP_MESSAGE_DEEPLINK_ACTION_LISTENER_KEY, IN_APP_MESSAGE_DEEPLINK_ACTION_LISTENER_VALUE);
         constants.put(IN_APP_MESSAGE_CUSTOM_ACTION_LISTENER_KEY, IN_APP_MESSAGE_CUSTOM_ACTION_LISTENER_VALUE);
         constants.put(IN_APP_MESSAGE_CUSTOM_METHOD_LISTENER_KEY, IN_APP_MESSAGE_CUSTOM_METHOD_LISTENER_VALUE);
+        constants.put(INLINE_IN_APP_MESSAGE_URL_ACTION_LISTENER_KEY, INLINE_IN_APP_MESSAGE_URL_ACTION_LISTENER_VALUE);
+        constants.put(INLINE_IN_APP_MESSAGE_DEEPLINK_ACTION_LISTENER_KEY, INLINE_IN_APP_MESSAGE_DEEPLINK_ACTION_LISTENER_VALUE);
+        constants.put(INLINE_IN_APP_MESSAGE_CUSTOM_ACTION_LISTENER_KEY, INLINE_IN_APP_MESSAGE_CUSTOM_ACTION_LISTENER_VALUE);
+        constants.put(INLINE_IN_APP_MESSAGE_CUSTOM_METHOD_LISTENER_KEY, INLINE_IN_APP_MESSAGE_CUSTOM_METHOD_LISTENER_VALUE);
+        constants.put(INLINE_IN_APP_MESSAGE_AVAILABLE_LISTENER_KEY, INLINE_IN_APP_MESSAGE_AVAILABLE_LISTENER_VALUE);
         return constants;
     }
 
@@ -134,7 +190,8 @@ public class RNInjector extends RNBaseModule {
     }
 
     protected static void initializeInjector() {
-        initializeInAppListener();
+        inAppManager.initializeInAppListener();
+        inAppManager.initializeInlineInAppListener();
     }
 
     protected static void initializeActionInjectorListener() {
@@ -175,124 +232,5 @@ public class RNInjector extends RNBaseModule {
         data.putString(DEEP_LINK, deepLink);
         data.putString(SOURCE, source);
         sendEventToJs(DEEP_LINK_VALUE, data, reactApplicationContext);
-    }
-
-    private static void initializeInAppListener() {
-        Injector.setOnInAppListener(new OnInAppListener() {
-            @Override
-            public boolean shouldShow(InAppMessageData inAppMessageData) {
-                return true;
-            }
-
-            @Override
-            public void onShown(InAppMessageData inAppMessageData) {
-                onInAppPresented(inAppMessageData);
-            }
-
-            @Override
-            public void onDismissed(InAppMessageData inAppMessageData) {
-                onInAppHidden(inAppMessageData);
-            }
-
-            @Override
-            public void onHandledOpenUrl(InAppMessageData inAppMessageData) {
-                onInAppMessageOpenUrl(inAppMessageData);
-            }
-
-            @Override
-            public void onHandledOpenDeepLink(InAppMessageData inAppMessageData) {
-                onInAppMessageDeepLink(inAppMessageData);
-            }
-
-            @Override
-            public HashMap<String, Object> onContextFromAppRequired(InAppMessageData inAppMessageData) {
-                return null;
-            }
-
-            @Override
-            public void onCustomAction(String identifier, HashMap<String, Object> params, InAppMessageData inAppMessageData) {
-                onInAppCustomAction(identifier, params, inAppMessageData);
-            }
-
-            @Override
-            public void onCustomMethod(String name, HashMap<String, Object> params, InAppMessageData inAppMessageData, InAppCustomMethodCompletion completion) {
-                onInAppCustomMethod(name, params, inAppMessageData, completion);
-            }
-        });
-    }
-
-    private static void onInAppPresented(InAppMessageData inAppMessageData) {
-        WritableMap objectToJs = Arguments.createMap();
-        WritableMap data = Arguments.createMap();
-        data.putString("campaignHash", inAppMessageData.getCampaignHash());
-        data.putString("variantIdentifier", inAppMessageData.getVariantId());
-        data.putMap("additionalParameters", MapUtil.toWritableMap(inAppMessageData.getAdditionalParameters()));
-        data.putBoolean("isTest", Boolean.TRUE.equals(inAppMessageData.getTest()));
-        objectToJs.putMap("data", data);
-        sendEventToJs(IN_APP_MESSAGE_PRESENTED_LISTENER_VALUE, objectToJs, reactApplicationContext);
-    }
-
-    private static void onInAppHidden(InAppMessageData inAppMessageData) {
-        WritableMap objectToJs = Arguments.createMap();
-        WritableMap data = Arguments.createMap();
-        data.putString("campaignHash", inAppMessageData.getCampaignHash());
-        data.putString("variantIdentifier", inAppMessageData.getVariantId());
-        data.putMap("additionalParameters", MapUtil.toWritableMap(inAppMessageData.getAdditionalParameters()));
-        data.putBoolean("isTest", Boolean.TRUE.equals(inAppMessageData.getTest()));
-        objectToJs.putMap("data", data);
-        sendEventToJs(IN_APP_MESSAGE_HIDDEN_LISTENER_VALUE, objectToJs, reactApplicationContext);
-    }
-
-    private static void onInAppMessageOpenUrl(InAppMessageData inAppMessageData) {
-        WritableMap objectToJs = Arguments.createMap();
-        WritableMap data = Arguments.createMap();
-        data.putString("campaignHash", inAppMessageData.getCampaignHash());
-        data.putString("variantIdentifier", inAppMessageData.getVariantId());
-        data.putMap("additionalParameters", MapUtil.toWritableMap(inAppMessageData.getAdditionalParameters()));
-        data.putBoolean("isTest", Boolean.TRUE.equals(inAppMessageData.getTest()));
-        objectToJs.putMap("data", data);
-        objectToJs.putString("url", inAppMessageData.getUrl());
-        sendEventToJs(IN_APP_MESSAGE_URL_ACTION_LISTENER_VALUE, objectToJs, reactApplicationContext);
-    }
-
-    private static void onInAppMessageDeepLink(InAppMessageData inAppMessageData) {
-        WritableMap objectToJs = Arguments.createMap();
-        WritableMap data = Arguments.createMap();
-        data.putString("campaignHash", inAppMessageData.getCampaignHash());
-        data.putString("variantIdentifier", inAppMessageData.getVariantId());
-        data.putMap("additionalParameters", MapUtil.toWritableMap(inAppMessageData.getAdditionalParameters()));
-        data.putBoolean("isTest", Boolean.TRUE.equals(inAppMessageData.getTest()));
-        objectToJs.putMap("data", data);
-        objectToJs.putString("deepLink", inAppMessageData.getDeepLink());
-        sendEventToJs(IN_APP_MESSAGE_DEEPLINK_ACTION_LISTENER_VALUE, objectToJs, reactApplicationContext);
-    }
-
-    private static void onInAppCustomAction(String identifier, HashMap<String, Object> params, InAppMessageData inAppMessageData) {
-        WritableMap objectToJs = Arguments.createMap();
-        WritableMap data = Arguments.createMap();
-        data.putString("campaignHash", inAppMessageData.getCampaignHash());
-        data.putString("variantIdentifier", inAppMessageData.getVariantId());
-        data.putMap("additionalParameters", MapUtil.toWritableMap(inAppMessageData.getAdditionalParameters()));
-        data.putBoolean("isTest", Boolean.TRUE.equals(inAppMessageData.getTest()));
-        objectToJs.putMap("data", data);
-        objectToJs.putString("name", identifier);
-        objectToJs.putMap("parameters", MapUtil.toWritableMap(params));
-        sendEventToJs(IN_APP_MESSAGE_CUSTOM_ACTION_LISTENER_VALUE, objectToJs, reactApplicationContext);
-    }
-
-    private static void onInAppCustomMethod(String name, HashMap<String, Object> params, InAppMessageData inAppMessageData, InAppCustomMethodCompletion completion) {
-        String callId = UUID.randomUUID().toString();
-        pendingInAppCustomMethodCompletions.put(callId, completion);
-        WritableMap objectToJs = Arguments.createMap();
-        WritableMap data = Arguments.createMap();
-        data.putString("campaignHash", inAppMessageData.getCampaignHash());
-        data.putString("variantIdentifier", inAppMessageData.getVariantId());
-        data.putMap("additionalParameters", MapUtil.toWritableMap(inAppMessageData.getAdditionalParameters()));
-        data.putBoolean("isTest", Boolean.TRUE.equals(inAppMessageData.getTest()));
-        objectToJs.putString("callId", callId);
-        objectToJs.putString("name", name);
-        objectToJs.putMap("parameters", params != null ? MapUtil.toWritableMap(params) : Arguments.createMap());
-        objectToJs.putMap("data", data);
-        sendEventToJs(IN_APP_MESSAGE_CUSTOM_METHOD_LISTENER_VALUE, objectToJs, reactApplicationContext);
     }
 }

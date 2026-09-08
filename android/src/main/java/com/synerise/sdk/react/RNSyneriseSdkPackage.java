@@ -9,6 +9,7 @@ import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 import com.facebook.react.bridge.JavaScriptModule;
+import com.synerise.sdk.react.inapp.inline.RNInlineInAppViewManager;
 
 public class RNSyneriseSdkPackage implements ReactPackage {
 
@@ -38,6 +39,8 @@ public class RNSyneriseSdkPackage implements ReactPackage {
 
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-        return Collections.emptyList();
+        List<ViewManager> viewManagers = new ArrayList<ViewManager>();
+        viewManagers.add(new RNInlineInAppViewManager());
+        return viewManagers;
     }
 }

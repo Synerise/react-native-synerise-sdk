@@ -12,6 +12,23 @@
 static NSString * const RNClientEventListenerClientIsSignedInKey = @"CLIENT_SIGNED_IN_LISTENER_KEY";
 static NSString * const RNClientEventListenerClientIsSignedOutKey = @"CLIENT_SIGNED_OUT_LISTENER_KEY";
 
+/** Maps the JS ClientIdentityProvider string to the SDK enum; replaces SNR_StringToClientIdentityProvider removed in SyneriseSDK 6.0.0. */
+static SNRClientIdentityProvider RNClientIdentityProviderFromString(NSString *string) {
+    if ([string isEqualToString:@"SYNERISE"]) {
+        return SNRClientIdentityProviderSynerise;
+    } else if ([string isEqualToString:@"OAUTH"]) {
+        return SNRClientIdentityProviderOAuth;
+    } else if ([string isEqualToString:@"FACEBOOK"]) {
+        return SNRClientIdentityProviderFacebook;
+    } else if ([string isEqualToString:@"APPLE"]) {
+        return SNRClientIdentityProviderApple;
+    } else if ([string isEqualToString:@"GOOGLE"]) {
+        return SNRClientIdentityProviderGoogle;
+    }
+
+    return SNRClientIdentityProviderUnknown;
+}
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface RNClient () <RNSyneriseManagerDelegate, SNRClientStateDelegate>
@@ -496,7 +513,7 @@ RCT_EXPORT_METHOD(signInConditionally:(NSString *)email password:(NSString *)pas
 RCT_EXPORT_METHOD(authenticate:(NSString *)token provider:(NSString *)provider context:(NSDictionary *)contextDictionary response:(RCTResponseSenderBlock)response)
 {
     NSString *authID = contextDictionary[@"authID"];
-    SNRClientIdentityProvider clientIdentityProvider = SNR_StringToClientIdentityProvider(provider);
+    SNRClientIdentityProvider clientIdentityProvider = RNClientIdentityProviderFromString(provider);
     SNRClientAuthenticationContext *context = [self modelClientAuthenticationContextWithDictionary:contextDictionary];
     
     [SNRClient authenticateWithToken:token clientIdentityProvider:clientIdentityProvider authID:authID context:context success:^() {
@@ -511,7 +528,7 @@ RCT_EXPORT_METHOD(authenticate:(NSString *)token provider:(NSString *)provider c
 RCT_EXPORT_METHOD(authenticateConditionally:(NSString *)token provider:(NSString *)provider context:(NSDictionary *)contextDictionary response:(RCTResponseSenderBlock)response)
 {
     NSString *authID = contextDictionary[@"authID"];
-    SNRClientIdentityProvider clientIdentityProvider = SNR_StringToClientIdentityProvider(provider);
+    SNRClientIdentityProvider clientIdentityProvider = RNClientIdentityProviderFromString(provider);
     SNRClientConditionalAuthenticationContext *context = [self modelClientConditionalAuthenticationContextWithDictionary:contextDictionary];
     
     [SNRClient authenticateConditionallyWithToken:token clientIdentityProvider:clientIdentityProvider authID:authID context:context success:^(SNRClientConditionalAuthResult *authResult) {
@@ -766,7 +783,7 @@ RCT_EXPORT_METHOD(confirmPhoneUpdate:(NSString *)phone confirmationCode:(NSStrin
 
 RCT_EXPORT_METHOD(deleteAccountByIdentityProvider:(id)clientAuthFactor clientIdentityProvider:(NSString *)clientIdentityProviderString authID:(nullable NSString *)authID response:(RCTResponseSenderBlock)response)
 {
-    SNRClientIdentityProvider clientIdentityProvider = SNR_StringToClientIdentityProvider(clientIdentityProviderString);
+    SNRClientIdentityProvider clientIdentityProvider = RNClientIdentityProviderFromString(clientIdentityProviderString);
     
     [SNRClient deleteAccount:clientAuthFactor clientIdentityProvider:clientIdentityProvider authID:authID success:^() {
         [self executeSuccessCallbackResponse:response data:@1];

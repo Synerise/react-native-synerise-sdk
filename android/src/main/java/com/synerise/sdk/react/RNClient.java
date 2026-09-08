@@ -3,6 +3,7 @@ package com.synerise.sdk.react;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
@@ -788,7 +789,8 @@ public class RNClient extends RNBaseModule {
         Client.recognizeAnonymous(email, customIdentify, parameters);
     }
 
-    private Attributes attributesMapper(HashMap<String, Object> map) {
+    @VisibleForTesting
+    static Attributes attributesMapper(HashMap<String, Object> map) {
         Attributes attributes = new Attributes();
         Iterator it = map.entrySet().iterator();
         while (it.hasNext()) {
@@ -799,7 +801,8 @@ public class RNClient extends RNBaseModule {
         return attributes;
     }
 
-    private Agreements agreementsMapper(ReadableMap map) {
+    @VisibleForTesting
+    static Agreements agreementsMapper(ReadableMap map) {
         if (map != null) {
             Agreements agreements = new Agreements();
             if (map.hasKey("bluetooth")) agreements.setBluetooth(map.getBoolean("bluetooth"));

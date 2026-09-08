@@ -49,3 +49,4 @@ export { TokenOrigin, TokenOriginFromString, TokenOriginToString } from './../cl
 export { InitializationConfig } from './../classes/models/Misc/InitializationConfig';
 export { SyneriseSource } from './../classes/models/Misc/SyneriseSource';
 export { InAppMessageData } from './../classes/models/Misc/InAppMessageData';
+export { InlineInAppMessageData } from './../classes/models/Misc/InlineInAppMessageData';
