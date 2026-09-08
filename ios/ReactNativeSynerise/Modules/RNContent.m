@@ -66,11 +66,11 @@ RCT_EXPORT_MODULE();
     return nil;
 }
 
-- (SNRRecommendationOptions *)modelRecommendationOptionsWithDictionary:(NSDictionary *)dictionary {
+- (SNRRecommendationApiQuery *)modelRecommendationOptionsWithDictionary:(NSDictionary *)dictionary {
     if (dictionary != nil) {
         NSString *slug = [dictionary getStringForKey:@"slug"];
         if (slug != nil) {
-            SNRRecommendationOptions *model = [[SNRRecommendationOptions alloc] initWithSlug:slug];
+            SNRRecommendationApiQuery *model = [[SNRRecommendationApiQuery alloc] initWithSlug:slug];
             model.productID = [dictionary getStringForKey:@"productID"];
             model.productIDs = [dictionary getArrayForKey:@"itemsIds"];
             model.itemsExcluded = [dictionary getArrayForKey:@"itemsExcluded"];
@@ -284,7 +284,7 @@ RCT_EXPORT_METHOD(generateDocumentWithApiQuery:(NSDictionary *)dictionary respon
 
 RCT_EXPORT_METHOD(getRecommendationsV2:(NSDictionary *)dictionary response:(RCTResponseSenderBlock)response)
 {
-    SNRRecommendationOptions *recommendationOptions = [self modelRecommendationOptionsWithDictionary:dictionary];
+    SNRRecommendationApiQuery *recommendationOptions = [self modelRecommendationOptionsWithDictionary:dictionary];
     if (recommendationOptions != nil) {
         [SNRContent getRecommendationsV2:recommendationOptions success:^(SNRRecommendationResponse *recommendationResponse) {
             if (recommendationResponse != nil) {

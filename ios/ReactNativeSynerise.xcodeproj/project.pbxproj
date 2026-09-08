@@ -7,20 +7,26 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6F17D07623756D6F00D725AE /* RNSyneriseInitializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F17D06223756C4F00D725AE /* RNSyneriseInitializer.m */; };
-		6F17D07723756D6F00D725AE /* RNBaseModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F17D06A23756C4F00D725AE /* RNBaseModule.m */; };
-		6F17D07923756D6F00D725AE /* RNSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F17D06D23756C4F00D725AE /* RNSettings.m */; };
-		6F17D07A23756D6F00D725AE /* RNSynerise.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F17D06523756C4F00D725AE /* RNSynerise.m */; };
-		6F17D07B23756D6F00D725AE /* RNClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F17D06623756C4F00D725AE /* RNClient.m */; };
-		6F17D07C23756D6F00D725AE /* RNTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F17D07023756C4F00D725AE /* RNTracker.m */; };
-		6F30542D238BEBEC00D0BD7D /* RNSyneriseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F30542C238BEBEC00D0BD7D /* RNSyneriseManager.m */; };
-		6F85452F2385494100067AC5 /* NSDictionary+ReactNative.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F85452E2385494100067AC5 /* NSDictionary+ReactNative.m */; };
-		6F8FDD42237D8CCB00EF1CC7 /* RNPromotions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F8FDD41237D8CCB00EF1CC7 /* RNPromotions.m */; };
-		6FCFFCF1238434A400EBD863 /* NSMutableDictionary+ReactNative.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FCFFCF0238434A400EBD863 /* NSMutableDictionary+ReactNative.m */; };
-		FF0827AB2388190E00B88D52 /* RNNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = FF0827AA2388190E00B88D52 /* RNNotifications.m */; };
-		FF0827AE2388191900B88D52 /* RNInjector.m in Sources */ = {isa = PBXBuildFile; fileRef = FF0827AD2388191900B88D52 /* RNInjector.m */; };
-		FF5BBC032449BA230074FA2E /* RNContent.m in Sources */ = {isa = PBXBuildFile; fileRef = FF5BBC022449BA230074FA2E /* RNContent.m */; };
-		FFB64BC7238893A6001856B7 /* RNSyneriseEventEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = FFB64BC6238893A6001856B7 /* RNSyneriseEventEmitter.m */; };
+		6F502AD7303F1F5200A0C6A4 /* RNInlineInAppViewRegistry.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F502AC8303F1F5200A0C6A4 /* RNInlineInAppViewRegistry.m */; };
+		6F502AD8303F1F5200A0C6A4 /* RNClient+Functions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F502ABC303F1F5200A0C6A4 /* RNClient+Functions.m */; };
+		6F502AD9303F1F5200A0C6A4 /* RNInlineInAppViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F502AC6303F1F5200A0C6A4 /* RNInlineInAppViewManager.m */; };
+		6F502ADA303F1F5200A0C6A4 /* RNSyneriseNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F502AD2303F1F5200A0C6A4 /* RNSyneriseNotifications.m */; };
+		6F502ADB303F1F5200A0C6A4 /* NSMutableDictionary+ReactNative.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F502AAE303F1F5200A0C6A4 /* NSMutableDictionary+ReactNative.m */; };
+		6F502ADC303F1F5200A0C6A4 /* RNPromotions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F502ACA303F1F5200A0C6A4 /* RNPromotions.m */; };
+		6F502ADD303F1F5200A0C6A4 /* RNSyneriseInitializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F502AB3303F1F5200A0C6A4 /* RNSyneriseInitializer.m */; };
+		6F502ADE303F1F5200A0C6A4 /* NSDictionary+ReactNative.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F502AAC303F1F5200A0C6A4 /* NSDictionary+ReactNative.m */; };
+		6F502ADF303F1F5200A0C6A4 /* RNSynerise.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F502AD0303F1F5200A0C6A4 /* RNSynerise.m */; };
+		6F502AE0303F1F5200A0C6A4 /* RNInjector.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F502AC2303F1F5200A0C6A4 /* RNInjector.m */; };
+		6F502AE1303F1F5200A0C6A4 /* RNSyneriseEventEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F502AB1303F1F5200A0C6A4 /* RNSyneriseEventEmitter.m */; };
+		6F502AE2303F1F5200A0C6A4 /* RNBaseModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F502AB8303F1F5200A0C6A4 /* RNBaseModule.m */; };
+		6F502AE3303F1F5200A0C6A4 /* RNSyneriseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F502AB5303F1F5200A0C6A4 /* RNSyneriseManager.m */; };
+		6F502AE4303F1F5200A0C6A4 /* RNSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F502ACE303F1F5200A0C6A4 /* RNSettings.m */; };
+		6F502AE5303F1F5200A0C6A4 /* RNContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F502ABE303F1F5200A0C6A4 /* RNContent.m */; };
+		6F502AE6303F1F5200A0C6A4 /* RNPromotions+Functions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F502ACC303F1F5200A0C6A4 /* RNPromotions+Functions.m */; };
+		6F502AE7303F1F5200A0C6A4 /* RNClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F502ABA303F1F5200A0C6A4 /* RNClient.m */; };
+		6F502AE8303F1F5200A0C6A4 /* RNTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F502AD4303F1F5200A0C6A4 /* RNTracker.m */; };
+		6F502AE9303F1F5200A0C6A4 /* RNInlineInAppView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F502AC4303F1F5200A0C6A4 /* RNInlineInAppView.m */; };
+		6F502AEA303F1F5200A0C6A4 /* RNInAppManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F502AC0303F1F5200A0C6A4 /* RNInAppManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -36,36 +42,48 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		6F17D06023756C4F00D725AE /* ReactNativeSynerise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReactNativeSynerise.h; sourceTree = "<group>"; };
-		6F17D06223756C4F00D725AE /* RNSyneriseInitializer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNSyneriseInitializer.m; sourceTree = "<group>"; };
-		6F17D06323756C4F00D725AE /* RNSyneriseInitializer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSyneriseInitializer.h; sourceTree = "<group>"; };
-		6F17D06523756C4F00D725AE /* RNSynerise.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNSynerise.m; sourceTree = "<group>"; };
-		6F17D06623756C4F00D725AE /* RNClient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNClient.m; sourceTree = "<group>"; };
-		6F17D06723756C4F00D725AE /* RNSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSettings.h; sourceTree = "<group>"; };
-		6F17D06923756C4F00D725AE /* RNTracker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNTracker.h; sourceTree = "<group>"; };
-		6F17D06A23756C4F00D725AE /* RNBaseModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNBaseModule.m; sourceTree = "<group>"; };
-		6F17D06B23756C4F00D725AE /* RNClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNClient.h; sourceTree = "<group>"; };
-		6F17D06C23756C4F00D725AE /* RNSynerise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSynerise.h; sourceTree = "<group>"; };
-		6F17D06D23756C4F00D725AE /* RNSettings.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNSettings.m; sourceTree = "<group>"; };
-		6F17D06F23756C4F00D725AE /* RNBaseModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNBaseModule.h; sourceTree = "<group>"; };
-		6F17D07023756C4F00D725AE /* RNTracker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNTracker.m; sourceTree = "<group>"; };
-		6F30542B238BEBEC00D0BD7D /* RNSyneriseManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSyneriseManager.h; sourceTree = "<group>"; };
-		6F30542C238BEBEC00D0BD7D /* RNSyneriseManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNSyneriseManager.m; sourceTree = "<group>"; };
-		6F85452D2385494100067AC5 /* NSDictionary+ReactNative.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+ReactNative.h"; sourceTree = "<group>"; };
-		6F85452E2385494100067AC5 /* NSDictionary+ReactNative.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+ReactNative.m"; sourceTree = "<group>"; };
-		6F8FDD40237D8CCB00EF1CC7 /* RNPromotions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNPromotions.h; sourceTree = "<group>"; };
-		6F8FDD41237D8CCB00EF1CC7 /* RNPromotions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNPromotions.m; sourceTree = "<group>"; };
-		6FCFFCEF238434A400EBD863 /* NSMutableDictionary+ReactNative.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSMutableDictionary+ReactNative.h"; sourceTree = "<group>"; };
-		6FCFFCF0238434A400EBD863 /* NSMutableDictionary+ReactNative.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary+ReactNative.m"; sourceTree = "<group>"; };
+		6F502AAB303F1F5200A0C6A4 /* NSDictionary+ReactNative.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+ReactNative.h"; sourceTree = "<group>"; };
+		6F502AAC303F1F5200A0C6A4 /* NSDictionary+ReactNative.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+ReactNative.m"; sourceTree = "<group>"; };
+		6F502AAD303F1F5200A0C6A4 /* NSMutableDictionary+ReactNative.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSMutableDictionary+ReactNative.h"; sourceTree = "<group>"; };
+		6F502AAE303F1F5200A0C6A4 /* NSMutableDictionary+ReactNative.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary+ReactNative.m"; sourceTree = "<group>"; };
+		6F502AB0303F1F5200A0C6A4 /* RNSyneriseEventEmitter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSyneriseEventEmitter.h; sourceTree = "<group>"; };
+		6F502AB1303F1F5200A0C6A4 /* RNSyneriseEventEmitter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNSyneriseEventEmitter.m; sourceTree = "<group>"; };
+		6F502AB2303F1F5200A0C6A4 /* RNSyneriseInitializer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSyneriseInitializer.h; sourceTree = "<group>"; };
+		6F502AB3303F1F5200A0C6A4 /* RNSyneriseInitializer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNSyneriseInitializer.m; sourceTree = "<group>"; };
+		6F502AB4303F1F5200A0C6A4 /* RNSyneriseManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSyneriseManager.h; sourceTree = "<group>"; };
+		6F502AB5303F1F5200A0C6A4 /* RNSyneriseManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNSyneriseManager.m; sourceTree = "<group>"; };
+		6F502AB7303F1F5200A0C6A4 /* RNBaseModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNBaseModule.h; sourceTree = "<group>"; };
+		6F502AB8303F1F5200A0C6A4 /* RNBaseModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNBaseModule.m; sourceTree = "<group>"; };
+		6F502AB9303F1F5200A0C6A4 /* RNClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNClient.h; sourceTree = "<group>"; };
+		6F502ABA303F1F5200A0C6A4 /* RNClient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNClient.m; sourceTree = "<group>"; };
+		6F502ABB303F1F5200A0C6A4 /* RNClient+Functions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RNClient+Functions.h"; sourceTree = "<group>"; };
+		6F502ABC303F1F5200A0C6A4 /* RNClient+Functions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "RNClient+Functions.m"; sourceTree = "<group>"; };
+		6F502ABD303F1F5200A0C6A4 /* RNContent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNContent.h; sourceTree = "<group>"; };
+		6F502ABE303F1F5200A0C6A4 /* RNContent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNContent.m; sourceTree = "<group>"; };
+		6F502ABF303F1F5200A0C6A4 /* RNInAppManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNInAppManager.h; sourceTree = "<group>"; };
+		6F502AC0303F1F5200A0C6A4 /* RNInAppManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNInAppManager.m; sourceTree = "<group>"; };
+		6F502AC1303F1F5200A0C6A4 /* RNInjector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNInjector.h; sourceTree = "<group>"; };
+		6F502AC2303F1F5200A0C6A4 /* RNInjector.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNInjector.m; sourceTree = "<group>"; };
+		6F502AC3303F1F5200A0C6A4 /* RNInlineInAppView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNInlineInAppView.h; sourceTree = "<group>"; };
+		6F502AC4303F1F5200A0C6A4 /* RNInlineInAppView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNInlineInAppView.m; sourceTree = "<group>"; };
+		6F502AC5303F1F5200A0C6A4 /* RNInlineInAppViewManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNInlineInAppViewManager.h; sourceTree = "<group>"; };
+		6F502AC6303F1F5200A0C6A4 /* RNInlineInAppViewManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNInlineInAppViewManager.m; sourceTree = "<group>"; };
+		6F502AC7303F1F5200A0C6A4 /* RNInlineInAppViewRegistry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNInlineInAppViewRegistry.h; sourceTree = "<group>"; };
+		6F502AC8303F1F5200A0C6A4 /* RNInlineInAppViewRegistry.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNInlineInAppViewRegistry.m; sourceTree = "<group>"; };
+		6F502AC9303F1F5200A0C6A4 /* RNPromotions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNPromotions.h; sourceTree = "<group>"; };
+		6F502ACA303F1F5200A0C6A4 /* RNPromotions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNPromotions.m; sourceTree = "<group>"; };
+		6F502ACB303F1F5200A0C6A4 /* RNPromotions+Functions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RNPromotions+Functions.h"; sourceTree = "<group>"; };
+		6F502ACC303F1F5200A0C6A4 /* RNPromotions+Functions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "RNPromotions+Functions.m"; sourceTree = "<group>"; };
+		6F502ACD303F1F5200A0C6A4 /* RNSettings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSettings.h; sourceTree = "<group>"; };
+		6F502ACE303F1F5200A0C6A4 /* RNSettings.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNSettings.m; sourceTree = "<group>"; };
+		6F502ACF303F1F5200A0C6A4 /* RNSynerise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSynerise.h; sourceTree = "<group>"; };
+		6F502AD0303F1F5200A0C6A4 /* RNSynerise.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNSynerise.m; sourceTree = "<group>"; };
+		6F502AD1303F1F5200A0C6A4 /* RNSyneriseNotifications.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNSyneriseNotifications.h; sourceTree = "<group>"; };
+		6F502AD2303F1F5200A0C6A4 /* RNSyneriseNotifications.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNSyneriseNotifications.m; sourceTree = "<group>"; };
+		6F502AD3303F1F5200A0C6A4 /* RNTracker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNTracker.h; sourceTree = "<group>"; };
+		6F502AD4303F1F5200A0C6A4 /* RNTracker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNTracker.m; sourceTree = "<group>"; };
+		6F502AD6303F1F5200A0C6A4 /* ReactNativeSynerise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReactNativeSynerise.h; sourceTree = "<group>"; };
 		6FF3B32D23758DB5009EC43C /* libReactNativeSynerise.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libReactNativeSynerise.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		FF0827A92388190E00B88D52 /* RNNotifications.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNNotifications.h; sourceTree = "<group>"; };
-		FF0827AA2388190E00B88D52 /* RNNotifications.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNNotifications.m; sourceTree = "<group>"; };
-		FF0827AC2388191900B88D52 /* RNInjector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNInjector.h; sourceTree = "<group>"; };
-		FF0827AD2388191900B88D52 /* RNInjector.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNInjector.m; sourceTree = "<group>"; };
-		FF5BBC012449BA230074FA2E /* RNContent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNContent.h; sourceTree = "<group>"; };
-		FF5BBC022449BA230074FA2E /* RNContent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNContent.m; sourceTree = "<group>"; };
-		FFB64BC5238893A6001856B7 /* RNSyneriseEventEmitter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RNSyneriseEventEmitter.h; path = ReactNativeSynerise/Main/RNSyneriseEventEmitter.h; sourceTree = SOURCE_ROOT; };
-		FFB64BC6238893A6001856B7 /* RNSyneriseEventEmitter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RNSyneriseEventEmitter.m; path = ReactNativeSynerise/Main/RNSyneriseEventEmitter.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,61 +116,73 @@
 		6F17D05E23756C4F00D725AE /* ReactNativeSynerise */ = {
 			isa = PBXGroup;
 			children = (
-				6F17D06023756C4F00D725AE /* ReactNativeSynerise.h */,
-				6FCFFCEE2384347500EBD863 /* Categories */,
-				6F17D06123756C4F00D725AE /* Main */,
-				6F17D06423756C4F00D725AE /* Modules */,
+				6F502AAF303F1F5200A0C6A4 /* Categories */,
+				6F502AB6303F1F5200A0C6A4 /* Main */,
+				6F502AD5303F1F5200A0C6A4 /* Modules */,
+				6F502AD6303F1F5200A0C6A4 /* ReactNativeSynerise.h */,
 			);
 			path = ReactNativeSynerise;
 			sourceTree = "<group>";
 		};
-		6F17D06123756C4F00D725AE /* Main */ = {
+		6F502AAF303F1F5200A0C6A4 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				6F17D06323756C4F00D725AE /* RNSyneriseInitializer.h */,
-				6F17D06223756C4F00D725AE /* RNSyneriseInitializer.m */,
-				6F30542B238BEBEC00D0BD7D /* RNSyneriseManager.h */,
-				6F30542C238BEBEC00D0BD7D /* RNSyneriseManager.m */,
-				FFB64BC5238893A6001856B7 /* RNSyneriseEventEmitter.h */,
-				FFB64BC6238893A6001856B7 /* RNSyneriseEventEmitter.m */,
+				6F502AAB303F1F5200A0C6A4 /* NSDictionary+ReactNative.h */,
+				6F502AAC303F1F5200A0C6A4 /* NSDictionary+ReactNative.m */,
+				6F502AAD303F1F5200A0C6A4 /* NSMutableDictionary+ReactNative.h */,
+				6F502AAE303F1F5200A0C6A4 /* NSMutableDictionary+ReactNative.m */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		6F502AB6303F1F5200A0C6A4 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				6F502AB0303F1F5200A0C6A4 /* RNSyneriseEventEmitter.h */,
+				6F502AB1303F1F5200A0C6A4 /* RNSyneriseEventEmitter.m */,
+				6F502AB2303F1F5200A0C6A4 /* RNSyneriseInitializer.h */,
+				6F502AB3303F1F5200A0C6A4 /* RNSyneriseInitializer.m */,
+				6F502AB4303F1F5200A0C6A4 /* RNSyneriseManager.h */,
+				6F502AB5303F1F5200A0C6A4 /* RNSyneriseManager.m */,
 			);
 			path = Main;
 			sourceTree = "<group>";
 		};
-		6F17D06423756C4F00D725AE /* Modules */ = {
+		6F502AD5303F1F5200A0C6A4 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
-				6F17D06F23756C4F00D725AE /* RNBaseModule.h */,
-				6F17D06A23756C4F00D725AE /* RNBaseModule.m */,
-				6F17D06723756C4F00D725AE /* RNSettings.h */,
-				6F17D06D23756C4F00D725AE /* RNSettings.m */,
-				6F17D06C23756C4F00D725AE /* RNSynerise.h */,
-				6F17D06523756C4F00D725AE /* RNSynerise.m */,
-				FF0827A92388190E00B88D52 /* RNNotifications.h */,
-				FF0827AA2388190E00B88D52 /* RNNotifications.m */,
-				6F17D06B23756C4F00D725AE /* RNClient.h */,
-				6F17D06623756C4F00D725AE /* RNClient.m */,
-				6F17D06923756C4F00D725AE /* RNTracker.h */,
-				6F17D07023756C4F00D725AE /* RNTracker.m */,
-				FF0827AC2388191900B88D52 /* RNInjector.h */,
-				FF0827AD2388191900B88D52 /* RNInjector.m */,
-				6F8FDD40237D8CCB00EF1CC7 /* RNPromotions.h */,
-				6F8FDD41237D8CCB00EF1CC7 /* RNPromotions.m */,
-				FF5BBC012449BA230074FA2E /* RNContent.h */,
-				FF5BBC022449BA230074FA2E /* RNContent.m */,
+				6F502AB7303F1F5200A0C6A4 /* RNBaseModule.h */,
+				6F502AB8303F1F5200A0C6A4 /* RNBaseModule.m */,
+				6F502AB9303F1F5200A0C6A4 /* RNClient.h */,
+				6F502ABA303F1F5200A0C6A4 /* RNClient.m */,
+				6F502ABB303F1F5200A0C6A4 /* RNClient+Functions.h */,
+				6F502ABC303F1F5200A0C6A4 /* RNClient+Functions.m */,
+				6F502ABD303F1F5200A0C6A4 /* RNContent.h */,
+				6F502ABE303F1F5200A0C6A4 /* RNContent.m */,
+				6F502ABF303F1F5200A0C6A4 /* RNInAppManager.h */,
+				6F502AC0303F1F5200A0C6A4 /* RNInAppManager.m */,
+				6F502AC1303F1F5200A0C6A4 /* RNInjector.h */,
+				6F502AC2303F1F5200A0C6A4 /* RNInjector.m */,
+				6F502AC3303F1F5200A0C6A4 /* RNInlineInAppView.h */,
+				6F502AC4303F1F5200A0C6A4 /* RNInlineInAppView.m */,
+				6F502AC5303F1F5200A0C6A4 /* RNInlineInAppViewManager.h */,
+				6F502AC6303F1F5200A0C6A4 /* RNInlineInAppViewManager.m */,
+				6F502AC7303F1F5200A0C6A4 /* RNInlineInAppViewRegistry.h */,
+				6F502AC8303F1F5200A0C6A4 /* RNInlineInAppViewRegistry.m */,
+				6F502AC9303F1F5200A0C6A4 /* RNPromotions.h */,
+				6F502ACA303F1F5200A0C6A4 /* RNPromotions.m */,
+				6F502ACB303F1F5200A0C6A4 /* RNPromotions+Functions.h */,
+				6F502ACC303F1F5200A0C6A4 /* RNPromotions+Functions.m */,
+				6F502ACD303F1F5200A0C6A4 /* RNSettings.h */,
+				6F502ACE303F1F5200A0C6A4 /* RNSettings.m */,
+				6F502ACF303F1F5200A0C6A4 /* RNSynerise.h */,
+				6F502AD0303F1F5200A0C6A4 /* RNSynerise.m */,
+				6F502AD1303F1F5200A0C6A4 /* RNSyneriseNotifications.h */,
+				6F502AD2303F1F5200A0C6A4 /* RNSyneriseNotifications.m */,
+				6F502AD3303F1F5200A0C6A4 /* RNTracker.h */,
+				6F502AD4303F1F5200A0C6A4 /* RNTracker.m */,
 			);
 			path = Modules;
-			sourceTree = "<group>";
-		};
-		6FCFFCEE2384347500EBD863 /* Categories */ = {
-			isa = PBXGroup;
-			children = (
-				6F85452D2385494100067AC5 /* NSDictionary+ReactNative.h */,
-				6F85452E2385494100067AC5 /* NSDictionary+ReactNative.m */,
-				6FCFFCEF238434A400EBD863 /* NSMutableDictionary+ReactNative.h */,
-				6FCFFCF0238434A400EBD863 /* NSMutableDictionary+ReactNative.m */,
-			);
-			path = Categories;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -214,20 +244,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FFB64BC7238893A6001856B7 /* RNSyneriseEventEmitter.m in Sources */,
-				FF5BBC032449BA230074FA2E /* RNContent.m in Sources */,
-				6F17D07623756D6F00D725AE /* RNSyneriseInitializer.m in Sources */,
-				6F30542D238BEBEC00D0BD7D /* RNSyneriseManager.m in Sources */,
-				6F17D07723756D6F00D725AE /* RNBaseModule.m in Sources */,
-				FF0827AB2388190E00B88D52 /* RNNotifications.m in Sources */,
-				6F8FDD42237D8CCB00EF1CC7 /* RNPromotions.m in Sources */,
-				6FCFFCF1238434A400EBD863 /* NSMutableDictionary+ReactNative.m in Sources */,
-				6F17D07923756D6F00D725AE /* RNSettings.m in Sources */,
-				6F17D07A23756D6F00D725AE /* RNSynerise.m in Sources */,
-				6F85452F2385494100067AC5 /* NSDictionary+ReactNative.m in Sources */,
-				FF0827AE2388191900B88D52 /* RNInjector.m in Sources */,
-				6F17D07B23756D6F00D725AE /* RNClient.m in Sources */,
-				6F17D07C23756D6F00D725AE /* RNTracker.m in Sources */,
+				6F502AD7303F1F5200A0C6A4 /* RNInlineInAppViewRegistry.m in Sources */,
+				6F502AD8303F1F5200A0C6A4 /* RNClient+Functions.m in Sources */,
+				6F502AD9303F1F5200A0C6A4 /* RNInlineInAppViewManager.m in Sources */,
+				6F502ADA303F1F5200A0C6A4 /* RNSyneriseNotifications.m in Sources */,
+				6F502ADB303F1F5200A0C6A4 /* NSMutableDictionary+ReactNative.m in Sources */,
+				6F502ADC303F1F5200A0C6A4 /* RNPromotions.m in Sources */,
+				6F502ADD303F1F5200A0C6A4 /* RNSyneriseInitializer.m in Sources */,
+				6F502ADE303F1F5200A0C6A4 /* NSDictionary+ReactNative.m in Sources */,
+				6F502ADF303F1F5200A0C6A4 /* RNSynerise.m in Sources */,
+				6F502AE0303F1F5200A0C6A4 /* RNInjector.m in Sources */,
+				6F502AE1303F1F5200A0C6A4 /* RNSyneriseEventEmitter.m in Sources */,
+				6F502AE2303F1F5200A0C6A4 /* RNBaseModule.m in Sources */,
+				6F502AE3303F1F5200A0C6A4 /* RNSyneriseManager.m in Sources */,
+				6F502AE4303F1F5200A0C6A4 /* RNSettings.m in Sources */,
+				6F502AE5303F1F5200A0C6A4 /* RNContent.m in Sources */,
+				6F502AE6303F1F5200A0C6A4 /* RNPromotions+Functions.m in Sources */,
+				6F502AE7303F1F5200A0C6A4 /* RNClient.m in Sources */,
+				6F502AE8303F1F5200A0C6A4 /* RNTracker.m in Sources */,
+				6F502AE9303F1F5200A0C6A4 /* RNInlineInAppView.m in Sources */,
+				6F502AEA303F1F5200A0C6A4 /* RNInAppManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.1] - 2026-09-07
+
+IMPORTANT:
+- [iOS] Notification content extensions are no longer supported in Objective-C. Use Swift instead.
+
+### Fixed
+- `Synerise.Injector.inAppContext` is cleared when the API key changes, so context from a previous workspace is not passed.
+
+### Added
+- We added inline in-app messages. It's a new in-app type rendered inside your own layout instead of over it.
+- `InlineInAppView` component to place and render inline in-app messages in the host app. It takes the `placementKey` prop (and optional `identifier` and `style` props).
+- `InlineInAppView` callback props for controlling the state and handling the component lifecycle: `onLoaded(data)`, `onUpdated(data)`, `onFailed(data, error)`, `onRemove(data)`, `onSizeChanged(data, size)`, and `onProcessingStarted()`.
+- `InlineInAppView` ref methods (`InlineInAppViewHandle`): `render()`, `release()`, `isRendered()`, and `getData()`.
+- `Synerise.Injector.setInlineInAppMessageListener(listener)` method to set a listener for inline in-app message campaigns.
+- `IInlineInAppMessageListener` interface for handling inline in-app message campaigns. It's analogous to `IInjectorInAppMessageListener`, but handles inline in-app messages. It provides the `onInlineInAppAvailable(view, data)` callback, invoked when the SDK creates an inline in-app message view on its own (for example, for a campaign triggered by an event) and hands it over as a ready-to-place React element, and the optional `onOpenUrl(data, url)`, `onDeepLink(data, deepLink)`, `onCustomAction(data, name, parameters)`, and `onCustomMethod(data, name, parameters, completion)` callbacks. The `completion` is the same `InAppCustomMethodCompletion` used by `IInjectorInAppMessageListener`.
+- `InlineInAppMessageData` model with the `campaignHash`, `variantIdentifier`, `placementKey`, `additionalParameters`, and `isTest` properties.
+- `InlineInAppSize` model with the `width`, `height`, `widthPx`, `heightPx`, `widthScreenRatio`, and `heightScreenRatio` properties.
+- `SyneriseSource.InlineInAppMessage` value. It is passed to `IInjectorListener.onOpenUrl(url, source)` and `IInjectorListener.onDeepLink(deepLink, source)` for actions from inline in-app messages.
+- `InAppContextKey` enum with well-known keys of `Synerise.Injector.inAppContext` (`InAppContextKey.JinjavaContext`).
+- `SRInApp.setComponentSize(width, height)` method to the JS interface in the in-app messaging module. This method allows reporting the content size to change the component view size in the host app.
+- `SRInApp.getComponentSize()` method to the JS interface in the in-app messaging module. This method allows getting the current size of the component view containing the web view with the in-app message.
+
+### Changed
+- Improvements to stability.
+
 ## [1.10.1] - 2026-09-03
 
 ### Fixed

@@ -9,6 +9,7 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import androidx.annotation.VisibleForTesting;
 import com.synerise.sdk.core.listeners.DataActionListener;
 import com.synerise.sdk.core.net.IApiCall;
 import com.synerise.sdk.core.net.IDataApiCall;
@@ -505,7 +506,8 @@ public class RNPromotions extends RNBaseModule {
         return promotionMap;
     }
 
-    private static List<PromotionStatus> readableArrayToPromotionStatusList(ReadableArray readableArray) {
+    @VisibleForTesting
+    static List<PromotionStatus> readableArrayToPromotionStatusList(ReadableArray readableArray) {
         PromotionStatus[] array = new PromotionStatus[readableArray.size()];
 
         for (int i = 0; i < readableArray.size(); i++) {
@@ -520,7 +522,8 @@ public class RNPromotions extends RNBaseModule {
         return list;
     }
 
-    private static List<PromotionType> readableArrayToPromotionTypesList(ReadableArray readableArray) {
+    @VisibleForTesting
+    static List<PromotionType> readableArrayToPromotionTypesList(ReadableArray readableArray) {
         PromotionType[] array = new PromotionType[readableArray.size()];
 
         for (int i = 0; i < readableArray.size(); i++) {
@@ -535,7 +538,8 @@ public class RNPromotions extends RNBaseModule {
         return list;
     }
 
-    private List<PromotionIdentifier> readableArrayToPromotionIdentifierList(ReadableArray readableArray) {
+    @VisibleForTesting
+    static List<PromotionIdentifier> readableArrayToPromotionIdentifierList(ReadableArray readableArray) {
         List<PromotionIdentifier> list = new ArrayList<>(readableArray.size());
         for (int i = 0; i < readableArray.size(); i++) {
             ReadableType type = readableArray.getType(i);
@@ -549,7 +553,8 @@ public class RNPromotions extends RNBaseModule {
         return list;
     }
 
-    private static LinkedHashMap<PromotionSortingKey, ApiQuerySortingOrder> readableArrayToLinkedHashMapSorting(ReadableArray readableArray) {
+    @VisibleForTesting
+    static LinkedHashMap<PromotionSortingKey, ApiQuerySortingOrder> readableArrayToLinkedHashMapSorting(ReadableArray readableArray) {
         LinkedHashMap<PromotionSortingKey, ApiQuerySortingOrder> sorting = new LinkedHashMap<>();
 
         for (int i = 0; i < readableArray.size(); i++) {
@@ -560,7 +565,7 @@ public class RNPromotions extends RNBaseModule {
                 sorting.put(key, order);
             }
         }
-        return null;
+        return sorting;
     }
 
     private WritableArray promotionImageToWritableArray(List<PromotionImage> array) {

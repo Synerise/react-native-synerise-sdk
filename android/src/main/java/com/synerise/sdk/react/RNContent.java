@@ -9,6 +9,7 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import androidx.annotation.VisibleForTesting;
 import com.google.gson.Gson;
 import com.synerise.sdk.content.Content;
 import com.synerise.sdk.content.model.brickwork.BrickworksApiQuery;
@@ -281,7 +282,8 @@ public class RNContent extends RNBaseModule {
         });
     }
 
-    private DocumentApiQuery readableMapToDocumentApiQuery(ReadableMap map) {
+    @VisibleForTesting
+    static DocumentApiQuery readableMapToDocumentApiQuery(ReadableMap map) {
         String slugName = map.hasKey("slug") ? map.getString("slug") : "";
         DocumentApiQuery documentApiQuery = new DocumentApiQuery(slugName);
         documentApiQuery.setProductId(map.hasKey("productId") ? map.getString("productId") : null);
@@ -306,7 +308,8 @@ public class RNContent extends RNBaseModule {
         return documentApiQuery;
     }
 
-    private RecommendationRequestBody readableMapToRecommendationRequestBody(ReadableMap map) {
+    @VisibleForTesting
+    static RecommendationRequestBody readableMapToRecommendationRequestBody(ReadableMap map) {
         RecommendationRequestBody recommendationRequestBody = new RecommendationRequestBody();
         recommendationRequestBody.setProductId(map.hasKey("productID") ? map.getString("productID") : null);
         recommendationRequestBody.setItemsIds(map.hasKey("itemsIds") ? readableArrayToListOfStrings(map.getArray("itemsIds")) : null);
@@ -325,7 +328,8 @@ public class RNContent extends RNBaseModule {
         return recommendationRequestBody;
     }
 
-    private static ArrayList<String> readableArrayToListOfStrings(ReadableArray readableArray) {
+    @VisibleForTesting
+    static ArrayList<String> readableArrayToListOfStrings(ReadableArray readableArray) {
         ArrayList<String> list = new ArrayList<>();
 
         for (int i = 0; i < readableArray.size(); i++) {
