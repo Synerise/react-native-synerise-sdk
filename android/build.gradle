@@ -4,23 +4,9 @@ ext.versions = [
         'minSdk'     : 24,
         'compileSdk' : 34,
         'targetSdk'  : 34,
-        'versionCode': 111,
-        'versionName': "2.0.1"
+        'versionCode': 112,
+        'versionName': "2.0.2"
 ]
-
-buildscript {
-    repositories {
-        mavenCentral()
-        jcenter()
-        maven {
-            url 'https://maven.fabric.io/public'
-        }
-    }
-
-    dependencies {
-
-    }
-}
 
 android {
     compileSdkVersion 33
@@ -52,7 +38,6 @@ repositories {
     }
     mavenCentral()
     google()
-    jcenter()
 }
 
 dependencies {

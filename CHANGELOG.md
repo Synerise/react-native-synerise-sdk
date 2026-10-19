@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.2] - 2026-10-19
+
+### Fixed
+- [Android] Build failure on Gradle 9 (`Could not find method jcenter()`). The library no longer declares the removed JCenter repository.
+
 ## [2.0.1] - 2026-09-07
 
 IMPORTANT:
