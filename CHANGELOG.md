@@ -1,11 +1,34 @@
 # Changelog
-
 All notable changes to this project will be documented in this file.
+
+## [2.0.3] - 2026-11-17
+
+### Fixed
+- [iOS] Some potential issues with notification processing in `NotificationServiceExtension`.
+- [iOS] Potential issue with downloading images when Simple Push campaign contains Rich Media (Carousel).
+- [iOS] Potential issue that could have caused late availability of in-app component size returned by `SRInApp.getComponentSize()`.
+- [iOS] Issue with re-authorizing anonymous tokens when the app was removed and installed again. The problem occurred since version 2.0.1.
+- [iOS] `NotificationInfo` properties (`campaignHashId`, `campaignTitle`, `payload`) visibility to public. The problem occurred since version 2.0.1.
+- [iOS] Issue with sending the control group event (`inApp.controlGroup`) for in-app messages with a global control group and a segment checked in real time. The event was sent to every client assigned to the global control group, even when the client did not match the campaign segment. The problem occurred since version 0.19.0.
+- [iOS] Issue with displaying in-app messages that use global control groups when the backend did not recognize the client yet (for example, a new anonymous profile). The problem occurred since version 2.0.1.
+- [iOS] Issue with missing additional parameters (`additionalParameters`) and the test message flag (`test_message`) in events of overlay in-app messages. The problem occurred since version 2.0.1.
+- [iOS] Potential issue with in-app messaging database execute operations which caused crash when the SDK could not open persistent store for the database.
+- [iOS] Potential issue with in-app messaging database when the application was launched in the background while the device was locked and the files were protected by Data Protection. The database is now opened again when protected data becomes available, without restarting the application.
+- [iOS] Potential issue with high memory usage and long processing time on the main thread when the `screen.content` event was created for a large screen view response. The problem could cause a crash.
+- [Android] Application-not-responding at launch caused by KeyStore work on the main thread (reported on Android 12, most often on Xiaomi devices).
+- [Android] In-app messages not refreshing after `Synerise.Client.destroySession()`, `Synerise.Client.signOut()` and `Synerise.Client.regenerateUUID()`.
+
+### Changed
+- Update of native SDK's dependencies.
+- [iOS] Optimization of the in-app messaging module.
+- [Android] Consumer ProGuard/R8 rules of the native SDK were reduced to what the SDK actually needs. If your app relied on the SDK's rules to keep its own `Parcelable` models, enums, Gson models or `com.google.*` / `org.*` libraries, declare those rules in your own `proguard-rules.pro`.
+
 
 ## [2.0.2] - 2026-10-19
 
 ### Fixed
 - [Android] Build failure on Gradle 9 (`Could not find method jcenter()`). The library no longer declares the removed JCenter repository.
+
 
 ## [2.0.1] - 2026-09-07
 
@@ -31,6 +54,7 @@ IMPORTANT:
 
 ### Changed
 - Improvements to stability.
+
 
 ## [1.10.1] - 2026-09-03
 
